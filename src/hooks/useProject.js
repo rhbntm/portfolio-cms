@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { getProjectBySlug } from '../lib/projects';
 
 export function useProject(slug) {
   const [data, setData] = useState(null);
@@ -14,11 +14,7 @@ export function useProject(slug) {
       setError(null);
       setData(null);
 
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('slug', slug)
-        .maybeSingle();
+      const { data, error } = await getProjectBySlug(slug);
 
       if (!isMounted) return;
 

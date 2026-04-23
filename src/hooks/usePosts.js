@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { getPosts } from '../lib/posts';
 
 export function usePosts() {
   const [data, setData] = useState([]);
@@ -13,10 +13,7 @@ export function usePosts() {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await getPosts();
 
       if (!isMounted) return;
 

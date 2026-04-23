@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { getProjects } from '../lib/projects';
 
 export function useProjects() {
   const [data, setData] = useState([]);
@@ -13,10 +13,7 @@ export function useProjects() {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await getProjects();
 
       if (!isMounted) return;
 

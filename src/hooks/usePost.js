@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { getPostBySlug } from '../lib/posts';
 
 export function usePost(slug) {
   const [data, setData] = useState(null);
@@ -14,11 +14,7 @@ export function usePost(slug) {
       setError(null);
       setData(null);
 
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('slug', slug)
-        .maybeSingle();
+      const { data, error } = await getPostBySlug(slug);
 
       if (!isMounted) return;
 
