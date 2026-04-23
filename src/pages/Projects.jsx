@@ -1,22 +1,10 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { useProjects } from '../hooks/useProjects';
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
+  const { data: projects, loading, error } = useProjects();
 
-  useEffect(() => {
-    async function fetchProjects() {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) console.error(error);
-      else setProjects(data);
-    }
-
-    fetchProjects();
-  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
