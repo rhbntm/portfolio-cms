@@ -5,6 +5,9 @@ import Projects from "../pages/Projects";
 import ProjectDetail from "../pages/ProjectDetail";
 import Blog from "../pages/Blog";
 import BlogPost from "../pages/BlogPost";
+import AdminProjectsList from "../pages/AdminProjectsList";
+import AdminProjectCreate from "../pages/AdminProjectCreate";
+import AdminProjectEdit from "../pages/AdminProjectEdit";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +19,9 @@ export const router = createBrowserRouter([
       { path: "projects/:slug", element: <ProjectDetail /> },
       { path: "blog", element: <Blog /> },
       { path: "blog/:slug", element: <BlogPost /> },
+      { path: "admin/projects", element: <AdminProjectsList /> },
+      { path: "admin/projects/new", element: <AdminProjectCreate /> },
+      { path: "admin/projects/:id/edit", element: <AdminProjectEdit /> },
     ],
   },
 ]);

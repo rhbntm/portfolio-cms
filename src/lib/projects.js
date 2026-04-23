@@ -15,6 +15,14 @@ export async function getProjectBySlug(slug) {
     .maybeSingle();
 }
 
+export async function getProjectById(id) {
+  return supabase
+    .from('projects')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+}
+
 export async function createProject(project) {
   return supabase
     .from('projects')

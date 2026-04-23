@@ -6,7 +6,8 @@ export default function MainLayout() {
       <nav>
         <Link to="/">Home</Link> | 
         <Link to="/projects">Projects</Link> | 
-        <Link to="/blog">Blog</Link>
+        <Link to="/blog">Blog</Link> | 
+        <Link to="/admin/projects">Admin</Link>
       </nav>
 
       <Outlet />
