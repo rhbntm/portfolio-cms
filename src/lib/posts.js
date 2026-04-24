@@ -15,6 +15,14 @@ export async function getPostBySlug(slug) {
     .maybeSingle();
 }
 
+export async function getPostById(id) {
+  return supabase
+    .from('posts')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+}
+
 export async function createPost(post) {
   return supabase
     .from('posts')
