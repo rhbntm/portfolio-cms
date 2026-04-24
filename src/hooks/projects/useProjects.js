@@ -1,43 +1,38 @@
 import { useEffect, useState } from 'react';
-import { getProjectBySlug } from '../lib/projects';
+import { getProjects } from '../../lib/projects';
 
-export function useProject(slug) {
-  const [data, setData] = useState(null);
+export function useProjects() {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
 
-    async function fetchProject() {
+    async function fetchProjects() {
       setLoading(true);
       setError(null);
-      setData(null);
 
-      const { data, error } = await getProjectBySlug(slug);
+      const { data, error } = await getProjects();
 
       if (!isMounted) return;
 
       if (error) {
         setError(error.message);
-        setData(null);
+        setData([]);
       } else {
-        setData(data);
+        setData(data || []);
       }
 
       setLoading(false);
     }
 
-    if (slug) {
-      fetchProject();
-    } else {
-      setLoading(false);
-    }
+    fetchProjects();
 
     return () => {
       isMounted = false;
     };
-  }, [slug]);
+  }, []);
 
   return { data, loading, error };
 }

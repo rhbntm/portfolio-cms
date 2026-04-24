@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost } from "../lib/posts";
+import { createPost } from "../../lib/posts";
 
 export default function AdminPostCreate() {
   const navigate = useNavigate();

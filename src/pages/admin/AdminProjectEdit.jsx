@@ -1,11 +1,29 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createProject } from "../lib/projects";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getProjectById, updateProject } from "../../lib/projects";
 
-export default function AdminProjectCreate() {
+export default function AdminProjectEdit() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({ title: "", slug: "", description: "" });
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      const { data } = await getProjectById(id);
+      if (data) {
+        setForm({
+          title: data.title || "",
+          slug: data.slug || "",
+          description: data.description || "",
+        });
+      }
+      setLoading(false);
+    }
+    load();
+  }, [id]);
 
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -14,14 +32,16 @@ export default function AdminProjectCreate() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    await createProject(form);
+    await updateProject(id, form);
     setSaving(false);
     navigate("/admin/projects");
   }
 
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div>
-      <h1>Create Project</h1>
+      <h1>Edit Project</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Title</label>
@@ -50,7 +70,7 @@ export default function AdminProjectCreate() {
           />
         </div>
         <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Create"}
+          {saving ? "Saving..." : "Save"}
         </button>
       </form>
     </div>

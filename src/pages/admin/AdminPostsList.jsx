@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { usePosts } from "../hooks/usePosts";
-import { deletePost } from "../lib/posts";
+import { usePosts } from "../../hooks/posts/usePosts";
+import { deletePost } from "../../lib/posts";
 
 export default function AdminPostsList() {
   const { data: posts, loading, error } = usePosts();

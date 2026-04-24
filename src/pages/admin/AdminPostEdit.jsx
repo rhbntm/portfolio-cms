@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPostById, updatePost } from "../lib/posts";
+import { getPostById, updatePost } from "../../lib/posts";
 
 export default function AdminPostEdit() {
   const { id } = useParams();

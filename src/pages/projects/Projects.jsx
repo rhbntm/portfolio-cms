@@ -1,4 +1,4 @@
-import { useProjects } from '../hooks/useProjects';
+import { useProjects } from '../../hooks/projects/useProjects';
 
 export default function ProjectsPage() {
   const { data: projects, loading, error } = useProjects();

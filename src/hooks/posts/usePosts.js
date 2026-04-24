@@ -1,43 +1,38 @@
 import { useEffect, useState } from 'react';
-import { getPostBySlug } from '../lib/posts';
+import { getPosts } from '../../lib/posts';
 
-export function usePost(slug) {
-  const [data, setData] = useState(null);
+export function usePosts() {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
 
-    async function fetchPost() {
+    async function fetchPosts() {
       setLoading(true);
       setError(null);
-      setData(null);
 
-      const { data, error } = await getPostBySlug(slug);
+      const { data, error } = await getPosts();
 
       if (!isMounted) return;
 
       if (error) {
         setError(error.message);
-        setData(null);
+        setData([]);
       } else {
-        setData(data);
+        setData(data || []);
       }
 
       setLoading(false);
     }
 
-    if (slug) {
-      fetchPost();
-    } else {
-      setLoading(false);
-    }
+    fetchPosts();
 
     return () => {
       isMounted = false;
     };
-  }, [slug]);
+  }, []);
 
   return { data, loading, error };
 }

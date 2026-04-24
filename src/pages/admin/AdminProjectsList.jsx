@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useProjects } from "../hooks/useProjects";
-import { deleteProject } from "../lib/projects";
+import { useProjects } from "../../hooks/projects/useProjects";
+import { deleteProject } from "../../lib/projects";
 
 export default function AdminProjectsList() {
   const { data: projects, loading, error } = useProjects();

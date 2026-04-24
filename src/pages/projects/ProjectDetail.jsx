@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useProject } from "../hooks/useProject";
+import { useProject } from "../../hooks/projects/useProject";
 
 export default function ProjectDetail() {
   const { slug } = useParams();

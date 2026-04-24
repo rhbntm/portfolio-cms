@@ -1,4 +1,4 @@
-import { usePosts } from "../hooks/usePosts";
+import { usePosts } from "../../hooks/posts/usePosts";
 import { Link } from "react-router-dom";
 
 export default function Blog() {
