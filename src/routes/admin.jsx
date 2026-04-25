@@ -6,11 +6,15 @@ import AdminProjectEdit from "../pages/admin/AdminProjectEdit";
 import AdminPostsList from "../pages/admin/AdminPostsList";
 import AdminPostCreate from "../pages/admin/AdminPostCreate";
 import AdminPostEdit from "../pages/admin/AdminPostEdit";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const adminRoutes = {
   path: "/admin",
-  element: <AdminLayout />,
-  children: [
+  element: <ProtectedRoute />,
+  children: [{
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
     { index: true, element: <AdminDashboard /> },
     { path: "projects", element: <AdminProjectsList /> },
     { path: "projects/new", element: <AdminProjectCreate /> },
@@ -18,5 +22,6 @@ export const adminRoutes = {
     { path: "posts", element: <AdminPostsList /> },
     { path: "posts/new", element: <AdminPostCreate /> },
     { path: "posts/:id/edit", element: <AdminPostEdit /> },
-  ],
+    ],
+  }],
 };
