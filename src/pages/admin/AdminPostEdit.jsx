@@ -14,6 +14,7 @@ export default function AdminPostEdit() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -44,9 +45,15 @@ export default function AdminPostEdit() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    await updatePost(id, form);
-    setSaving(false);
-    navigate("/admin/posts");
+    setError(null);
+    try {
+      await updatePost(id, form);
+      navigate("/admin/posts");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (loading) return <p>Loading...</p>;
@@ -101,6 +108,7 @@ export default function AdminPostEdit() {
             Published
           </label>
         </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <button type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save"}
         </button>

@@ -6,6 +6,7 @@ export default function AdminProjectCreate() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ title: "", slug: "", description: "" });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -14,9 +15,15 @@ export default function AdminProjectCreate() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    await createProject(form);
-    setSaving(false);
-    navigate("/admin/projects");
+    setError(null);
+    try {
+      await createProject(form);
+      navigate("/admin/projects");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -49,6 +56,7 @@ export default function AdminProjectCreate() {
             onChange={handleChange}
           />
         </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <button type="submit" disabled={saving}>
           {saving ? "Saving..." : "Create"}
         </button>

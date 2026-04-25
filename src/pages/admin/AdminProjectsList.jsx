@@ -6,14 +6,20 @@ import { deleteProject } from "../../lib/projects";
 export default function AdminProjectsList() {
   const { data: projects, loading, error } = useProjects();
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this project?")) return;
 
     setDeletingId(id);
-    await deleteProject(id);
-    setDeletingId(null);
-    window.location.reload();
+    setDeleteError(null);
+    try {
+      await deleteProject(id);
+      window.location.reload();
+    } catch (err) {
+      setDeleteError(err.message);
+      setDeletingId(null);
+    }
   }
 
   if (loading) return <p>Loading...</p>;
@@ -26,6 +32,7 @@ export default function AdminProjectsList() {
         <button>Create New Project</button>
       </Link>
 
+      {deleteError && <p style={{ color: "red" }}>{deleteError}</p>}
       {projects.length === 0 && <p>No projects found.</p>}
 
       <ul>

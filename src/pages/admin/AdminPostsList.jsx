@@ -6,14 +6,20 @@ import { deletePost } from "../../lib/posts";
 export default function AdminPostsList() {
   const { data: posts, loading, error } = useAdminPosts();
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this post?")) return;
 
     setDeletingId(id);
-    await deletePost(id);
-    setDeletingId(null);
-    window.location.reload();
+    setDeleteError(null);
+    try {
+      await deletePost(id);
+      window.location.reload();
+    } catch (err) {
+      setDeleteError(err.message);
+      setDeletingId(null);
+    }
   }
 
   if (loading) return <p>Loading...</p>;
@@ -26,6 +32,7 @@ export default function AdminPostsList() {
         <button>Create New Post</button>
       </Link>
 
+      {deleteError && <p style={{ color: "red" }}>{deleteError}</p>}
       {posts.length === 0 && <p>No posts found.</p>}
 
       <ul>

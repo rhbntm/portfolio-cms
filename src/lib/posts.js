@@ -60,8 +60,10 @@ export async function updatePost(id, post) {
 }
 
 export async function deletePost(id) {
-  return supabase
+  const { error } = await supabase
     .from('posts')
     .delete()
     .eq('id', id);
+
+  if (error) throw error;
 }

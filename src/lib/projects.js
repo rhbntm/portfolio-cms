@@ -24,25 +24,33 @@ export async function getProjectById(id) {
 }
 
 export async function createProject(project) {
-  return supabase
+  const { data, error } = await supabase
     .from('projects')
     .insert(project)
     .select()
     .single();
+
+  if (error) throw error;
+  return data;
 }
 
 export async function updateProject(id, project) {
-  return supabase
+  const { data, error } = await supabase
     .from('projects')
     .update(project)
     .eq('id', id)
     .select()
     .single();
+
+  if (error) throw error;
+  return data;
 }
 
 export async function deleteProject(id) {
-  return supabase
+  const { error } = await supabase
     .from('projects')
     .delete()
     .eq('id', id);
+
+  if (error) throw error;
 }

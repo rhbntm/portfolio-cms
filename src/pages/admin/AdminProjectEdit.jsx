@@ -8,6 +8,7 @@ export default function AdminProjectEdit() {
   const [form, setForm] = useState({ title: "", slug: "", description: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -32,9 +33,15 @@ export default function AdminProjectEdit() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    await updateProject(id, form);
-    setSaving(false);
-    navigate("/admin/projects");
+    setError(null);
+    try {
+      await updateProject(id, form);
+      navigate("/admin/projects");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (loading) return <p>Loading...</p>;
@@ -69,6 +76,7 @@ export default function AdminProjectEdit() {
             onChange={handleChange}
           />
         </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <button type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save"}
         </button>

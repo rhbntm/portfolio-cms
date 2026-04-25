@@ -12,6 +12,7 @@ export default function AdminPostCreate() {
     is_published: false,
   });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -24,9 +25,15 @@ export default function AdminPostCreate() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    await createPost(form);
-    setSaving(false);
-    navigate("/admin/posts");
+    setError(null);
+    try {
+      await createPost(form);
+      navigate("/admin/posts");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -79,6 +86,7 @@ export default function AdminPostCreate() {
             Published
           </label>
         </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <button type="submit" disabled={saving}>
           {saving ? "Saving..." : "Create"}
         </button>
