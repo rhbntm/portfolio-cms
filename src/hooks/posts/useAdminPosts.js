@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getPosts } from '../../lib/posts';
 
-export function usePosts() {
+export function useAdminPosts() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ export function usePosts() {
       setError(null);
 
       try {
-        const posts = await getPosts();
+        const posts = await getPosts({ includeDrafts: true });
         if (!isMounted) return;
         setData(posts || []);
       } catch (err) {

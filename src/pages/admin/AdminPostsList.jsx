@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { usePosts } from "../../hooks/posts/usePosts";
+import { useAdminPosts } from "../../hooks/posts/useAdminPosts";
 import { deletePost } from "../../lib/posts";
 
 export default function AdminPostsList() {
-  const { data: posts, loading, error } = usePosts();
+  const { data: posts, loading, error } = useAdminPosts();
   const [deletingId, setDeletingId] = useState(null);
 
   async function handleDelete(id) {

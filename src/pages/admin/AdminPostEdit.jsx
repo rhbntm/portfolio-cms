@@ -18,7 +18,7 @@ export default function AdminPostEdit() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const { data } = await getPostById(id);
+      const data = await getPostById(id);
       if (data) {
         setForm({
           title: data.title || "",
