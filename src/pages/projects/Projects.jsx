@@ -1,6 +1,6 @@
 import { useProjects } from '../../hooks/projects/useProjects';
 
-export default function ProjectsPage() {
+export default function Projects() {
   const { data: projects, loading, error } = useProjects();
 
   if (loading) return <p>Loading...</p>;
