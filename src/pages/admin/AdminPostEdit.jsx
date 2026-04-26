@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPostById, updatePost } from "../../lib/posts";
-import { uploadImage } from "../../lib/storage";
+import { getPostById, updatePost, uploadImage } from "../../lib";
 
 export default function AdminPostEdit() {
   const { id } = useParams();

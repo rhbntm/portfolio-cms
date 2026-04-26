@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { usePost } from "../../hooks/posts/usePost";
+import { usePost } from "../../hooks";
 
 export default function BlogPost() {
   const { slug } = useParams();

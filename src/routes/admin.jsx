@@ -6,7 +6,7 @@ import AdminProjectEdit from "../pages/admin/AdminProjectEdit";
 import AdminPostsList from "../pages/admin/AdminPostsList";
 import AdminPostCreate from "../pages/admin/AdminPostCreate";
 import AdminPostEdit from "../pages/admin/AdminPostEdit";
-import ProtectedRoute from "../components/ProtectedRoute";
+import { ProtectedRoute } from "../components";
 
 export const adminRoutes = {
   path: "/admin",

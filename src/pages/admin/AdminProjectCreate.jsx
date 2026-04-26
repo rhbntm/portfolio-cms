@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createProject } from "../../lib/projects";
-import { uploadImage } from "../../lib/storage";
+import { createProject, uploadImage } from "../../lib";
 
 export default function AdminProjectCreate() {
   const navigate = useNavigate();

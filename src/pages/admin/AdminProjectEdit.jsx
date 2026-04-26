@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProjectById, updateProject } from "../../lib/projects";
-import { uploadImage } from "../../lib/storage";
+import { getProjectById, updateProject, uploadImage } from "../../lib";
 
 export default function AdminProjectEdit() {
   const { id } = useParams();
