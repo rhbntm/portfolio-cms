@@ -38,6 +38,13 @@ export default function AdminPostsList() {
       <ul>
         {posts.map((p) => (
           <li key={p.id}>
+            {p.cover_image && (
+              <img
+                src={p.cover_image}
+                alt={p.title}
+                style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "8px", verticalAlign: "middle" }}
+              />
+            )}
             <strong>{p.title}</strong> ({p.slug}){" "}
             <Link to={`/admin/posts/${p.id}/edit`}>
               <button>Edit</button>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../../lib/posts";
+import { uploadImage } from "../../lib/storage";
 
 export default function AdminPostCreate() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function AdminPostCreate() {
     content: "",
     is_published: false,
   });
+  const [imageFile, setImageFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,7 +29,11 @@ export default function AdminPostCreate() {
     setSaving(true);
     setError(null);
     try {
-      await createPost(form);
+      let coverImageUrl = null;
+      if (imageFile) {
+        coverImageUrl = await uploadImage(imageFile, "posts");
+      }
+      await createPost({ ...form, cover_image: coverImageUrl });
       navigate("/admin/posts");
     } catch (err) {
       setError(err.message);
@@ -73,6 +79,14 @@ export default function AdminPostCreate() {
             value={form.content}
             onChange={handleChange}
             rows={10}
+          />
+        </div>
+        <div>
+          <label>Cover Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
           />
         </div>
         <div>

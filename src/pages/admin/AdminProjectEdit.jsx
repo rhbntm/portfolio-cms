@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProjectById, updateProject } from "../../lib/projects";
+import { uploadImage } from "../../lib/storage";
 
 export default function AdminProjectEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ title: "", slug: "", description: "" });
+  const [form, setForm] = useState({ title: "", slug: "", description: "", image_url: "" });
+  const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -19,6 +21,7 @@ export default function AdminProjectEdit() {
           title: data.title || "",
           slug: data.slug || "",
           description: data.description || "",
+          image_url: data.image_url || "",
         });
       }
       setLoading(false);
@@ -35,7 +38,11 @@ export default function AdminProjectEdit() {
     setSaving(true);
     setError(null);
     try {
-      await updateProject(id, form);
+      const payload = { ...form };
+      if (imageFile) {
+        payload.image_url = await uploadImage(imageFile, "projects");
+      }
+      await updateProject(id, payload);
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -74,6 +81,19 @@ export default function AdminProjectEdit() {
             name="description"
             value={form.description}
             onChange={handleChange}
+          />
+        </div>
+        {form.image_url && (
+          <div>
+            <img src={form.image_url} alt="Current" style={{ maxWidth: "200px", maxHeight: "200px" }} />
+          </div>
+        )}
+        <div>
+          <label>Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
           />
         </div>
         {error && <p style={{ color: "red" }}>{error}</p>}

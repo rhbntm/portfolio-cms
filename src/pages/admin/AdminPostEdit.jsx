@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPostById, updatePost } from "../../lib/posts";
+import { uploadImage } from "../../lib/storage";
 
 export default function AdminPostEdit() {
   const { id } = useParams();
@@ -11,7 +12,9 @@ export default function AdminPostEdit() {
     excerpt: "",
     content: "",
     is_published: false,
+    cover_image: "",
   });
+  const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -27,6 +30,7 @@ export default function AdminPostEdit() {
           excerpt: data.excerpt || "",
           content: data.content || "",
           is_published: !!data.is_published,
+          cover_image: data.cover_image || "",
         });
       }
       setLoading(false);
@@ -47,7 +51,11 @@ export default function AdminPostEdit() {
     setSaving(true);
     setError(null);
     try {
-      await updatePost(id, form);
+      const payload = { ...form };
+      if (imageFile) {
+        payload.cover_image = await uploadImage(imageFile, "posts");
+      }
+      await updatePost(id, payload);
       navigate("/admin/posts");
     } catch (err) {
       setError(err.message);
@@ -95,6 +103,19 @@ export default function AdminPostEdit() {
             value={form.content}
             onChange={handleChange}
             rows={10}
+          />
+        </div>
+        {form.cover_image && (
+          <div>
+            <img src={form.cover_image} alt="Current" style={{ maxWidth: "200px", maxHeight: "200px" }} />
+          </div>
+        )}
+        <div>
+          <label>Cover Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
           />
         </div>
         <div>

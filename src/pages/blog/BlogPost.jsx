@@ -11,6 +11,9 @@ export default function BlogPost() {
 
   return (
     <div>
+      {post.cover_image && (
+        <img src={post.cover_image} alt={post.title} style={{ maxWidth: "100%", maxHeight: "400px", objectFit: "cover" }} />
+      )}
       <h1>{post.title}</h1>
       <p>{post.content}</p>
     </div>

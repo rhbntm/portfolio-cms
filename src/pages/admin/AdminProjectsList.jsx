@@ -38,6 +38,13 @@ export default function AdminProjectsList() {
       <ul>
         {projects.map((p) => (
           <li key={p.id}>
+            {p.image_url && (
+              <img
+                src={p.image_url}
+                alt={p.title}
+                style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "8px", verticalAlign: "middle" }}
+              />
+            )}
             <strong>{p.title}</strong> ({p.slug}){" "}
             <Link to={`/admin/projects/${p.id}/edit`}>
               <button>Edit</button>

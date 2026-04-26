@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createProject } from "../../lib/projects";
+import { uploadImage } from "../../lib/storage";
 
 export default function AdminProjectCreate() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ title: "", slug: "", description: "" });
+  const [imageFile, setImageFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,7 +19,11 @@ export default function AdminProjectCreate() {
     setSaving(true);
     setError(null);
     try {
-      await createProject(form);
+      let imageUrl = null;
+      if (imageFile) {
+        imageUrl = await uploadImage(imageFile, "projects");
+      }
+      await createProject({ ...form, image_url: imageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -54,6 +60,14 @@ export default function AdminProjectCreate() {
             name="description"
             value={form.description}
             onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
           />
         </div>
         {error && <p style={{ color: "red" }}>{error}</p>}

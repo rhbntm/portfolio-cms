@@ -9,7 +9,14 @@ export default function Projects() {
   return (
     <div>
       {projects.map(p => (
-        <div key={p.id}>{p.title}</div>
+        <div key={p.id}>
+          {p.image_url ? (
+            <img src={p.image_url} alt={p.title} style={{ width: "120px", height: "120px", objectFit: "cover", marginRight: "8px", verticalAlign: "middle" }} />
+          ) : (
+            <span style={{ display: "inline-block", width: "120px", height: "120px", background: "#eee", marginRight: "8px", verticalAlign: "middle" }} />
+          )}
+          {p.title}
+        </div>
       ))}
     </div>
   );
