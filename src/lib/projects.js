@@ -1,26 +1,35 @@
 import { supabase } from './supabase';
 
 export async function getProjects() {
-  return supabase
+  const { data, error } = await supabase
     .from('projects')
     .select('*')
     .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data;
 }
 
 export async function getProjectBySlug(slug) {
-  return supabase
+  const { data, error } = await supabase
     .from('projects')
     .select('*')
     .eq('slug', slug)
     .maybeSingle();
+
+  if (error) throw error;
+  return data;
 }
 
 export async function getProjectById(id) {
-  return supabase
+  const { data, error } = await supabase
     .from('projects')
     .select('*')
     .eq('id', id)
     .maybeSingle();
+
+  if (error) throw error;
+  return data;
 }
 
 export async function createProject(project) {

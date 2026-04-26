@@ -15,13 +15,13 @@ export default function AdminProjectEdit() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const { data } = await getProjectById(id);
-      if (data) {
+      const project = await getProjectById(id);
+      if (project) {
         setForm({
-          title: data.title || "",
-          slug: data.slug || "",
-          description: data.description || "",
-          image_url: data.image_url || "",
+          title: project.title || "",
+          slug: project.slug || "",
+          description: project.description || "",
+          image_url: project.image_url || "",
         });
       }
       setLoading(false);

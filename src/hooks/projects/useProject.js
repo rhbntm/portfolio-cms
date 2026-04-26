@@ -14,18 +14,17 @@ export function useProject(slug) {
       setError(null);
       setData(null);
 
-      const { data, error } = await getProjectBySlug(slug);
-
-      if (!isMounted) return;
-
-      if (error) {
-        setError(error.message);
+      try {
+        const project = await getProjectBySlug(slug);
+        if (!isMounted) return;
+        setData(project);
+      } catch (err) {
+        if (!isMounted) return;
+        setError(err.message);
         setData(null);
-      } else {
-        setData(data);
+      } finally {
+        if (isMounted) setLoading(false);
       }
-
-      setLoading(false);
     }
 
     if (slug) {

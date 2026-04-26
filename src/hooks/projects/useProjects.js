@@ -13,18 +13,17 @@ export function useProjects() {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await getProjects();
-
-      if (!isMounted) return;
-
-      if (error) {
-        setError(error.message);
+      try {
+        const projects = await getProjects();
+        if (!isMounted) return;
+        setData(projects || []);
+      } catch (err) {
+        if (!isMounted) return;
+        setError(err.message);
         setData([]);
-      } else {
-        setData(data || []);
+      } finally {
+        if (isMounted) setLoading(false);
       }
-
-      setLoading(false);
     }
 
     fetchProjects();
