@@ -1,11 +1,12 @@
 import { usePosts } from "../../hooks";
 import { Link } from "react-router-dom";
+import { Loading, ErrorMessage } from "../../components";
 
 export default function Blog() {
   const { data: posts, loading, error } = usePosts();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
   if (!posts.length) return <p>No posts yet</p>;
 
   return (

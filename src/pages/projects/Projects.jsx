@@ -1,10 +1,11 @@
 import { useProjects } from '../../hooks';
+import { Loading, ErrorMessage } from '../../components';
 
 export default function Projects() {
   const { data: projects, loading, error } = useProjects();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <div>

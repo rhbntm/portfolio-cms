@@ -10,6 +10,11 @@ export function usePost(slug) {
     let isMounted = true;
 
     async function fetchPost() {
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       setData(null);
@@ -27,11 +32,7 @@ export function usePost(slug) {
       }
     }
 
-    if (slug) {
-      fetchPost();
-    } else {
-      setLoading(false);
-    }
+    fetchPost();
 
     return () => {
       isMounted = false;

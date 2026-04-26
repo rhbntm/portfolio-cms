@@ -10,6 +10,11 @@ export function useProject(slug) {
     let isMounted = true;
 
     async function fetchProject() {
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       setData(null);
@@ -27,11 +32,7 @@ export function useProject(slug) {
       }
     }
 
-    if (slug) {
-      fetchProject();
-    } else {
-      setLoading(false);
-    }
+    fetchProject();
 
     return () => {
       isMounted = false;
