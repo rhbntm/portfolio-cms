@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '../lib';
+import { useAuth } from '../hooks';
 import styles from './Login.module.css';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/admin');
+    }
+  }, [user, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,6 +32,8 @@ export default function Login() {
       setLoading(false);
     }
   }
+
+  if (authLoading) return null;
 
   return (
     <div className={styles.page}>

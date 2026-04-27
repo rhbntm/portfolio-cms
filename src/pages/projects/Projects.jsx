@@ -9,7 +9,6 @@ export default function Projects() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Work</p>
         <h1 className={styles.title}>Projects</h1>
       </div>
 

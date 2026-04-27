@@ -18,10 +18,14 @@ export default function AdminLayout() {
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <span className={styles.sidebarLogo}>Portfolio CMS</span>
-          <span className={styles.sidebarEnv}>admin</span>
+          <span className={styles.sidebarLogo}>Ralph Brent Marcelo</span>
+          <span className={styles.sidebarEnv}>Brent</span>
         </div>
         <nav className={styles.sidebarNav}>
+          <NavLink to="/" className={styles.sidebarLinkBack}>
+            ← Back to Site
+          </NavLink>
+          <div className={styles.sidebarDivider} />
           <span className={styles.sidebarSection}>Content</span>
           <NavLink
             to="/admin"

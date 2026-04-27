@@ -8,6 +8,8 @@ export default function AdminProjectEdit() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
+  const [category, setCategory] = useState('');
+  const [githubUrl, setGithubUrl] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -23,6 +25,8 @@ export default function AdminProjectEdit() {
       if (project) {
         setTitle(project.title || '');
         setSlug(project.slug || '');
+        setCategory(project.category || '');
+        setGithubUrl(project.github_url || '');
         setDescription(project.description || '');
         setImageUrl(project.image_url || '');
       }
@@ -46,7 +50,7 @@ export default function AdminProjectEdit() {
       if (imageFile) {
         finalImageUrl = await uploadImage(imageFile, "projects");
       }
-      await updateProject(id, { title, slug, description, image_url: finalImageUrl });
+      await updateProject(id, { title, slug, category, github_url: githubUrl, description, image_url: finalImageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -76,6 +80,17 @@ export default function AdminProjectEdit() {
             <label className={styles.label}>Slug</label>
             <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" />
             <span className={styles.hint}>Leave blank to auto-generate from title</span>
+          </div>
+        </div>
+
+        <div className={styles.formRow}>
+          <div className={styles.field}>
+            <label className={styles.label}>Tech Stack / Category</label>
+            <input className={styles.input} type="text" value={category} onChange={e => setCategory(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>GitHub URL</label>
+            <input className={styles.input} type="url" value={githubUrl} onChange={e => setGithubUrl(e.target.value)} placeholder="https://github.com/..." />
           </div>
         </div>
 

@@ -9,8 +9,7 @@ export default function Blog() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Writing</p>
-        <h1 className={styles.title}>Journal</h1>
+        <h1 className={styles.title}>Blog</h1>
       </div>
 
       {loading && <Loading />}

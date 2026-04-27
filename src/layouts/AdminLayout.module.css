@@ -65,6 +65,28 @@
   user-select: none;
 }
 
+.sidebarLinkBack {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-admin);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #8fd195;
+  text-decoration: none;
+  transition: background var(--transition);
+  margin-bottom: var(--space-xs);
+}
+.sidebarLinkBack:hover { background: #191b1f; }
+
+.sidebarDivider {
+  height: 1px;
+  background: #1c1e22;
+  margin: var(--space-sm) var(--space-md);
+}
+
 .sidebarLink {
   display: flex;
   align-items: center;
