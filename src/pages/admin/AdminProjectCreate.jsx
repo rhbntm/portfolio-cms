@@ -1,78 +1,85 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createProject, uploadImage } from "../../lib";
+import styles from './AdminForm.module.css';
 
 export default function AdminProjectCreate() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ title: "", slug: "", description: "" });
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [description, setDescription] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  function handleChange(e) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file) setPreviewUrl(URL.createObjectURL(file));
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setSaving(true);
+    setLoading(true);
     setError(null);
     try {
       let imageUrl = null;
       if (imageFile) {
         imageUrl = await uploadImage(imageFile, "projects");
       }
-      await createProject({ ...form, image_url: imageUrl });
+      await createProject({ title, slug, description, image_url: imageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
     } finally {
-      setSaving(false);
+      setLoading(false);
     }
   }
 
   return (
-    <div>
-      <h1>Create Project</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <Link to="/admin/projects" className={styles.back}>← projects</Link>
+        <h1 className={styles.pageTitle}>New Project</h1>
+      </div>
+
+      {error && <div className={styles.error}>{error}</div>}
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formRow}>
+          <div className={styles.field}>
+            <label className={styles.label}>Title <span className={styles.required}>*</span></label>
+            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Project name" required />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Slug</label>
+            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" />
+            <span className={styles.hint}>Leave blank to auto-generate from title</span>
+          </div>
         </div>
-        <div>
-          <label>Slug</label>
-          <input
-            name="slug"
-            value={form.slug}
-            onChange={handleChange}
-            required
-          />
+
+        <div className={styles.field}>
+          <label className={styles.label}>Description</label>
+          <textarea className={styles.textarea} value={description} onChange={e => setDescription(e.target.value)} placeholder="Brief project description" />
         </div>
-        <div>
-          <label>Description</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-          />
+
+        <div className={styles.field}>
+          <label className={styles.label}>Cover Image</label>
+          <div className={styles.imageSection}>
+            <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
+            {previewUrl && (
+              <img className={styles.imagePreview} src={previewUrl} alt="Preview" />
+            )}
+          </div>
         </div>
-        <div>
-          <label>Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0])}
-          />
+
+        <div className={styles.formActions}>
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
+            {loading ? 'Saving…' : 'Save Project'}
+          </button>
+          <Link to="/admin/projects" className={styles.cancelBtn}>Cancel</Link>
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Create"}
-        </button>
       </form>
     </div>
   );

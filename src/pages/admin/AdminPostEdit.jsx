@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { getPostById, updatePost, uploadImage } from "../../lib";
+import styles from './AdminForm.module.css';
 
 export default function AdminPostEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    title: "",
-    slug: "",
-    excerpt: "",
-    content: "",
-    is_published: false,
-    cover_image: "",
-  });
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+  const [content, setContent] = useState('');
+  const [isPublished, setIsPublished] = useState(false);
+  const [coverImage, setCoverImage] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -23,26 +23,22 @@ export default function AdminPostEdit() {
       setLoading(true);
       const data = await getPostById(id);
       if (data) {
-        setForm({
-          title: data.title || "",
-          slug: data.slug || "",
-          excerpt: data.excerpt || "",
-          content: data.content || "",
-          is_published: !!data.is_published,
-          cover_image: data.cover_image || "",
-        });
+        setTitle(data.title || '');
+        setSlug(data.slug || '');
+        setExcerpt(data.excerpt || '');
+        setContent(data.content || '');
+        setIsPublished(!!data.is_published);
+        setCoverImage(data.cover_image || '');
       }
       setLoading(false);
     }
     load();
   }, [id]);
 
-  function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file) setPreviewUrl(URL.createObjectURL(file));
   }
 
   async function handleSubmit(e) {
@@ -50,11 +46,11 @@ export default function AdminPostEdit() {
     setSaving(true);
     setError(null);
     try {
-      const payload = { ...form };
+      let finalCoverImage = coverImage;
       if (imageFile) {
-        payload.cover_image = await uploadImage(imageFile, "posts");
+        finalCoverImage = await uploadImage(imageFile, "posts");
       }
-      await updatePost(id, payload);
+      await updatePost(id, { title, slug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage });
       navigate("/admin/posts");
     } catch (err) {
       setError(err.message);
@@ -63,75 +59,67 @@ export default function AdminPostEdit() {
     }
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p style={{ padding: '2rem', color: '#52555e' }}>Loading…</p>;
 
   return (
-    <div>
-      <h1>Edit Post</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Slug</label>
-          <input
-            name="slug"
-            value={form.slug}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Excerpt</label>
-          <textarea
-            name="excerpt"
-            value={form.excerpt}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Content</label>
-          <textarea
-            name="content"
-            value={form.content}
-            onChange={handleChange}
-            rows={10}
-          />
-        </div>
-        {form.cover_image && (
-          <div>
-            <img src={form.cover_image} alt="Current" style={{ maxWidth: "200px", maxHeight: "200px" }} />
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <Link to="/admin/posts" className={styles.back}>← posts</Link>
+        <h1 className={styles.pageTitle}>Edit Post</h1>
+      </div>
+
+      {error && <div className={styles.error}>{error}</div>}
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formRow}>
+          <div className={styles.field}>
+            <label className={styles.label}>Title <span className={styles.required}>*</span></label>
+            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Post title" required />
           </div>
-        )}
-        <div>
-          <label>Cover Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0])}
+          <div className={styles.field}>
+            <label className={styles.label}>Slug</label>
+            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" />
+            <span className={styles.hint}>Leave blank to auto-generate</span>
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Excerpt</label>
+          <textarea className={styles.textarea} value={excerpt} onChange={e => setExcerpt(e.target.value)} placeholder="Short summary shown in listings" />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Content <span className={styles.required}>*</span></label>
+          <textarea
+            className={`${styles.textarea} ${styles.contentTextarea}`}
+            value={content}
+            onChange={e => setContent(e.target.value)}
+            placeholder="Write your post content here…"
+            required
           />
         </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="is_published"
-              checked={form.is_published}
-              onChange={handleChange}
-            />{" "}
-            Published
-          </label>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Cover Image</label>
+          <div className={styles.imageSection}>
+            <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
+            {(previewUrl || coverImage) && (
+              <img className={styles.imagePreview} src={previewUrl || coverImage} alt="Preview" />
+            )}
+          </div>
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save"}
-        </button>
+
+        <label className={styles.checkboxField}>
+          <input type="checkbox" className={styles.checkboxInput} checked={isPublished} onChange={e => setIsPublished(e.target.checked)} />
+          <span className={styles.checkboxLabel}>Publish immediately</span>
+        </label>
+
+        <div className={styles.formActions}>
+          <button type="submit" className={styles.submitBtn} disabled={saving}>
+            {saving ? 'Saving…' : 'Save Post'}
+          </button>
+          <Link to="/admin/posts" className={styles.cancelBtn}>Cancel</Link>
+        </div>
       </form>
     </div>
   );

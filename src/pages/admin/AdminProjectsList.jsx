@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProjects } from "../../hooks";
 import { deleteProject } from "../../lib";
+import { Loading, ErrorMessage } from "../../components";
+import styles from './AdminList.module.css';
 
 export default function AdminProjectsList() {
   const { data: projects, loading, error } = useProjects();
@@ -10,7 +12,6 @@ export default function AdminProjectsList() {
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this project?")) return;
-
     setDeletingId(id);
     setDeleteError(null);
     try {
@@ -22,42 +23,51 @@ export default function AdminProjectsList() {
     }
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <div>
-      <h1>Admin — Projects</h1>
-      <Link to="/admin/projects/new">
-        <button>Create New Project</button>
-      </Link>
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Projects</h1>
+        <Link to="/admin/projects/new" className={styles.createBtn}>+ New Project</Link>
+      </div>
 
-      {deleteError && <p style={{ color: "red" }}>{deleteError}</p>}
-      {projects.length === 0 && <p>No projects found.</p>}
+      {loading && <Loading />}
+      {(error || deleteError) && <ErrorMessage message={error || deleteError} />}
 
-      <ul>
-        {projects.map((p) => (
-          <li key={p.id}>
-            {p.image_url && (
-              <img
-                src={p.image_url}
-                alt={p.title}
-                style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "8px", verticalAlign: "middle" }}
-              />
-            )}
-            <strong>{p.title}</strong> ({p.slug}){" "}
-            <Link to={`/admin/projects/${p.id}/edit`}>
-              <button>Edit</button>
-            </Link>{" "}
-            <button
-              onClick={() => handleDelete(p.id)}
-              disabled={deletingId === p.id}
-            >
-              {deletingId === p.id ? "Deleting..." : "Delete"}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {!loading && !error && (
+        projects.length === 0 ? (
+          <p className={styles.empty}>No projects yet.</p>
+        ) : (
+          <table className={styles.table}>
+            <thead className={styles.tableHead}>
+              <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {projects.map(project => (
+                <tr key={project.id} className={styles.tableRow}>
+                  <td className={styles.cellPrimary}>{project.title}</td>
+                  <td className={styles.cellMono}>{project.slug}</td>
+                  <td>
+                    <div className={styles.cellActions}>
+                      <Link to={`/admin/projects/${project.id}/edit`} className={styles.editBtn}>edit</Link>
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDelete(project.id)}
+                        disabled={deletingId === project.id}
+                      >
+                        {deletingId === project.id ? '…' : 'delete'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      )}
     </div>
   );
 }

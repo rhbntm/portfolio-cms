@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminPosts } from "../../hooks";
 import { deletePost } from "../../lib";
+import { Loading, ErrorMessage } from "../../components";
+import styles from './AdminList.module.css';
 
 export default function AdminPostsList() {
   const { data: posts, loading, error } = useAdminPosts();
@@ -10,7 +12,6 @@ export default function AdminPostsList() {
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this post?")) return;
-
     setDeletingId(id);
     setDeleteError(null);
     try {
@@ -22,42 +23,57 @@ export default function AdminPostsList() {
     }
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <div>
-      <h1>Admin — Posts</h1>
-      <Link to="/admin/posts/new">
-        <button>Create New Post</button>
-      </Link>
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Posts</h1>
+        <Link to="/admin/posts/new" className={styles.createBtn}>+ New Post</Link>
+      </div>
 
-      {deleteError && <p style={{ color: "red" }}>{deleteError}</p>}
-      {posts.length === 0 && <p>No posts found.</p>}
+      {loading && <Loading />}
+      {(error || deleteError) && <ErrorMessage message={error || deleteError} />}
 
-      <ul>
-        {posts.map((p) => (
-          <li key={p.id}>
-            {p.cover_image && (
-              <img
-                src={p.cover_image}
-                alt={p.title}
-                style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "8px", verticalAlign: "middle" }}
-              />
-            )}
-            <strong>{p.title}</strong> ({p.slug}){" "}
-            <Link to={`/admin/posts/${p.id}/edit`}>
-              <button>Edit</button>
-            </Link>{" "}
-            <button
-              onClick={() => handleDelete(p.id)}
-              disabled={deletingId === p.id}
-            >
-              {deletingId === p.id ? "Deleting..." : "Delete"}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {!loading && !error && (
+        posts.length === 0 ? (
+          <p className={styles.empty}>No posts yet.</p>
+        ) : (
+          <table className={styles.table}>
+            <thead className={styles.tableHead}>
+              <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map(post => (
+                <tr key={post.id} className={styles.tableRow}>
+                  <td className={styles.cellPrimary}>{post.title}</td>
+                  <td className={styles.cellMono}>{post.slug}</td>
+                  <td>
+                    <span className={`${styles.badge} ${post.is_published ? styles.badgePublished : styles.badgeDraft}`}>
+                      {post.is_published ? 'live' : 'draft'}
+                    </span>
+                  </td>
+                  <td>
+                    <div className={styles.cellActions}>
+                      <Link to={`/admin/posts/${post.id}/edit`} className={styles.editBtn}>edit</Link>
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDelete(post.id)}
+                        disabled={deletingId === post.id}
+                      >
+                        {deletingId === post.id ? '…' : 'delete'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      )}
     </div>
   );
 }

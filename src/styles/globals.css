@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:              #121414;
+  --bg-low:          #0c0f0f;
+  --surface:         #1a1c1c;
+  --surface-mid:     #1e2020;
+  --surface-high:    #282a2b;
+  --surface-bright:  #37393a;
+
+  --text-primary:    #e2e2e2;
+  --text-secondary:  #b9cacb;
+  --text-muted:      #849495;
+
+  --border:          #3b494b;
+  --border-bright:   #546a6b;
+
+  --accent:          #215224;
+  --accent-bright:   #3d9945;
+  --accent-hover:    #1a4020;
+  --accent-glow:     rgba(33, 82, 36, 0.18);
+  --accent-text:     #8fd195;
+  --on-accent:       #e8f5e9;
+
+  --font-display:    'Noto Serif', Georgia, serif;
+  --font-body:       'Manrope', system-ui, sans-serif;
+  --font-admin:      'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono:       'IBM Plex Mono', 'Courier New', monospace;
+
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   48px;
+  --space-xxl:  80px;
+
+  --radius-sm:  2px;
+  --radius-md:  4px;
+  --radius-lg:  8px;
+
+  --transition:      220ms ease;
+  --transition-slow: 600ms ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+::selection { background: var(--accent); color: var(--on-accent); }

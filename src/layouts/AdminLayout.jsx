@@ -1,10 +1,11 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "../lib/auth";
+import styles from './AdminLayout.module.css';
 
 export default function AdminLayout() {
   const navigate = useNavigate();
 
-  async function handleLogout() {
+  async function handleSignOut() {
     try {
       await signOut();
       navigate("/login");
@@ -14,17 +15,46 @@ export default function AdminLayout() {
   }
 
   return (
-    <div>
-      <nav style={{ marginBottom: "1rem" }}>
-        <strong>Admin</strong> |{" "}
-        <Link to="/admin">Dashboard</Link> |{" "}
-        <Link to="/admin/projects">Projects</Link> |{" "}
-        <Link to="/admin/posts">Posts</Link> |{" "}
-        <Link to="/">← Back to Site</Link> |{" "}
-        <button onClick={handleLogout}>Logout</button>
-      </nav>
+    <div className={styles.shell}>
+      <aside className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>
+          <span className={styles.sidebarLogo}>Portfolio CMS</span>
+          <span className={styles.sidebarEnv}>admin</span>
+        </div>
+        <nav className={styles.sidebarNav}>
+          <span className={styles.sidebarSection}>Content</span>
+          <NavLink
+            to="/admin"
+            end
+            className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.sidebarLinkActive : ''}`}
+          >
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/admin/projects"
+            className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.sidebarLinkActive : ''}`}
+          >
+            Projects
+          </NavLink>
+          <NavLink
+            to="/admin/posts"
+            className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.sidebarLinkActive : ''}`}
+          >
+            Posts
+          </NavLink>
+        </nav>
+        <div className={styles.logoutArea}>
+          <button className={styles.logoutBtn} onClick={handleSignOut}>
+            Sign out
+          </button>
+        </div>
+      </aside>
 
-      <Outlet />
+      <div className={styles.main}>
+        <div className={styles.content}>
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 }

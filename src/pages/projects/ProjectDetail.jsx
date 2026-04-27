@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
-import { useProject } from "../../hooks";
-import { Loading, ErrorMessage } from "../../components";
+import { Link, useParams } from 'react-router-dom';
+import { useProject } from '../../hooks';
+import { Loading, ErrorMessage } from '../../components';
+import styles from './ProjectDetail.module.css';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -11,12 +12,21 @@ export default function ProjectDetail() {
   if (!project) return <p>Project not found</p>;
 
   return (
-    <div>
-      {project.image_url && (
-        <img src={project.image_url} alt={project.title} style={{ maxWidth: "100%", maxHeight: "400px", objectFit: "cover" }} />
-      )}
-      <h1>{project.title}</h1>
-      <p>{project.description}</p>
+    <div className={styles.page}>
+      <Link to="/projects" className={styles.back}>← Projects</Link>
+
+      <div className={styles.hero}>
+        {project.image_url
+          ? <img className={styles.heroImage} src={project.image_url} alt={project.title} />
+          : <div className={styles.heroPlaceholder}>No Image</div>
+        }
+      </div>
+
+      <div className={styles.content}>
+        <p className={styles.category}>Project</p>
+        <h1 className={styles.title}>{project.title}</h1>
+        <p className={styles.description}>{project.description}</p>
+      </div>
     </div>
   );
 }

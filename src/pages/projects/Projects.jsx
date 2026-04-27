@@ -1,24 +1,42 @@
+import { Link } from 'react-router-dom';
 import { useProjects } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
+import styles from './Projects.module.css';
 
 export default function Projects() {
   const { data: projects, loading, error } = useProjects();
 
-  if (loading) return <Loading />;
-  if (error) return <ErrorMessage message={error} />;
-
   return (
-    <div>
-      {projects.map(p => (
-        <div key={p.id}>
-          {p.image_url ? (
-            <img src={p.image_url} alt={p.title} style={{ width: "120px", height: "120px", objectFit: "cover", marginRight: "8px", verticalAlign: "middle" }} />
-          ) : (
-            <span style={{ display: "inline-block", width: "120px", height: "120px", background: "#eee", marginRight: "8px", verticalAlign: "middle" }} />
-          )}
-          {p.title}
-        </div>
-      ))}
+    <div className={styles.page}>
+      <div className={styles.header}>
+        <p className={styles.eyebrow}>Work</p>
+        <h1 className={styles.title}>Projects</h1>
+      </div>
+
+      {loading && <Loading />}
+      {error && <ErrorMessage message={error} />}
+
+      {!loading && !error && (
+        projects.length === 0 ? (
+          <p className={styles.empty}>No projects yet.</p>
+        ) : (
+          <div className={styles.grid}>
+            {projects.map(project => (
+              <Link key={project.id} to={`/projects/${project.slug}`} className={styles.card}>
+                <div className={styles.cardImageWrap}>
+                  {project.image_url && (
+                    <img className={styles.cardImage} src={project.image_url} alt={project.title} />
+                  )}
+                </div>
+                <div className={styles.cardBody}>
+                  <h2 className={styles.cardTitle}>{project.title}</h2>
+                  <p className={styles.cardDescription}>{project.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )
+      )}
     </div>
   );
 }

@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { getProjectById, updateProject, uploadImage } from "../../lib";
+import styles from './AdminForm.module.css';
 
 export default function AdminProjectEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ title: "", slug: "", description: "", image_url: "" });
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -16,20 +21,20 @@ export default function AdminProjectEdit() {
       setLoading(true);
       const project = await getProjectById(id);
       if (project) {
-        setForm({
-          title: project.title || "",
-          slug: project.slug || "",
-          description: project.description || "",
-          image_url: project.image_url || "",
-        });
+        setTitle(project.title || '');
+        setSlug(project.slug || '');
+        setDescription(project.description || '');
+        setImageUrl(project.image_url || '');
       }
       setLoading(false);
     }
     load();
   }, [id]);
 
-  function handleChange(e) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file) setPreviewUrl(URL.createObjectURL(file));
   }
 
   async function handleSubmit(e) {
@@ -37,11 +42,11 @@ export default function AdminProjectEdit() {
     setSaving(true);
     setError(null);
     try {
-      const payload = { ...form };
+      let finalImageUrl = imageUrl;
       if (imageFile) {
-        payload.image_url = await uploadImage(imageFile, "projects");
+        finalImageUrl = await uploadImage(imageFile, "projects");
       }
-      await updateProject(id, payload);
+      await updateProject(id, { title, slug, description, image_url: finalImageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -50,55 +55,51 @@ export default function AdminProjectEdit() {
     }
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p style={{ padding: '2rem', color: '#52555e' }}>Loading…</p>;
 
   return (
-    <div>
-      <h1>Edit Project</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Slug</label>
-          <input
-            name="slug"
-            value={form.slug}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Description</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-          />
-        </div>
-        {form.image_url && (
-          <div>
-            <img src={form.image_url} alt="Current" style={{ maxWidth: "200px", maxHeight: "200px" }} />
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <Link to="/admin/projects" className={styles.back}>← projects</Link>
+        <h1 className={styles.pageTitle}>Edit Project</h1>
+      </div>
+
+      {error && <div className={styles.error}>{error}</div>}
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formRow}>
+          <div className={styles.field}>
+            <label className={styles.label}>Title <span className={styles.required}>*</span></label>
+            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Project name" required />
           </div>
-        )}
-        <div>
-          <label>Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0])}
-          />
+          <div className={styles.field}>
+            <label className={styles.label}>Slug</label>
+            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" />
+            <span className={styles.hint}>Leave blank to auto-generate from title</span>
+          </div>
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save"}
-        </button>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Description</label>
+          <textarea className={styles.textarea} value={description} onChange={e => setDescription(e.target.value)} placeholder="Brief project description" />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Cover Image</label>
+          <div className={styles.imageSection}>
+            <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
+            {(previewUrl || imageUrl) && (
+              <img className={styles.imagePreview} src={previewUrl || imageUrl} alt="Preview" />
+            )}
+          </div>
+        </div>
+
+        <div className={styles.formActions}>
+          <button type="submit" className={styles.submitBtn} disabled={saving}>
+            {saving ? 'Saving…' : 'Save Project'}
+          </button>
+          <Link to="/admin/projects" className={styles.cancelBtn}>Cancel</Link>
+        </div>
       </form>
     </div>
   );
