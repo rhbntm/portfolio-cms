@@ -23,7 +23,19 @@ export default function ProjectDetail() {
       </div>
 
       <div className={styles.content}>
-        <p className={styles.category}>{project.tech_stack?.join(' / ') || 'Project'}</p>
+        <div className={styles.metaRow}>
+          <p className={styles.category}>{project.tech_stack?.join(' / ') || 'Project'}</p>
+          {project.github_url && (
+            <a
+              href={project.github_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.githubLink}
+            >
+              GitHub →
+            </a>
+          )}
+        </div>
         <h1 className={styles.title}>{project.title}</h1>
         <p className={styles.description}>{project.description}</p>
       </div>
