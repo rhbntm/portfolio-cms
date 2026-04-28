@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { sanitizeString, sanitizeStringArray } from './validation';
 
 export async function getProjects() {
   const { data, error } = await supabase
@@ -33,9 +34,16 @@ export async function getProjectById(id) {
 }
 
 export async function createProject(project) {
+  const sanitized = {
+    ...project,
+    title: sanitizeString(project.title),
+    slug: sanitizeString(project.slug),
+    tech_stack: sanitizeStringArray(project.tech_stack),
+    description: sanitizeString(project.description),
+  };
   const { data, error } = await supabase
     .from('projects')
-    .insert(project)
+    .insert(sanitized)
     .select()
     .single();
 
@@ -44,9 +52,16 @@ export async function createProject(project) {
 }
 
 export async function updateProject(id, project) {
+  const sanitized = {
+    ...project,
+    title: sanitizeString(project.title),
+    slug: sanitizeString(project.slug),
+    tech_stack: sanitizeStringArray(project.tech_stack),
+    description: sanitizeString(project.description),
+  };
   const { data, error } = await supabase
     .from('projects')
-    .update(project)
+    .update(sanitized)
     .eq('id', id)
     .select()
     .single();

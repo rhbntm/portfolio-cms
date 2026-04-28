@@ -8,7 +8,7 @@ export default function AdminProjectEdit() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
-  const [category, setCategory] = useState('');
+  const [techStack, setTechStack] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -25,7 +25,7 @@ export default function AdminProjectEdit() {
       if (project) {
         setTitle(project.title || '');
         setSlug(project.slug || '');
-        setCategory(project.category || '');
+        setTechStack(project.tech_stack?.join(' • ') || '');
         setGithubUrl(project.github_url || '');
         setDescription(project.description || '');
         setImageUrl(project.image_url || '');
@@ -37,9 +37,16 @@ export default function AdminProjectEdit() {
 
   function handleImageChange(e) {
     const file = e.target.files[0];
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
     setImageFile(file);
     if (file) setPreviewUrl(URL.createObjectURL(file));
   }
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -50,7 +57,8 @@ export default function AdminProjectEdit() {
       if (imageFile) {
         finalImageUrl = await uploadImage(imageFile, "projects");
       }
-      await updateProject(id, { title, slug, category, github_url: githubUrl, description, image_url: finalImageUrl });
+      const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
+      await updateProject(id, { title, slug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -74,19 +82,19 @@ export default function AdminProjectEdit() {
         <div className={styles.formRow}>
           <div className={styles.field}>
             <label className={styles.label}>Title <span className={styles.required}>*</span></label>
-            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Project name" required />
+            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Project name" required maxLength={200} />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Slug</label>
-            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" />
+            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" maxLength={200} />
             <span className={styles.hint}>Leave blank to auto-generate from title</span>
           </div>
         </div>
 
         <div className={styles.formRow}>
           <div className={styles.field}>
-            <label className={styles.label}>Tech Stack / Category</label>
-            <input className={styles.input} type="text" value={category} onChange={e => setCategory(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
+            <label className={styles.label}>Tech Stack</label>
+            <input className={styles.input} type="text" value={techStack} onChange={e => setTechStack(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>GitHub URL</label>

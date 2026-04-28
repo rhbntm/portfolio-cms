@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { sanitizeString } from './validation';
 
 export async function getPosts({ includeDrafts = false } = {}) {
   let query = supabase
@@ -39,9 +40,16 @@ export async function getPostById(id) {
 }
 
 export async function createPost(post) {
+  const sanitized = {
+    ...post,
+    title: sanitizeString(post.title),
+    slug: sanitizeString(post.slug),
+    excerpt: sanitizeString(post.excerpt),
+    content: sanitizeString(post.content),
+  };
   const { data, error } = await supabase
     .from('posts')
-    .insert(post)
+    .insert(sanitized)
     .select();
 
   if (error) throw error;
@@ -49,9 +57,16 @@ export async function createPost(post) {
 }
 
 export async function updatePost(id, post) {
+  const sanitized = {
+    ...post,
+    title: sanitizeString(post.title),
+    slug: sanitizeString(post.slug),
+    excerpt: sanitizeString(post.excerpt),
+    content: sanitizeString(post.content),
+  };
   const { data, error } = await supabase
     .from('posts')
-    .update(post)
+    .update(sanitized)
     .eq('id', id)
     .select();
 

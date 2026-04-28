@@ -133,9 +133,7 @@
   display: block;
   transition: transform var(--transition-slow);
 }
-.heroImageContainer:hover .heroImage {
-  transform: scale(1.05);
-}
+
 
 /* Standard Sections */
 .divider {

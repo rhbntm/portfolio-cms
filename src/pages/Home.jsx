@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useProjects, usePosts } from '../hooks';
 import { Loading } from '../components/ui';
+import { isValidHttpsUrl } from '../lib/validation';
 import heroImg from '../assets/hero.jpg';
 import styles from './Home.module.css';
 
@@ -18,7 +19,7 @@ export default function Home() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <p className={styles.heroEyebrow}>Open for work</p>
+          <p className={styles.heroEyebrow}>Open for internships</p>
           <h1 className={styles.heroTitle}>I build full-stack web apps with React and Laravel.</h1>
           <p className={styles.heroSub}>
             3rd-year IT student focused on building functional websites and systems 
@@ -52,15 +53,15 @@ export default function Home() {
             {projects[0] && (
               <div className={`${styles.projectCard} ${styles.projectCardLarge}`}>
                 <Link to={`/projects/${projects[0]?.slug}`} className={styles.projectImageWrapper}>
-                  <img className={styles.projectImage} src={projects[0]?.image_url} alt={projects[0]?.title} />
+                  {projects[0]?.image_url && <img className={styles.projectImage} src={projects[0].image_url} alt={projects[0].title} />}
                   <div className={styles.projectOverlay} />
                 </Link>
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
                     <h3 className={styles.projectTitle}>{projects[0]?.title}</h3>
-                    <p className={styles.projectCategory}>{projects[0]?.category || 'Full-stack Platform'}</p>
+                    <p className={styles.projectCategory}>{projects[0]?.tech_stack?.join(' / ') || 'Full-stack Platform'}</p>
                   </div>
-                  {projects[0]?.github_url && (
+                  {isValidHttpsUrl(projects[0]?.github_url, ['github.com']) && (
                     <a href={projects[0].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
                   )}
                 </div>
@@ -69,15 +70,15 @@ export default function Home() {
             {projects[1] && (
               <div className={`${styles.projectCard} ${styles.projectCardSmall}`}>
                 <Link to={`/projects/${projects[1]?.slug}`} className={styles.projectImageWrapper}>
-                  <img className={styles.projectImage} src={projects[1]?.image_url} alt={projects[1]?.title} />
+                  {projects[1]?.image_url && <img className={styles.projectImage} src={projects[1].image_url} alt={projects[1].title} />}
                   <div className={styles.projectOverlay} />
                 </Link>
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
                     <h3 className={styles.projectTitle}>{projects[1]?.title}</h3>
-                    <p className={styles.projectCategory}>{projects[1]?.category || 'Web Application'}</p>
+                    <p className={styles.projectCategory}>{projects[1]?.tech_stack?.join(' / ') || 'Web Application'}</p>
                   </div>
-                  {projects[1]?.github_url && (
+                  {isValidHttpsUrl(projects[1]?.github_url, ['github.com']) && (
                     <a href={projects[1].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
                   )}
                 </div>
@@ -86,15 +87,15 @@ export default function Home() {
             {projects[2] && (
               <div className={`${styles.projectCard} ${styles.projectCardFull}`}>
                 <Link to={`/projects/${projects[2]?.slug}`} className={styles.projectImageWrapper}>
-                  <img className={styles.projectImage} src={projects[2]?.image_url} alt={projects[2]?.title} />
+                  {projects[2]?.image_url && <img className={styles.projectImage} src={projects[2].image_url} alt={projects[2].title} />}
                   <div className={styles.projectOverlay} />
                 </Link>
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
                     <h3 className={styles.projectTitle}>{projects[2]?.title}</h3>
-                    <p className={styles.projectCategory}>{projects[2]?.category || 'System Implementation'}</p>
+                    <p className={styles.projectCategory}>{projects[2]?.tech_stack?.join(' / ') || 'System Implementation'}</p>
                   </div>
-                  {projects[2]?.github_url && (
+                  {isValidHttpsUrl(projects[2]?.github_url, ['github.com']) && (
                     <a href={projects[2].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
                   )}
                 </div>

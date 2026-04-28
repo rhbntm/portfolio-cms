@@ -1,7 +1,10 @@
 import { supabase } from './supabase';
+import { validateImageFile } from './validation';
 
 export async function uploadImage(file, folder) {
-  const filePath = `${folder}/${Date.now()}-${file.name}`;
+  validateImageFile(file);
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const filePath = `${folder}/${Date.now()}-${safeName}`;
 
   const { error: uploadError } = await supabase.storage
     .from('images')

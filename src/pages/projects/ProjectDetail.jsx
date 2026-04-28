@@ -23,7 +23,7 @@ export default function ProjectDetail() {
       </div>
 
       <div className={styles.content}>
-        <p className={styles.category}>Project</p>
+        <p className={styles.category}>{project.tech_stack?.join(' / ') || 'Project'}</p>
         <h1 className={styles.title}>{project.title}</h1>
         <p className={styles.description}>{project.description}</p>
       </div>

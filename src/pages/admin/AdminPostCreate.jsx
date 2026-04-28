@@ -52,11 +52,11 @@ export default function AdminPostCreate() {
         <div className={styles.formRow}>
           <div className={styles.field}>
             <label className={styles.label}>Title <span className={styles.required}>*</span></label>
-            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Post title" required />
+            <input className={styles.input} type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Post title" required maxLength={200} />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Slug</label>
-            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" />
+            <input className={styles.input} type="text" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated" maxLength={200} />
             <span className={styles.hint}>Leave blank to auto-generate</span>
           </div>
         </div>
