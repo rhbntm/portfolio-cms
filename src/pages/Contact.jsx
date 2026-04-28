@@ -112,7 +112,7 @@ export default function Contact() {
         <div className={styles.infoSection}>
           <div className={styles.infoGroup}>
             <span className={styles.infoLabel}>Email</span>
-            <span className={styles.infoValue}>rhbntm@gmail.com</span>
+            <span className={styles.infoValue}>ralphbrentm@gmail.com</span>
           </div>
 
           <div className={styles.infoGroup}>
