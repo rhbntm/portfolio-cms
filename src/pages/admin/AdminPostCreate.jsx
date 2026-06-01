@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createPost, uploadImage } from "../../lib";
+import { createPost, uploadImage, getPostBySlug } from "../../lib";
 import styles from './AdminForm.module.css';
 
 export default function AdminPostCreate() {
@@ -26,11 +26,38 @@ export default function AdminPostCreate() {
     setLoading(true);
     setError(null);
     try {
+      let finalSlug = slug.trim();
+      if (!finalSlug && title) {
+        finalSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      }
+      if (finalSlug) {
+        let uniqueSlug = finalSlug;
+        let counter = 2;
+        let collision = true;
+        while (collision) {
+          const existing = await getPostBySlug(uniqueSlug);
+          if (existing) {
+            uniqueSlug = `${finalSlug}-${counter}`;
+            counter++;
+          } else {
+            collision = false;
+          }
+        }
+        if (uniqueSlug !== finalSlug) {
+          if (!window.confirm(`Slug collision detected. Use "${uniqueSlug}" instead?`)) {
+            setLoading(false);
+            setError("Slug generation cancelled.");
+            return;
+          }
+        }
+        finalSlug = uniqueSlug;
+      }
+
       let coverImageUrl = null;
       if (imageFile) {
         coverImageUrl = await uploadImage(imageFile, "posts");
       }
-      await createPost({ title, slug, excerpt, content, is_published: isPublished, cover_image: coverImageUrl });
+      await createPost({ title, slug: finalSlug, excerpt, content, is_published: isPublished, cover_image: coverImageUrl });
       navigate("/admin/posts");
     } catch (err) {
       setError(err.message);

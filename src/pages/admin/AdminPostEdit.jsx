@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { getPostById, updatePost, uploadImage } from "../../lib";
+import { getPostById, updatePost, uploadImage, getPostBySlug } from "../../lib";
 import styles from './AdminForm.module.css';
 
 export default function AdminPostEdit() {
@@ -21,14 +21,21 @@ export default function AdminPostEdit() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const data = await getPostById(id);
-      if (data) {
-        setTitle(data.title || '');
-        setSlug(data.slug || '');
-        setExcerpt(data.excerpt || '');
-        setContent(data.content || '');
-        setIsPublished(!!data.is_published);
-        setCoverImage(data.cover_image || '');
+      setError(null);
+      try {
+        const data = await getPostById(id);
+        if (data) {
+          setTitle(data.title || '');
+          setSlug(data.slug || '');
+          setExcerpt(data.excerpt || '');
+          setContent(data.content || '');
+          setIsPublished(!!data.is_published);
+          setCoverImage(data.cover_image || '');
+        } else {
+          setError("Post not found.");
+        }
+      } catch (err) {
+        setError("Failed to load post. Please try again.");
       }
       setLoading(false);
     }
@@ -46,11 +53,38 @@ export default function AdminPostEdit() {
     setSaving(true);
     setError(null);
     try {
+      let finalSlug = slug.trim();
+      if (!finalSlug && title) {
+        finalSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      }
+      if (finalSlug) {
+        let uniqueSlug = finalSlug;
+        let counter = 2;
+        let collision = true;
+        while (collision) {
+          const existing = await getPostBySlug(uniqueSlug);
+          if (existing && existing.id !== parseInt(id, 10)) {
+            uniqueSlug = `${finalSlug}-${counter}`;
+            counter++;
+          } else {
+            collision = false;
+          }
+        }
+        if (uniqueSlug !== finalSlug) {
+          if (!window.confirm(`Slug collision detected. Use "${uniqueSlug}" instead?`)) {
+            setSaving(false);
+            setError("Slug generation cancelled.");
+            return;
+          }
+        }
+        finalSlug = uniqueSlug;
+      }
+
       let finalCoverImage = coverImage;
       if (imageFile) {
         finalCoverImage = await uploadImage(imageFile, "posts");
       }
-      await updatePost(id, { title, slug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage });
+      await updatePost(id, { title, slug: finalSlug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage });
       navigate("/admin/posts");
     } catch (err) {
       setError(err.message);

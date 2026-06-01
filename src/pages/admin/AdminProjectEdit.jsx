@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { getProjectById, updateProject, uploadImage } from "../../lib";
+import { getProjectById, updateProject, uploadImage, getProjectBySlug } from "../../lib";
 import styles from './AdminForm.module.css';
 
 export default function AdminProjectEdit() {
@@ -21,14 +21,21 @@ export default function AdminProjectEdit() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const project = await getProjectById(id);
-      if (project) {
-        setTitle(project.title || '');
-        setSlug(project.slug || '');
-        setTechStack(project.tech_stack?.join(' • ') || '');
-        setGithubUrl(project.github_url || '');
-        setDescription(project.description || '');
-        setImageUrl(project.image_url || '');
+      setError(null);
+      try {
+        const project = await getProjectById(id);
+        if (project) {
+          setTitle(project.title || '');
+          setSlug(project.slug || '');
+          setTechStack(project.tech_stack?.join(' • ') || '');
+          setGithubUrl(project.github_url || '');
+          setDescription(project.description || '');
+          setImageUrl(project.image_url || '');
+        } else {
+          setError("Project not found.");
+        }
+      } catch (err) {
+        setError("Failed to load project. Please try again.");
       }
       setLoading(false);
     }
@@ -53,12 +60,39 @@ export default function AdminProjectEdit() {
     setSaving(true);
     setError(null);
     try {
+      let finalSlug = slug.trim();
+      if (!finalSlug && title) {
+        finalSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      }
+      if (finalSlug) {
+        let uniqueSlug = finalSlug;
+        let counter = 2;
+        let collision = true;
+        while (collision) {
+          const existing = await getProjectBySlug(uniqueSlug);
+          if (existing && existing.id !== parseInt(id, 10)) {
+            uniqueSlug = `${finalSlug}-${counter}`;
+            counter++;
+          } else {
+            collision = false;
+          }
+        }
+        if (uniqueSlug !== finalSlug) {
+          if (!window.confirm(`Slug collision detected. Use "${uniqueSlug}" instead?`)) {
+            setSaving(false);
+            setError("Slug generation cancelled.");
+            return;
+          }
+        }
+        finalSlug = uniqueSlug;
+      }
+
       let finalImageUrl = imageUrl;
       if (imageFile) {
         finalImageUrl = await uploadImage(imageFile, "projects");
       }
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await updateProject(id, { title, slug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl });
+      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);

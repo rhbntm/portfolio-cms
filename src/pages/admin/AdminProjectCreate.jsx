@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createProject, uploadImage } from "../../lib";
+import { createProject, uploadImage, getProjectBySlug } from "../../lib";
 import styles from './AdminForm.module.css';
 
 export default function AdminProjectCreate() {
@@ -33,12 +33,39 @@ export default function AdminProjectCreate() {
     setLoading(true);
     setError(null);
     try {
+      let finalSlug = slug.trim();
+      if (!finalSlug && title) {
+        finalSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      }
+      if (finalSlug) {
+        let uniqueSlug = finalSlug;
+        let counter = 2;
+        let collision = true;
+        while (collision) {
+          const existing = await getProjectBySlug(uniqueSlug);
+          if (existing) {
+            uniqueSlug = `${finalSlug}-${counter}`;
+            counter++;
+          } else {
+            collision = false;
+          }
+        }
+        if (uniqueSlug !== finalSlug) {
+          if (!window.confirm(`Slug collision detected. Use "${uniqueSlug}" instead?`)) {
+            setLoading(false);
+            setError("Slug generation cancelled.");
+            return;
+          }
+        }
+        finalSlug = uniqueSlug;
+      }
+
       let imageUrl = null;
       if (imageFile) {
         imageUrl = await uploadImage(imageFile, "projects");
       }
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await createProject({ title, slug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: imageUrl });
+      await createProject({ title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: imageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useProjects, usePosts } from '../hooks';
 import { Loading } from '../components/ui';
 import { isValidHttpsUrl } from '../lib/validation';
-import heroImg from '../assets/hero.jpg';
+
 import styles from './Home.module.css';
 
 export default function Home() {
@@ -32,7 +32,6 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.heroImageContainer}>
-          <img src={heroImg} alt="Hero" className={styles.heroImage} />
         </div>
       </section>
       

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '../lib';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks';
 import styles from './Login.module.css';
 
@@ -39,6 +40,10 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  const [showResetInput, setShowResetInput] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -83,6 +88,20 @@ export default function Login() {
     }
   }
 
+  async function handleSendResetEmail() {
+    if (!resetEmail) return;
+    setLoading(true);
+    setResetMessage(null);
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail);
+    if (error) {
+      setResetMessage(error.message);
+    } else {
+      setResetMessage("Password reset email sent. Please check your inbox.");
+      setResetEmail('');
+    }
+    setLoading(false);
+  }
+
   if (authLoading) return null;
 
   return (
@@ -123,6 +142,37 @@ export default function Login() {
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
+        {!showResetInput ? (
+          <button type="button" onClick={() => setShowResetInput(true)} className={styles.backBtn} style={{ marginTop: '1rem', marginBottom: '0.5rem' }}>
+            Forgot password?
+          </button>
+        ) : (
+          <div className={styles.resetContainer}>
+            <div className={styles.field}>
+              <label className={styles.label}>Reset Password</label>
+              <input
+                className={styles.input}
+                type="email"
+                value={resetEmail}
+                onChange={e => setResetEmail(e.target.value)}
+                placeholder="Enter email to reset"
+                required
+                maxLength={256}
+              />
+            </div>
+            {resetMessage && (
+              <div className={styles.error} style={resetMessage.includes('sent') ? { backgroundColor: '#13231b', color: '#8fd195', borderColor: '#1a3325' } : {}}>
+                {resetMessage}
+              </div>
+            )}
+            <button type="button" onClick={handleSendResetEmail} className={styles.submitBtn} disabled={loading || !resetEmail}>
+              {loading ? 'Sending…' : 'Send reset link'}
+            </button>
+            <button type="button" onClick={() => { setShowResetInput(false); setResetMessage(null); setResetEmail(''); }} className={styles.backBtn}>
+              Cancel
+            </button>
+          </div>
+        )}
         <button 
           type="button" 
           className={styles.backBtn}
