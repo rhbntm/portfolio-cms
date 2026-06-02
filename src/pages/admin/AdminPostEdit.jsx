@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { getPostById, updatePost, uploadImage, getPostBySlug, deleteImage } from "../../lib";
 import styles from './AdminForm.module.css';
 
@@ -17,6 +19,7 @@ export default function AdminPostEdit() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -34,7 +37,7 @@ export default function AdminPostEdit() {
         } else {
           setError("Post not found.");
         }
-      } catch (err) {
+      } catch {
         setError("Failed to load post. Please try again.");
       }
       setLoading(false);
@@ -126,14 +129,33 @@ export default function AdminPostEdit() {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Content <span className={styles.required}>*</span></label>
-          <textarea
-            className={`${styles.textarea} ${styles.contentTextarea}`}
-            value={content}
-            onChange={e => setContent(e.target.value)}
-            placeholder="Write your post content here…"
-            required
-          />
+          <div className={styles.contentLabelRow}>
+            <label className={styles.label}>Content <span className={styles.required}>*</span></label>
+            <button
+              type="button"
+              className={`${styles.previewToggle} ${showPreview ? styles.previewToggleActive : ''}`}
+              onClick={() => setShowPreview(p => !p)}
+            >
+              {showPreview ? 'Hide Preview' : 'Preview'}
+            </button>
+          </div>
+          <div className={showPreview ? styles.editorSplit : undefined}>
+            <textarea
+              className={`${styles.textarea} ${styles.contentTextarea}`}
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              placeholder="Write your post content here…"
+              required
+            />
+            {showPreview && (
+              <div className={styles.mdPreview}>
+                {content
+                  ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+                  : <span className={styles.mdPreviewEmpty}>Nothing to preview yet…</span>
+                }
+              </div>
+            )}
+          </div>
         </div>
 
         <div className={styles.field}>

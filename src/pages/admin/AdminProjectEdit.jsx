@@ -37,7 +37,7 @@ export default function AdminProjectEdit() {
         } else {
           setError("Project not found.");
         }
-      } catch (err) {
+      } catch {
         setError("Failed to load project. Please try again.");
       }
       setLoading(false);

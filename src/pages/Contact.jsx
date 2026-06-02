@@ -7,6 +7,8 @@ const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
+const isConfigured = Boolean(SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY);
+
 const MAX_SUBMISSIONS = 3;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 const LS_SUBMISSIONS_KEY = 'contact_submissions';
@@ -134,6 +136,11 @@ export default function Contact() {
         </div>
 
         <form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
+          {!isConfigured && (
+            <p className={styles.configWarning}>
+              Contact form is not configured. Please check environment variables.
+            </p>
+          )}
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="name">Full Name</label>
             <input
@@ -143,7 +150,7 @@ export default function Contact() {
               className={styles.input}
               placeholder="John Doe"
               required
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isConfigured}
               maxLength={100}
             />
           </div>
@@ -157,7 +164,7 @@ export default function Contact() {
               className={styles.input}
               placeholder="john@example.com"
               required
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isConfigured}
               maxLength={256}
             />
           </div>
@@ -171,7 +178,7 @@ export default function Contact() {
               className={styles.input}
               placeholder="Project Inquiry"
               required
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isConfigured}
               maxLength={200}
             />
           </div>
@@ -184,12 +191,12 @@ export default function Contact() {
               className={styles.textarea}
               placeholder="Tell me about your project..."
               required
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isConfigured}
               maxLength={5000}
             ></textarea>
           </div>
 
-          <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+          <button type="submit" className={styles.submitBtn} disabled={isSubmitting || !isConfigured}>
             {isSubmitting ? 'Sending…' : 'Send Message'}
           </button>
 

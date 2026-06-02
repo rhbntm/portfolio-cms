@@ -1,5 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { usePost } from '../../hooks';
@@ -41,7 +43,9 @@ export default function BlogPost() {
             />
           </>
         )}
-        <div className={styles.content}>{post.content}</div>
+        <div className={styles.content}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+        </div>
       </article>
     </div>
   );
