@@ -1,4 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 import { usePost } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
 import styles from './BlogPost.module.css';
@@ -6,6 +9,7 @@ import styles from './BlogPost.module.css';
 export default function BlogPost() {
   const { slug } = useParams();
   const { data: post, loading, error } = usePost(slug);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -22,7 +26,20 @@ export default function BlogPost() {
         <h1 className={styles.title}>{post.title}</h1>
         {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
         {post.cover_image && (
-          <img className={styles.coverImage} src={post.cover_image} alt={post.title} />
+          <>
+            <img 
+              className={styles.coverImage} 
+              src={post.cover_image} 
+              alt={post.title} 
+              style={{ cursor: 'pointer' }}
+              onClick={() => setLightboxOpen(true)}
+            />
+            <Lightbox
+              open={lightboxOpen}
+              close={() => setLightboxOpen(false)}
+              slides={[{ src: post.cover_image }]}
+            />
+          </>
         )}
         <div className={styles.content}>{post.content}</div>
       </article>

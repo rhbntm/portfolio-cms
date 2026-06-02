@@ -1,15 +1,26 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { usePosts } from '../../hooks';
-import { Loading, ErrorMessage } from '../../components';
+import { Loading, ErrorMessage, Pagination } from '../../components';
 import styles from './Blog.module.css';
 
 export default function Blog() {
-  const { data: posts, loading, error } = usePosts();
+  const [page, setPage] = useState(1);
+  const { data: posts, count, loading, error } = usePosts(page, 6);
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <h1 className={styles.title}>Blog</h1>
+        <p className={styles.description}>
+          No AI, no Grammarly, just me writing, and some occasional definition lookups.
+          <br />
+          <br />
+          And with AI advancing rapidly, clear language matters more than ever.
+          <br />
+          <br />
+          This blog is my way of practicing writing to build better with AI.
+        </p>
       </div>
 
       {loading && <Loading />}
@@ -33,6 +44,9 @@ export default function Blog() {
             ))}
           </div>
         )
+      )}
+      {!loading && !error && count > 6 && (
+        <Pagination page={page} pageSize={6} total={count} setPage={setPage} />
       )}
     </div>
   );

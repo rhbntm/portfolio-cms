@@ -18,3 +18,17 @@ export async function uploadImage(file, folder) {
 
   return publicUrlData.publicUrl;
 }
+
+export async function deleteImage(imageUrl) {
+  if (!imageUrl) return;
+  try {
+    const match = imageUrl.match(/\/object\/public\/images\/(.+)$/);
+    if (match && match[1]) {
+      const path = match[1];
+      const { error } = await supabase.storage.from('images').remove([path]);
+      if (error) console.error('Failed to delete image from storage:', error.message);
+    }
+  } catch (err) {
+    console.error('Error in deleteImage:', err);
+  }
+}

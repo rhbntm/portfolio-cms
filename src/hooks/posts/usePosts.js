@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getPosts } from '../../lib/posts';
 
-export function usePosts() {
+export function usePosts(page = 1, pageSize = 10) {
   const [data, setData] = useState([]);
+  const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,13 +15,15 @@ export function usePosts() {
       setError(null);
 
       try {
-        const posts = await getPosts();
+        const result = await getPosts({ page, pageSize });
         if (!isMounted) return;
-        setData(posts || []);
+        setData(result.data || []);
+        setCount(result.count || 0);
       } catch (err) {
         if (!isMounted) return;
         setError(err.message);
         setData([]);
+        setCount(0);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -31,7 +34,7 @@ export function usePosts() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [page, pageSize]);
 
-  return { data, loading, error };
+  return { data, count, loading, error };
 }

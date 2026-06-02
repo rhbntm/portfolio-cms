@@ -2,13 +2,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProjects } from "../../hooks";
 import { deleteProject } from "../../lib";
-import { Loading, ErrorMessage } from "../../components";
+import { Loading, ErrorMessage, Pagination } from "../../components";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 import styles from './AdminList.module.css';
 
 export default function AdminProjectsList() {
-  const { data: projects, loading, error } = useProjects();
+  const [page, setPage] = useState(1);
+  const { data: projects, count, loading, error } = useProjects(page, 10);
   const [deletingId, setDeletingId] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+  const [lightboxUrl, setLightboxUrl] = useState(null);
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this project?")) return;
@@ -40,6 +44,7 @@ export default function AdminProjectsList() {
           <table className={styles.table}>
             <thead className={styles.tableHead}>
               <tr>
+                <th>Image</th>
                 <th>Title</th>
                 <th>Slug</th>
                 <th>Actions</th>
@@ -48,6 +53,16 @@ export default function AdminProjectsList() {
             <tbody>
               {projects.map(project => (
                 <tr key={project.id} className={styles.tableRow}>
+                  <td>
+                    {project.image_url ? (
+                      <img 
+                        src={project.image_url} 
+                        alt={project.title}
+                        className={styles.thumbnail}
+                        onClick={() => setLightboxUrl(project.image_url)}
+                      />
+                    ) : '-'}
+                  </td>
                   <td className={styles.cellPrimary}>{project.title}</td>
                   <td className={styles.cellMono}>{project.slug}</td>
                   <td>
@@ -68,6 +83,15 @@ export default function AdminProjectsList() {
           </table>
         )
       )}
+      {!loading && !error && count > 10 && (
+        <Pagination page={page} pageSize={10} total={count} setPage={setPage} />
+      )}
+
+      <Lightbox
+        open={!!lightboxUrl}
+        close={() => setLightboxUrl(null)}
+        slides={lightboxUrl ? [{ src: lightboxUrl }] : []}
+      />
     </div>
   );
 }

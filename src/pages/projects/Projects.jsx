@@ -1,15 +1,27 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useProjects } from '../../hooks';
-import { Loading, ErrorMessage } from '../../components';
+import { Loading, ErrorMessage, Pagination } from '../../components';
 import styles from './Projects.module.css';
 
 export default function Projects() {
-  const { data: projects, loading, error } = useProjects();
+  const [page, setPage] = useState(1);
+  const { data: projects, count, loading, error } = useProjects(page, 6);
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <h1 className={styles.title}>Projects</h1>
+        <p className={styles.description}>
+          <a
+            href="https://github.com/rhbntm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.githubLink}
+          >
+            My GitHub
+          </a>
+        </p>
       </div>
 
       {loading && <Loading />}
@@ -35,6 +47,9 @@ export default function Projects() {
             ))}
           </div>
         )
+      )}
+      {!loading && !error && count > 6 && (
+        <Pagination page={page} pageSize={6} total={count} setPage={setPage} />
       )}
     </div>
   );

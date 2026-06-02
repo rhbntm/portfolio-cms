@@ -1,4 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 import { useProject } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
 import styles from './ProjectDetail.module.css';
@@ -6,6 +9,7 @@ import styles from './ProjectDetail.module.css';
 export default function ProjectDetail() {
   const { slug } = useParams();
   const { data: project, loading, error } = useProject(slug);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -17,7 +21,22 @@ export default function ProjectDetail() {
 
       <div className={styles.hero}>
         {project.image_url
-          ? <img className={styles.heroImage} src={project.image_url} alt={project.title} />
+          ? (
+            <>
+              <img 
+                className={styles.heroImage} 
+                src={project.image_url} 
+                alt={project.title} 
+                style={{ cursor: 'pointer' }}
+                onClick={() => setLightboxOpen(true)}
+              />
+              <Lightbox
+                open={lightboxOpen}
+                close={() => setLightboxOpen(false)}
+                slides={[{ src: project.image_url }]}
+              />
+            </>
+          )
           : <div className={styles.heroPlaceholder}>No Image</div>
         }
       </div>

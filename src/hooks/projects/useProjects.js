@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getProjects } from '../../lib/projects';
 
-export function useProjects() {
+export function useProjects(page = 1, pageSize = 10) {
   const [data, setData] = useState([]);
+  const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,13 +15,15 @@ export function useProjects() {
       setError(null);
 
       try {
-        const projects = await getProjects();
+        const result = await getProjects({ page, pageSize });
         if (!isMounted) return;
-        setData(projects || []);
+        setData(result.data || []);
+        setCount(result.count || 0);
       } catch (err) {
         if (!isMounted) return;
         setError(err.message);
         setData([]);
+        setCount(0);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -31,7 +34,7 @@ export function useProjects() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [page, pageSize]);
 
-  return { data, loading, error };
+  return { data, count, loading, error };
 }

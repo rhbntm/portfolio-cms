@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { getPostById, updatePost, uploadImage, getPostBySlug } from "../../lib";
+import { getPostById, updatePost, uploadImage, getPostBySlug, deleteImage } from "../../lib";
 import styles from './AdminForm.module.css';
 
 export default function AdminPostEdit() {
@@ -85,6 +85,9 @@ export default function AdminPostEdit() {
         finalCoverImage = await uploadImage(imageFile, "posts");
       }
       await updatePost(id, { title, slug: finalSlug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage });
+      if (imageFile && coverImage) {
+        await deleteImage(coverImage);
+      }
       navigate("/admin/posts");
     } catch (err) {
       setError(err.message);

@@ -1,14 +1,16 @@
 import { supabase } from './supabase';
 import { sanitizeString, sanitizeStringArray } from './validation';
+import { deleteImage } from './storage';
 
-export async function getProjects() {
-  const { data, error } = await supabase
+export async function getProjects({ page = 1, pageSize = 10 } = {}) {
+  const { data, error, count } = await supabase
     .from('projects')
-    .select('*')
-    .order('created_at', { ascending: false });
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range((page - 1) * pageSize, page * pageSize - 1);
 
   if (error) throw error;
-  return data;
+  return { data, count };
 }
 
 export async function getProjectBySlug(slug) {
@@ -71,6 +73,10 @@ export async function updateProject(id, project) {
 }
 
 export async function deleteProject(id) {
+  const project = await getProjectById(id);
+  if (project && project.image_url) {
+    await deleteImage(project.image_url);
+  }
   const { error } = await supabase
     .from('projects')
     .delete()

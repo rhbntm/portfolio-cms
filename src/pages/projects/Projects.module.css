@@ -28,6 +28,30 @@
   text-align: center;
 }
 
+.description {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: var(--space-lg) auto 0;
+  text-align: center;
+}
+
+.githubLink {
+  color: #0e1097;
+  display: inline-block;
+  transition: all 0.25s ease;
+  text-shadow: 0 0 10px #ffffff1f;
+  font-weight: 700;
+}
+
+.githubLink:hover {
+  color: #007bff;
+  transform: scale(1.1);
+  letter-spacing: 0.5px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

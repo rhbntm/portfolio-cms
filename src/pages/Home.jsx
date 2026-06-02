@@ -20,9 +20,9 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <p className={styles.heroEyebrow}>Open for internships</p>
-          <h1 className={styles.heroTitle}>I build full-stack web apps with React and Laravel.</h1>
+          <h1 className={styles.heroTitle}>I build full-stack web applications using React and PHP frameworks such as CodeIgniter and Laravel.</h1>
           <p className={styles.heroSub}>
-            3rd-year IT student focused on building functional websites and systems 
+            3rd-year IT student focused on building functional websites and systems
             from CMS website to inventory management tools.
           </p>
           <div className={styles.heroActions}>
@@ -32,9 +32,28 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.heroImageContainer}>
+          <img src="src/assets/hero.jpg" alt="Hero" className={styles.heroImage} />
         </div>
       </section>
-      
+      <div className={styles.divider}>
+        <div className={styles.dividerInner}>Technologies</div>
+      </div>
+
+      <div className={styles.marqueeWrapper}>
+        <div className={styles.marqueeTrack}>
+          {[...Array(2)].map((_, i) => (
+            <div className={styles.marqueeGroup} key={i} aria-hidden={i > 0}>
+              {['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs', 'Supabase', 'MySQL', 'SQLite3', 'PostgreSQL', 'Docker'].map(tech => (
+                <span className={styles.marqueeItem} key={`${tech}-${i}`}>
+                  {tech}
+                  <span className={styles.marqueeDot} aria-hidden="true">◆</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className={styles.divider}>
         <div className={styles.dividerInner}>Curated Projects</div>
       </div>
@@ -44,7 +63,7 @@ export default function Home() {
           <h2 className={styles.sectionTitle}>Projects</h2>
           <Link to="/projects" className={styles.sectionLink}>All Projects →</Link>
         </div>
-        
+
         {!projects.length ? (
           <p className={styles.emptyState}>No projects to show yet.</p>
         ) : (

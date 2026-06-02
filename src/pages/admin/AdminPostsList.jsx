@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminPosts } from "../../hooks";
 import { deletePost } from "../../lib";
-import { Loading, ErrorMessage } from "../../components";
+import { Loading, ErrorMessage, Pagination } from "../../components";
 import styles from './AdminList.module.css';
 
 export default function AdminPostsList() {
-  const { data: posts, loading, error } = useAdminPosts();
+  const [page, setPage] = useState(1);
+  const { data: posts, count, loading, error } = useAdminPosts(page, 10);
   const [deletingId, setDeletingId] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
 
@@ -73,6 +74,9 @@ export default function AdminPostsList() {
             </tbody>
           </table>
         )
+      )}
+      {!loading && !error && count > 10 && (
+        <Pagination page={page} pageSize={10} total={count} setPage={setPage} />
       )}
     </div>
   );

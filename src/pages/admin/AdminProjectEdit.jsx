@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { getProjectById, updateProject, uploadImage, getProjectBySlug } from "../../lib";
+import { getProjectById, updateProject, uploadImage, getProjectBySlug, deleteImage } from "../../lib";
 import styles from './AdminForm.module.css';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 export default function AdminProjectEdit() {
   const { id } = useParams();
@@ -17,6 +19,7 @@ export default function AdminProjectEdit() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -93,6 +96,9 @@ export default function AdminProjectEdit() {
       }
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
       await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl });
+      if (imageFile && imageUrl) {
+        await deleteImage(imageUrl);
+      }
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -146,7 +152,24 @@ export default function AdminProjectEdit() {
           <div className={styles.imageSection}>
             <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
             {(previewUrl || imageUrl) && (
-              <img className={styles.imagePreview} src={previewUrl || imageUrl} alt="Preview" />
+              previewUrl ? (
+                <img className={styles.imagePreview} src={previewUrl} alt="Preview" />
+              ) : (
+                <>
+                  <img 
+                    className={styles.imagePreview} 
+                    src={imageUrl} 
+                    alt="Preview" 
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setLightboxOpen(true)}
+                  />
+                  <Lightbox
+                    open={lightboxOpen}
+                    close={() => setLightboxOpen(false)}
+                    slides={[{ src: imageUrl }]}
+                  />
+                </>
+              )
             )}
           </div>
         </div>
