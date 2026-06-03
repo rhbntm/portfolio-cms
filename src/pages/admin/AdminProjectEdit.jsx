@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { getProjectById, updateProject, uploadImage, getProjectBySlug, deleteImage } from "../../lib";
 import styles from './AdminForm.module.css';
 import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
 export default function AdminProjectEdit() {
@@ -20,6 +23,17 @@ export default function AdminProjectEdit() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [originalImageUrl, setOriginalImageUrl] = useState('');
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    setImageUrl('');
+  }
 
   useEffect(() => {
     async function load() {
@@ -34,6 +48,7 @@ export default function AdminProjectEdit() {
           setGithubUrl(project.github_url || '');
           setDescription(project.description || '');
           setImageUrl(project.image_url || '');
+          setOriginalImageUrl(project.image_url || '');
         } else {
           setError("Project not found.");
         }
@@ -94,10 +109,12 @@ export default function AdminProjectEdit() {
       if (imageFile) {
         finalImageUrl = await uploadImage(imageFile, "projects");
       }
+      
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl });
-      if (imageFile && imageUrl) {
-        await deleteImage(imageUrl);
+      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl || null });
+      
+      if (originalImageUrl && originalImageUrl !== finalImageUrl) {
+        await deleteImage(originalImageUrl);
       }
       navigate("/admin/projects");
     } catch (err) {
@@ -143,8 +160,32 @@ export default function AdminProjectEdit() {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Description</label>
-          <textarea className={styles.textarea} value={description} onChange={e => setDescription(e.target.value)} placeholder="Brief project description" />
+          <div className={styles.contentLabelRow}>
+            <label className={styles.label}>Description</label>
+            <button
+              type="button"
+              className={`${styles.previewToggle} ${showPreview ? styles.previewToggleActive : ''}`}
+              onClick={() => setShowPreview(p => !p)}
+            >
+              {showPreview ? 'Hide Preview' : 'Preview'}
+            </button>
+          </div>
+          <div className={showPreview ? styles.editorSplit : undefined}>
+            <textarea
+              className={`${styles.textarea} ${styles.contentTextarea}`}
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              placeholder="Brief project description"
+            />
+            {showPreview && (
+              <div className={styles.mdPreview}>
+                {description
+                  ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{description}</ReactMarkdown>
+                  : <span className={styles.mdPreviewEmpty}>Nothing to preview yet…</span>
+                }
+              </div>
+            )}
+          </div>
         </div>
 
         <div className={styles.field}>
@@ -152,24 +193,31 @@ export default function AdminProjectEdit() {
           <div className={styles.imageSection}>
             <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
             {(previewUrl || imageUrl) && (
-              previewUrl ? (
-                <img className={styles.imagePreview} src={previewUrl} alt="Preview" />
-              ) : (
-                <>
-                  <img 
-                    className={styles.imagePreview} 
-                    src={imageUrl} 
-                    alt="Preview" 
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setLightboxOpen(true)}
-                  />
-                  <Lightbox
-                    open={lightboxOpen}
-                    close={() => setLightboxOpen(false)}
-                    slides={[{ src: imageUrl }]}
-                  />
-                </>
-              )
+              <div className={styles.previewContainer}>
+                {previewUrl ? (
+                  <img className={styles.imagePreview} src={previewUrl} alt="Preview" />
+                ) : (
+                  <>
+                    <img 
+                      className={styles.imagePreview} 
+                      src={imageUrl} 
+                      alt="Preview" 
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setLightboxOpen(true)}
+                    />
+                    <Lightbox
+                      open={lightboxOpen}
+                      close={() => setLightboxOpen(false)}
+                      slides={[{ src: imageUrl }]}
+                      plugins={[Zoom]}
+                      zoom={{ maxZoomPixelRatio: 4, wheelZoomDistanceFactor: 100 }}
+                    />
+                  </>
+                )}
+                <button type="button" className={styles.removeImageBtn} onClick={handleRemoveImage}>
+                  Remove Image
+                </button>
+              </div>
             )}
           </div>
         </div>

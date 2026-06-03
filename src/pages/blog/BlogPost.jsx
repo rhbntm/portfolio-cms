@@ -3,6 +3,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { usePost } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
@@ -40,6 +41,8 @@ export default function BlogPost() {
               open={lightboxOpen}
               close={() => setLightboxOpen(false)}
               slides={[{ src: post.cover_image }]}
+              plugins={[Zoom]}
+              zoom={{ maxZoomPixelRatio: 4, wheelZoomDistanceFactor: 100 }}
             />
           </>
         )}

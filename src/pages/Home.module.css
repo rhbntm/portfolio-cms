@@ -596,4 +596,22 @@ body {
     height: min(220px, 70vw);
     margin: 0 auto;
   }
+
+  .section {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .journalItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .journalTitle {
+    font-size: 1.25rem;
+  }
+
+  .journalExcerpt {
+    font-size: 0.875rem;
+  }
 }

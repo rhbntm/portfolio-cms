@@ -1,6 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { useProject } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
@@ -34,6 +37,8 @@ export default function ProjectDetail() {
                 open={lightboxOpen}
                 close={() => setLightboxOpen(false)}
                 slides={[{ src: project.image_url }]}
+                plugins={[Zoom]}
+                zoom={{ maxZoomPixelRatio: 4, wheelZoomDistanceFactor: 100 }}
               />
             </>
           )
@@ -56,7 +61,9 @@ export default function ProjectDetail() {
           )}
         </div>
         <h1 className={styles.title}>{project.title}</h1>
-        <p className={styles.description}>{project.description}</p>
+        <div className={styles.description}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{project.description}</ReactMarkdown>
+        </div>
       </div>
     </div>
   );

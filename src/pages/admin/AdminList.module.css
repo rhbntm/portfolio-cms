@@ -76,3 +76,6 @@
   transition: opacity var(--transition);
 }
 .thumbnail:hover { opacity: 0.8; }
+
+.dragging { opacity: 0.4; }
+.dragOver td { border-top: 2px solid #d1d5db; }

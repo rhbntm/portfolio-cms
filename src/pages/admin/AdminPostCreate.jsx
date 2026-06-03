@@ -18,6 +18,14 @@ export default function AdminPostCreate() {
   const [error, setError] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
 
+  function handleRemoveImage() {
+    setImageFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+  }
+
   function handleImageChange(e) {
     const file = e.target.files[0];
     setImageFile(file);
@@ -131,7 +139,12 @@ export default function AdminPostCreate() {
           <div className={styles.imageSection}>
             <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
             {previewUrl && (
-              <img className={styles.imagePreview} src={previewUrl} alt="Preview" />
+              <div className={styles.previewContainer}>
+                <img className={styles.imagePreview} src={previewUrl} alt="Preview" />
+                <button type="button" className={styles.removeImageBtn} onClick={handleRemoveImage}>
+                  Remove Image
+                </button>
+              </div>
             )}
           </div>
         </div>

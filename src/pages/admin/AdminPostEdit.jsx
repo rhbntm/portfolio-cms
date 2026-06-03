@@ -20,6 +20,16 @@ export default function AdminPostEdit() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [originalCoverImage, setOriginalCoverImage] = useState('');
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    setCoverImage('');
+  }
 
   useEffect(() => {
     async function load() {
@@ -34,6 +44,7 @@ export default function AdminPostEdit() {
           setContent(data.content || '');
           setIsPublished(!!data.is_published);
           setCoverImage(data.cover_image || '');
+          setOriginalCoverImage(data.cover_image || '');
         } else {
           setError("Post not found.");
         }
@@ -87,9 +98,11 @@ export default function AdminPostEdit() {
       if (imageFile) {
         finalCoverImage = await uploadImage(imageFile, "posts");
       }
-      await updatePost(id, { title, slug: finalSlug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage });
-      if (imageFile && coverImage) {
-        await deleteImage(coverImage);
+      
+      await updatePost(id, { title, slug: finalSlug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage || null });
+      
+      if (originalCoverImage && originalCoverImage !== finalCoverImage) {
+        await deleteImage(originalCoverImage);
       }
       navigate("/admin/posts");
     } catch (err) {
@@ -163,7 +176,12 @@ export default function AdminPostEdit() {
           <div className={styles.imageSection}>
             <input type="file" className={styles.fileInput} accept="image/*" onChange={handleImageChange} />
             {(previewUrl || coverImage) && (
-              <img className={styles.imagePreview} src={previewUrl || coverImage} alt="Preview" />
+              <div className={styles.previewContainer}>
+                <img className={styles.imagePreview} src={previewUrl || coverImage} alt="Preview" />
+                <button type="button" className={styles.removeImageBtn} onClick={handleRemoveImage}>
+                  Remove Image
+                </button>
+              </div>
             )}
           </div>
         </div>
