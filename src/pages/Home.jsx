@@ -44,10 +44,9 @@ export default function Home() {
         <div className={styles.marqueeTrack}>
           {[...Array(2)].map((_, i) => (
             <div className={styles.marqueeGroup} key={i} aria-hidden={i > 0}>
-              {['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs', 'Supabase', 'MySQL', 'SQLite3', 'PostgreSQL', 'Docker'].map(tech => (
+              {['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs', 'Supabase', 'MySQL', 'PostgreSQL', 'Docker'].map(tech => (
                 <span className={styles.marqueeItem} key={`${tech}-${i}`}>
                   {tech}
-                  <span className={styles.marqueeDot} aria-hidden="true">◆</span>
                 </span>
               ))}
             </div>
@@ -78,7 +77,15 @@ export default function Home() {
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
                     <h3 className={styles.projectTitle}>{projects[0]?.title}</h3>
-                    <p className={styles.projectCategory}>{projects[0]?.tech_stack?.join(' / ') || 'Full-stack Platform'}</p>
+                    {projects[0]?.tech_stack?.length > 0 ? (
+                      <div className={styles.cardTechStack}>
+                        {projects[0].tech_stack.slice(0, 3).map(tech => (
+                          <span key={tech} className={styles.techTag}>{tech}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={styles.projectCategory}>Full-stack Platform</p>
+                    )}
                   </div>
                   {isValidHttpsUrl(projects[0]?.github_url, ['github.com']) && (
                     <a href={projects[0].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
@@ -95,7 +102,15 @@ export default function Home() {
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
                     <h3 className={styles.projectTitle}>{projects[1]?.title}</h3>
-                    <p className={styles.projectCategory}>{projects[1]?.tech_stack?.join(' / ') || 'Web Application'}</p>
+                    {projects[1]?.tech_stack?.length > 0 ? (
+                      <div className={styles.cardTechStack}>
+                        {projects[1].tech_stack.slice(0, 3).map(tech => (
+                          <span key={tech} className={styles.techTag}>{tech}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={styles.projectCategory}>Web Application</p>
+                    )}
                   </div>
                   {isValidHttpsUrl(projects[1]?.github_url, ['github.com']) && (
                     <a href={projects[1].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
@@ -112,7 +127,15 @@ export default function Home() {
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
                     <h3 className={styles.projectTitle}>{projects[2]?.title}</h3>
-                    <p className={styles.projectCategory}>{projects[2]?.tech_stack?.join(' / ') || 'System Implementation'}</p>
+                    {projects[2]?.tech_stack?.length > 0 ? (
+                      <div className={styles.cardTechStack}>
+                        {projects[2].tech_stack.slice(0, 3).map(tech => (
+                          <span key={tech} className={styles.techTag}>{tech}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={styles.projectCategory}>System Implementation</p>
+                    )}
                   </div>
                   {isValidHttpsUrl(projects[2]?.github_url, ['github.com']) && (
                     <a href={projects[2].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>

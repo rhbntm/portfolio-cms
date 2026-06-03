@@ -1,4 +1,4 @@
-.page { max-width: 1440px; margin: 0 auto; padding: var(--space-xxl) var(--space-xl); }
+.page { max-width: 900px; margin: 0 auto; padding: var(--space-xxl) var(--space-xl); }
 
 .back {
   display: inline-flex; align-items: center; gap: var(--space-sm);
@@ -10,7 +10,7 @@
 .back:hover { color: var(--accent-text); }
 
 .hero {
-  position: relative; width: 100%; height: 560px;
+  position: relative; width: 100%; height: 500px;
   border-radius: var(--radius-md); overflow: hidden;
   margin-bottom: var(--space-xl);
   background: var(--surface); border: 1px solid var(--border);
@@ -26,7 +26,7 @@
   color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase;
 }
 
-.content { max-width: 760px; }
+.content { max-width: 100%; }
 
 .metaRow {
   display: flex; align-items: center; justify-content: space-between;
@@ -38,6 +38,26 @@
   font-family: var(--font-body); font-size: 0.6875rem; font-weight: 700;
   letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent-text); margin: 0;
+}
+
+.cardTechStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.techTag {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  background: rgba(33, 200, 96, 0.08);
+  border: 1px solid rgba(33, 200, 96, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  white-space: nowrap;
 }
 
 .title {

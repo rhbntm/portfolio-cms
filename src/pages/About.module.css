@@ -11,13 +11,16 @@
   padding: 0 var(--space-xl);
 }
 
+/* ── Hero ──────────────────────────────────────────────── */
 .heroSection {
   padding: var(--space-xxl) 0 var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4rem;
 }
 
 .pageTitle {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   letter-spacing: -0.04em;
   color: var(--text-primary);
@@ -30,13 +33,15 @@
   font-size: 1.125rem;
   color: var(--text-secondary);
   max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
 }
 
+/* ── About / Bio ───────────────────────────────────────── */
 .aboutSection {
   background: var(--bg-low);
-  border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: var(--space-lg) 0;
+  padding: var(--space-xl) 0;
 }
 
 .aboutMain {
@@ -44,7 +49,7 @@
   grid-template-columns: 200px 1fr;
   gap: var(--space-xl);
   align-items: baseline;
-  padding-top: 30px;
+  padding: var(--space-xl) 0;
 }
 
 .aboutLabel {
@@ -56,24 +61,51 @@
   color: var(--accent-text);
 }
 
+/* Markdown bio */
 .aboutText {
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  line-height: 1.5;
-  color: var(--text-primary);
-  max-width: 800px;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.75;
+  color: var(--text-secondary);
+  max-width: 760px;
 }
 
+.aboutText p {
+  margin: 0 0 var(--space-md);
+}
+
+.aboutText p:last-child {
+  margin-bottom: 0;
+}
+
+.aboutText strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.aboutText a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity var(--transition);
+}
+
+.aboutText a:hover {
+  opacity: 0.75;
+}
+
+/* ── Technologies ──────────────────────────────────────── */
 .techSection {
   background: var(--bg);
-  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-xl) 0;
 }
 
 .techMain {
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: var(--space-xl);
-  padding-top: 30px;
+  padding: var(--space-xl) 0;
 }
 
 .techLabel {
@@ -82,7 +114,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--accent-text);
 }
 
 .techGrid {
@@ -97,28 +129,144 @@
   font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent-text);
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-sm);
 }
 
-.techCategory p {
+.cardTechStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.techTag {
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  background: rgba(33, 200, 96, 0.08);
+  border: 1px solid rgba(33, 200, 96, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  white-space: nowrap;
 }
 
+/* Resume button */
+.resumeRow {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.resumeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all var(--transition);
+}
+
+.resumeBtn:hover {
+  background: var(--surface);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+  transform: translateY(-1px);
+}
+
+/* ── Experience / Timeline ─────────────────────────────── */
+.experienceSection {
+  background: var(--bg-low);
+  padding: var(--space-xl) 0 var(--space-xxl);
+}
+
+.experienceMain {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-xl);
+  padding: var(--space-xl) 0;
+}
+
+.experienceLabel {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--space-xl);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--border);
+  align-items: baseline;
+}
+
+.timelinePeriod {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding-top: 3px;
+}
+
+.timelineRole {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+  line-height: 1.25;
+}
+
+.timelineDesc {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ── Responsive ────────────────────────────────────────── */
 @media (max-width: 900px) {
 
   .aboutMain,
-  .techMain {
+  .techMain,
+  .experienceMain {
     grid-template-columns: 1fr;
-    gap: var(--space-sm);
+    gap: var(--space-md);
   }
 
   .techGrid {
     grid-template-columns: 1fr;
     gap: var(--space-md);
+  }
+
+  .timelineItem {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
   }
 }
 

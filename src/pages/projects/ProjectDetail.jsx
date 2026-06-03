@@ -48,7 +48,15 @@ export default function ProjectDetail() {
 
       <div className={styles.content}>
         <div className={styles.metaRow}>
-          <p className={styles.category}>{project.tech_stack?.join(' / ') || 'Project'}</p>
+          {project.tech_stack?.length > 0 ? (
+            <div className={styles.cardTechStack}>
+              {project.tech_stack.map(tech => (
+                <span key={tech} className={styles.techTag}>{tech}</span>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.category}>Project</p>
+          )}
           {project.github_url && (
             <a
               href={project.github_url}

@@ -41,7 +41,13 @@ export default function Projects() {
                 </div>
                 <div className={styles.cardBody}>
                   <h2 className={styles.cardTitle}>{project.title}</h2>
-                  <p className={styles.cardDescription}>{project.description}</p>
+                  {project.tech_stack?.length > 0 && (
+                    <div className={styles.cardTechStack}>
+                      {project.tech_stack.map(tech => (
+                        <span key={tech} className={styles.techTag}>{tech}</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}
