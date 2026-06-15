@@ -13,13 +13,7 @@ export default function Blog() {
       <div className={styles.header}>
         <h1 className={styles.title}>Blog</h1>
         <p className={styles.description}>
-          No AI, no Grammarly, just me writing, and some occasional definition lookups.
-          <br />
-          <br />
-          And with AI advancing rapidly, clear language matters more than ever.
-          <br />
-          <br />
-          This blog is my way of practicing writing to build better with AI.
+          This blog is one of the ways I practice writing and improve my ability to use AI effectively.
         </p>
       </div>
 
