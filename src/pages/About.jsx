@@ -12,13 +12,13 @@ const EXPERIENCE = [
   {
     period: 'December 2025 – Present',
     role: 'Web Developer & E-commerce Operations Assistant',
-    description: 'Developed a custom inventory management system and supported stock and order management during live sales operations.',
+    description: 'Developed a custom inventory management system and supports stock and order management during live sales operations.',
     link: 'https://shopee.ph/mr.silentwhite',
   },
   {
     period: '2022 – Present',
     role: 'BS Information Technology (Student)',
-    description: 'The group developer and technical leader of every project in my group',
+    description: 'Expected Graduation: June, 2027',
   },
 ];
 
