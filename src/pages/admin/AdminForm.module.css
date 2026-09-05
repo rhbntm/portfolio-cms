@@ -208,3 +208,120 @@
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.3);
 }
+
+/* ── Tags ──────────────────────────────────────────────────── */
+
+.tagChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--space-sm);
+}
+
+.tagChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #1c1e22;
+  background: #0d0e10;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #52555e;
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.tagChip:hover {
+  border-color: #3a3d44;
+  color: #9ca3af;
+}
+
+.tagChipActive {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.tagChipActive:hover {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.tagChipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--accent-text);
+  font-size: 0.55rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.tagCustomRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.tagCustomInput {
+  flex: 1;
+  background: #0d0e10;
+  border: 1px solid #1c1e22;
+  border-radius: var(--radius-sm);
+  padding: 6px var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: #d1d5db;
+  outline: none;
+  transition: border-color var(--transition);
+  min-width: 0;
+}
+.tagCustomInput:focus { border-color: var(--accent); }
+.tagCustomInput::placeholder { color: #2e3036; }
+
+.tagAddBtn {
+  background: none;
+  border: 1px solid #1c1e22;
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #52555e;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tagAddBtn:hover { border-color: #3a3d44; color: #9ca3af; }
+
+/* ── Content image drag-and-drop / paste ───────────────────── */
+
+.contentTextareaDragging {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.18);
+}
+
+.contentUploadingHint {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--accent-text);
+  letter-spacing: 0.08em;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

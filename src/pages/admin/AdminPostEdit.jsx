@@ -1,17 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getPostById, updatePost, uploadImage, getPostBySlug, deleteImage } from "../../lib";
 import styles from './AdminForm.module.css';
 
+const PRESET_TAGS = ['Business', 'Tech', 'Reflection', 'Personal', 'Design', 'Life'];
+
 export default function AdminPostEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const contentRef = useRef(null);
+
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
+  const [tags, setTags] = useState([]);
+  const [customTag, setCustomTag] = useState('');
   const [isPublished, setIsPublished] = useState(false);
   const [coverImage, setCoverImage] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -21,15 +27,10 @@ export default function AdminPostEdit() {
   const [error, setError] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [originalCoverImage, setOriginalCoverImage] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [contentUploading, setContentUploading] = useState(false);
 
-  function handleRemoveImage() {
-    setImageFile(null);
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-    }
-    setCoverImage('');
-  }
+  // ── Load post ────────────────────────────────────────────────
 
   useEffect(() => {
     async function load() {
@@ -42,6 +43,7 @@ export default function AdminPostEdit() {
           setSlug(data.slug || '');
           setExcerpt(data.excerpt || '');
           setContent(data.content || '');
+          setTags(Array.isArray(data.tags) ? data.tags : []);
           setIsPublished(!!data.is_published);
           setCoverImage(data.cover_image || '');
           setOriginalCoverImage(data.cover_image || '');
@@ -56,11 +58,91 @@ export default function AdminPostEdit() {
     load();
   }, [id]);
 
+  // ── Tag helpers ──────────────────────────────────────────────
+
+  function toggleTag(tag) {
+    setTags(prev =>
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  }
+
+  function addCustomTag() {
+    const t = customTag.trim();
+    if (t && !tags.includes(t)) setTags(prev => [...prev, t]);
+    setCustomTag('');
+  }
+
+  function handleCustomTagKey(e) {
+    if (e.key === 'Enter') { e.preventDefault(); addCustomTag(); }
+  }
+
+  // ── Cover image helpers ──────────────────────────────────────
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    if (previewUrl) { URL.revokeObjectURL(previewUrl); setPreviewUrl(null); }
+    setCoverImage('');
+  }
+
   function handleImageChange(e) {
     const file = e.target.files[0];
     setImageFile(file);
     if (file) setPreviewUrl(URL.createObjectURL(file));
   }
+
+  // ── Content image: shared upload + insert ───────────────────
+
+  async function insertContentImage(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    setContentUploading(true);
+    try {
+      const url = await uploadImage(file, 'posts');
+      const textarea = contentRef.current;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const before = content.slice(0, start);
+      const after = content.slice(end);
+      const insertion = `![image](${url})`;
+      const newContent = before + insertion + after;
+      setContent(newContent);
+      requestAnimationFrame(() => {
+        textarea.focus();
+        const pos = start + insertion.length;
+        textarea.setSelectionRange(pos, pos);
+      });
+    } catch (err) {
+      setError(`Image upload failed: ${err.message}`);
+    } finally {
+      setContentUploading(false);
+    }
+  }
+
+  function handleContentDragOver(e) {
+    e.preventDefault();
+    setIsDragging(true);
+  }
+
+  function handleContentDragLeave() {
+    setIsDragging(false);
+  }
+
+  function handleContentDrop(e) {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) insertContentImage(file);
+  }
+
+  function handleContentPaste(e) {
+    const items = Array.from(e.clipboardData?.items ?? []);
+    const imageItem = items.find(i => i.type.startsWith('image/'));
+    if (imageItem) {
+      e.preventDefault();
+      insertContentImage(imageItem.getAsFile());
+    }
+  }
+
+  // ── Form submit ──────────────────────────────────────────────
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -95,12 +177,10 @@ export default function AdminPostEdit() {
       }
 
       let finalCoverImage = coverImage;
-      if (imageFile) {
-        finalCoverImage = await uploadImage(imageFile, "posts");
-      }
-      
-      await updatePost(id, { title, slug: finalSlug, excerpt, content, is_published: isPublished, cover_image: finalCoverImage || null });
-      
+      if (imageFile) finalCoverImage = await uploadImage(imageFile, "posts");
+
+      await updatePost(id, { title, slug: finalSlug, excerpt, content, tags, is_published: isPublished, cover_image: finalCoverImage || null });
+
       if (originalCoverImage && originalCoverImage !== finalCoverImage) {
         await deleteImage(originalCoverImage);
       }
@@ -141,9 +221,55 @@ export default function AdminPostEdit() {
           <textarea className={styles.textarea} value={excerpt} onChange={e => setExcerpt(e.target.value)} placeholder="Short summary shown in listings" />
         </div>
 
+        {/* ── Tags ── */}
+        <div className={styles.field}>
+          <label className={styles.label}>Tags</label>
+          <div className={styles.tagChips}>
+            {PRESET_TAGS.map(tag => (
+              <button
+                key={tag}
+                type="button"
+                className={`${styles.tagChip} ${tags.includes(tag) ? styles.tagChipActive : ''}`}
+                onClick={() => toggleTag(tag)}
+              >
+                {tags.includes(tag) && <span className={styles.tagChipRemove}>✕</span>}
+                {tag}
+              </button>
+            ))}
+            {/* custom tags not in preset */}
+            {tags.filter(t => !PRESET_TAGS.includes(t)).map(t => (
+              <button
+                key={t}
+                type="button"
+                className={`${styles.tagChip} ${styles.tagChipActive}`}
+                onClick={() => toggleTag(t)}
+              >
+                <span className={styles.tagChipRemove}>✕</span>
+                {t}
+              </button>
+            ))}
+          </div>
+          <div className={styles.tagCustomRow}>
+            <input
+              className={styles.tagCustomInput}
+              type="text"
+              value={customTag}
+              onChange={e => setCustomTag(e.target.value)}
+              onKeyDown={handleCustomTagKey}
+              placeholder="Custom tag…"
+              maxLength={40}
+            />
+            <button type="button" className={styles.tagAddBtn} onClick={addCustomTag}>+ Add</button>
+          </div>
+        </div>
+
+        {/* ── Content editor ── */}
         <div className={styles.field}>
           <div className={styles.contentLabelRow}>
-            <label className={styles.label}>Content <span className={styles.required}>*</span></label>
+            <label className={styles.label}>
+              Content <span className={styles.required}>*</span>
+              {contentUploading && <span className={styles.contentUploadingHint}>&nbsp;· uploading image…</span>}
+            </label>
             <button
               type="button"
               className={`${styles.previewToggle} ${showPreview ? styles.previewToggleActive : ''}`}
@@ -154,11 +280,16 @@ export default function AdminPostEdit() {
           </div>
           <div className={showPreview ? styles.editorSplit : undefined}>
             <textarea
-              className={`${styles.textarea} ${styles.contentTextarea}`}
+              ref={contentRef}
+              className={`${styles.textarea} ${styles.contentTextarea} ${isDragging ? styles.contentTextareaDragging : ''}`}
               value={content}
               onChange={e => setContent(e.target.value)}
-              placeholder="Write your post content here…"
+              placeholder="Write your post content here… Drop or paste images to embed them."
               required
+              onDragOver={handleContentDragOver}
+              onDragLeave={handleContentDragLeave}
+              onDrop={handleContentDrop}
+              onPaste={handleContentPaste}
             />
             {showPreview && (
               <div className={styles.mdPreview}>
@@ -171,6 +302,7 @@ export default function AdminPostEdit() {
           </div>
         </div>
 
+        {/* ── Cover Image ── */}
         <div className={styles.field}>
           <label className={styles.label}>Cover Image</label>
           <div className={styles.imageSection}>

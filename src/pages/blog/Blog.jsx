@@ -32,7 +32,14 @@ export default function Blog() {
                 </span>
                 <div>
                   <h2 className={styles.postTitle}>{post.title}</h2>
-                  <p className={styles.postExcerpt}>{post.excerpt}</p>
+                  {post.excerpt && <p className={styles.postExcerpt}>{post.excerpt}</p>}
+                  {Array.isArray(post.tags) && post.tags.length > 0 && (
+                    <div className={styles.tagRow}>
+                      {post.tags.map(tag => (
+                        <span key={tag} className={styles.tag}>{tag}</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}

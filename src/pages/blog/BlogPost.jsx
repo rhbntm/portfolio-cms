@@ -27,6 +27,13 @@ export default function BlogPost() {
           {new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
         </p>
         <h1 className={styles.title}>{post.title}</h1>
+        {Array.isArray(post.tags) && post.tags.length > 0 && (
+          <div className={styles.tagRow}>
+            {post.tags.map(tag => (
+              <span key={tag} className={styles.tag}>{tag}</span>
+            ))}
+          </div>
+        )}
         {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
         {post.cover_image && (
           <>
