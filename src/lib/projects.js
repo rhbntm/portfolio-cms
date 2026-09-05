@@ -1,28 +1,55 @@
 import { supabase } from './supabase';
 import { sanitizeString, sanitizeStringArray } from './validation';
 import { deleteImage } from './storage';
+import { fetchFromGitHub, syncProjectsToGitHub } from './github';
+
+// ─── Reads (Supabase-first, GitHub fallback) ──────────────────────────────────
 
 export async function getProjects({ page = 1, pageSize = 10 } = {}) {
-  const { data, error, count } = await supabase
-    .from('projects')
-    .select('*', { count: 'exact' })
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: false })
-    .range((page - 1) * pageSize, page * pageSize - 1);
+  try {
+    const { data, error, count } = await supabase
+      .from('projects')
+      .select('*', { count: 'exact' })
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: false })
+      .range((page - 1) * pageSize, page * pageSize - 1);
 
-  if (error) throw error;
-  return { data, count };
+    if (error) throw error;
+    return { data, count };
+  } catch (supabaseErr) {
+    console.warn('[Fallback] Supabase unavailable for getProjects, trying GitHub:', supabaseErr.message);
+    try {
+      const all = await fetchFromGitHub('data/projects.json');
+      const start = (page - 1) * pageSize;
+      const paged = all.slice(start, start + pageSize);
+      return { data: paged, count: all.length };
+    } catch (ghErr) {
+      console.error('[Fallback] GitHub fallback also failed for getProjects:', ghErr.message);
+      throw supabaseErr;
+    }
+  }
 }
 
 export async function getProjectBySlug(slug) {
-  const { data, error } = await supabase
-    .from('projects')
-    .select('*')
-    .eq('slug', slug)
-    .maybeSingle();
+  try {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('slug', slug)
+      .maybeSingle();
 
-  if (error) throw error;
-  return data;
+    if (error) throw error;
+    return data;
+  } catch (supabaseErr) {
+    console.warn('[Fallback] Supabase unavailable for getProjectBySlug, trying GitHub:', supabaseErr.message);
+    try {
+      const all = await fetchFromGitHub('data/projects.json');
+      return all.find(p => p.slug === slug) ?? null;
+    } catch (ghErr) {
+      console.error('[Fallback] GitHub fallback also failed for getProjectBySlug:', ghErr.message);
+      throw supabaseErr;
+    }
+  }
 }
 
 export async function getProjectById(id) {
@@ -35,6 +62,8 @@ export async function getProjectById(id) {
   if (error) throw error;
   return data;
 }
+
+// ─── Writes (Supabase + fire-and-forget GitHub sync) ─────────────────────────
 
 export async function createProject(project) {
   const sanitized = {
@@ -51,6 +80,7 @@ export async function createProject(project) {
     .single();
 
   if (error) throw error;
+  syncProjectsToGitHub(); // fire-and-forget
   return data;
 }
 
@@ -70,6 +100,7 @@ export async function updateProject(id, project) {
     .single();
 
   if (error) throw error;
+  syncProjectsToGitHub(); // fire-and-forget
   return data;
 }
 
@@ -84,6 +115,7 @@ export async function deleteProject(id) {
     .eq('id', id);
 
   if (error) throw error;
+  syncProjectsToGitHub(); // fire-and-forget
 }
 
 export async function updateProjectsOrder(updates) {
@@ -100,4 +132,5 @@ export async function updateProjectsOrder(updates) {
   if (errors.length > 0) {
     throw new Error("Failed to update order: " + errors[0].message);
   }
+  syncProjectsToGitHub(); // fire-and-forget
 }

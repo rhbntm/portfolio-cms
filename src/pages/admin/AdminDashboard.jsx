@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useProjects } from '../../hooks';
 import { usePosts } from '../../hooks';
+import { isGitHubSyncConfigured } from '../../lib';
 import styles from './AdminDashboard.module.css';
 
 export default function AdminDashboard() {
@@ -10,12 +11,29 @@ export default function AdminDashboard() {
   const projectCount = projects?.length ?? null;
   const postCount = posts?.length ?? null;
   const publishedCount = posts?.filter(p => p.is_published).length ?? null;
+  const githubReady = isGitHubSyncConfigured();
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <h1 className={styles.title}>Dashboard</h1>
         <p className={styles.subtitle}>portfolio-cms / admin</p>
+      </div>
+
+      {/* GitHub sync status banner */}
+      <div className={githubReady ? styles.syncBannerOk : styles.syncBannerWarn}>
+        <span className={styles.syncDot} />
+        {githubReady ? (
+          <>
+            <span className={styles.syncText}>GitHub sync active</span>
+            <span className={styles.syncHint}>— data is mirrored to the repo after every save</span>
+          </>
+        ) : (
+          <>
+            <span className={styles.syncText}>GitHub sync not configured</span>
+            <span className={styles.syncHint}>— add <code>VITE_GITHUB_TOKEN</code> to your <code>.env</code> to enable fallback reads</span>
+          </>
+        )}
       </div>
 
       <div className={styles.statsGrid}>
@@ -56,4 +74,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-}
+}
