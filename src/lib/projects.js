@@ -72,6 +72,8 @@ export async function createProject(project) {
     slug: sanitizeString(project.slug),
     tech_stack: sanitizeStringArray(project.tech_stack),
     description: sanitizeString(project.description),
+    github_url: sanitizeString(project.github_url) || null,
+    live_url: sanitizeString(project.live_url) || null,
   };
   const { data, error } = await supabase
     .from('projects')
@@ -91,6 +93,8 @@ export async function updateProject(id, project) {
     slug: sanitizeString(project.slug),
     tech_stack: sanitizeStringArray(project.tech_stack),
     description: sanitizeString(project.description),
+    github_url: sanitizeString(project.github_url) || null,
+    live_url: sanitizeString(project.live_url) || null,
   };
   const { data, error } = await supabase
     .from('projects')

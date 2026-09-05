@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useProjects, usePosts } from '../hooks';
 import { Loading } from '../components/ui';
-import { isValidHttpsUrl } from '../lib/validation';
+import { isValidHttpsUrl, isValidUrl } from '../lib/validation';
 import heroImage from '../assets/hero.jpg';
 
 import styles from './Home.module.css';
@@ -87,9 +87,14 @@ export default function Home() {
                       <p className={styles.projectCategory}>Full-stack Platform</p>
                     )}
                   </div>
-                  {isValidHttpsUrl(projects[0]?.github_url, ['github.com']) && (
-                    <a href={projects[0].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-                  )}
+                  <div className={styles.projectActions}>
+                    {isValidUrl(projects[0]?.live_url) && (
+                      <a href={projects[0].live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
+                    )}
+                    {isValidHttpsUrl(projects[0]?.github_url, ['github.com']) && (
+                      <a href={projects[0].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -112,9 +117,14 @@ export default function Home() {
                       <p className={styles.projectCategory}>Web Application</p>
                     )}
                   </div>
-                  {isValidHttpsUrl(projects[1]?.github_url, ['github.com']) && (
-                    <a href={projects[1].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-                  )}
+                  <div className={styles.projectActions}>
+                    {isValidUrl(projects[1]?.live_url) && (
+                      <a href={projects[1].live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
+                    )}
+                    {isValidHttpsUrl(projects[1]?.github_url, ['github.com']) && (
+                      <a href={projects[1].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -137,9 +147,14 @@ export default function Home() {
                       <p className={styles.projectCategory}>System Implementation</p>
                     )}
                   </div>
-                  {isValidHttpsUrl(projects[2]?.github_url, ['github.com']) && (
-                    <a href={projects[2].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-                  )}
+                  <div className={styles.projectActions}>
+                    {isValidUrl(projects[2]?.live_url) && (
+                      <a href={projects[2].live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
+                    )}
+                    {isValidHttpsUrl(projects[2]?.github_url, ['github.com']) && (
+                      <a href={projects[2].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

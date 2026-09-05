@@ -11,6 +11,7 @@ export default function AdminProjectCreate() {
   const [slug, setSlug] = useState('');
   const [techStack, setTechStack] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
+  const [liveUrl, setLiveUrl] = useState('');
   const [description, setDescription] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -76,7 +77,7 @@ export default function AdminProjectCreate() {
         imageUrl = await uploadImage(imageFile, "projects");
       }
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await createProject({ title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: imageUrl });
+      await createProject({ title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, live_url: liveUrl, description, image_url: imageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -107,10 +108,16 @@ export default function AdminProjectCreate() {
           </div>
         </div>
 
+        <div className={styles.field}>
+          <label className={styles.label}>Tech Stack</label>
+          <input className={styles.input} type="text" value={techStack} onChange={e => setTechStack(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
+        </div>
+
         <div className={styles.formRow}>
           <div className={styles.field}>
-            <label className={styles.label}>Tech Stack</label>
-            <input className={styles.input} type="text" value={techStack} onChange={e => setTechStack(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
+            <label className={styles.label}>Live URL</label>
+            <input className={styles.input} type="url" value={liveUrl} onChange={e => setLiveUrl(e.target.value)} placeholder="https://..." />
+            <span className={styles.hint}>Optional: Link to live deployed application</span>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>GitHub URL</label>

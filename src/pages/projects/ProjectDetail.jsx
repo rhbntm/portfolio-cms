@@ -57,16 +57,28 @@ export default function ProjectDetail() {
           ) : (
             <p className={styles.category}>Project</p>
           )}
-          {project.github_url && (
-            <a
-              href={project.github_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.githubLink}
-            >
-              GitHub →
-            </a>
-          )}
+          <div className={styles.projectActions}>
+            {project.live_url && (
+              <a
+                href={project.live_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.liveButton}
+              >
+                Live Demo ↗
+              </a>
+            )}
+            {project.github_url && (
+              <a
+                href={project.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.githubLink}
+              >
+                GitHub →
+              </a>
+            )}
+          </div>
         </div>
         <h1 className={styles.title}>{project.title}</h1>
         <div className={styles.description}>

@@ -153,6 +153,17 @@ export default function AdminProjectsList() {
                     <td className={styles.cellMono}>{project.slug}</td>
                     <td>
                       <div className={styles.cellActions}>
+                        {project.live_url && (
+                          <a
+                            href={project.live_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.liveBtn}
+                            title="Open live site"
+                          >
+                            live ↗
+                          </a>
+                        )}
                         <Link to={`/admin/projects/${project.id}/edit`} className={styles.editBtn}>edit</Link>
                         <button
                           className={styles.deleteBtn}

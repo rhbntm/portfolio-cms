@@ -15,6 +15,7 @@ export default function AdminProjectEdit() {
   const [slug, setSlug] = useState('');
   const [techStack, setTechStack] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
+  const [liveUrl, setLiveUrl] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -46,6 +47,7 @@ export default function AdminProjectEdit() {
           setSlug(project.slug || '');
           setTechStack(project.tech_stack?.join(' • ') || '');
           setGithubUrl(project.github_url || '');
+          setLiveUrl(project.live_url || '');
           setDescription(project.description || '');
           setImageUrl(project.image_url || '');
           setOriginalImageUrl(project.image_url || '');
@@ -111,7 +113,7 @@ export default function AdminProjectEdit() {
       }
       
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, description, image_url: finalImageUrl || null });
+      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, live_url: liveUrl, description, image_url: finalImageUrl || null });
       
       if (originalImageUrl && originalImageUrl !== finalImageUrl) {
         await deleteImage(originalImageUrl);
@@ -148,10 +150,16 @@ export default function AdminProjectEdit() {
           </div>
         </div>
 
+        <div className={styles.field}>
+          <label className={styles.label}>Tech Stack</label>
+          <input className={styles.input} type="text" value={techStack} onChange={e => setTechStack(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
+        </div>
+
         <div className={styles.formRow}>
           <div className={styles.field}>
-            <label className={styles.label}>Tech Stack</label>
-            <input className={styles.input} type="text" value={techStack} onChange={e => setTechStack(e.target.value)} placeholder="e.g. React • Laravel • Supabase" />
+            <label className={styles.label}>Live URL</label>
+            <input className={styles.input} type="url" value={liveUrl} onChange={e => setLiveUrl(e.target.value)} placeholder="https://..." />
+            <span className={styles.hint}>Optional: Link to live deployed application</span>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>GitHub URL</label>

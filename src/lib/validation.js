@@ -40,3 +40,22 @@ export function isValidHttpsUrl(url, allowedDomains = null) {
     return false;
   }
 }
+
+export function isValidUrl(url, allowedDomains = null) {
+  if (typeof url !== 'string' || !url.trim()) return false;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return false;
+    if (allowedDomains) {
+      const hostname = parsed.hostname.toLowerCase();
+      const isAllowed = allowedDomains.some(domain =>
+        hostname === domain || hostname.endsWith(`.${domain}`)
+      );
+      if (!isAllowed) return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
