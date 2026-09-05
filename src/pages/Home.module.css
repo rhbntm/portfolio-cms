@@ -452,6 +452,7 @@ body {
   border-bottom: 1px solid var(--border);
   text-decoration: none;
   transition: padding-left var(--transition);
+  min-width: 0;
 }
 
 .journalItem:hover {
@@ -472,6 +473,10 @@ body {
   padding-top: 5px;
 }
 
+.journalBody {
+  min-width: 0;
+}
+
 .journalTitle {
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -480,6 +485,8 @@ body {
   margin-bottom: var(--space-sm);
   transition: color var(--transition);
   line-height: 1.25;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .journalExcerpt {
@@ -488,6 +495,8 @@ body {
   line-height: 1.65;
   color: var(--text-secondary);
   max-width: 620px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* CTA Section */
@@ -584,6 +593,10 @@ body {
 }
 
 @media (max-width: 900px) {
+  .section {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
   .bentoGrid {
     grid-template-columns: 1fr;
   }
@@ -598,9 +611,44 @@ body {
   .projectImageWrapper {
     height: 350px;
   }
+
+  .journalItem {
+    grid-template-columns: 150px 1fr;
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .journalItem {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+    padding: var(--space-md) 0;
+  }
+
+  .journalDate {
+    padding-top: 0;
+  }
+
+  .journalTitle {
+    font-size: 1.25rem;
+  }
 }
 
 @media (max-width: 640px) {
+  .section {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .dividerInner {
+    padding: 0 var(--space-md);
+  }
+
+  .sectionHeader {
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
   .hero {
     grid-template-columns: 1fr;
     width: 100%;
@@ -645,5 +693,25 @@ body {
     width: min(220px, 70vw);
     height: min(220px, 70vw);
     margin: 0 auto;
+  }
+
+  .projectInfo {
+    padding: var(--space-md);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .projectActions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .journalItem:hover {
+    padding-left: 0;
+  }
+
+  .ctaSection {
+    padding: var(--space-xl) var(--space-md);
   }
 }

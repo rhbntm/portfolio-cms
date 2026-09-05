@@ -180,7 +180,7 @@ export default function Home() {
                 <span className={styles.journalDate}>
                   {new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
-                <div>
+                <div className={styles.journalBody}>
                   <h3 className={styles.journalTitle}>{post.title}</h3>
                   <p className={styles.journalExcerpt}>{post.excerpt}</p>
                 </div>
