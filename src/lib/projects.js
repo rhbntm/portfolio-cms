@@ -1,5 +1,11 @@
 import { supabase } from './supabase';
-import { sanitizeString, sanitizeStringArray } from './validation';
+import {
+  sanitizeString,
+  sanitizeStringArray,
+  validateSlug,
+  validateUrl,
+  validateImageUrl,
+} from './validation';
 import { deleteImage } from './storage';
 import {
   fetchProjectsFromGitHub,
@@ -72,6 +78,11 @@ export async function getProjectById(id) {
 // ─── Writes (Supabase + fire-and-forget GitHub sync) ─────────────────────────
 
 export async function createProject(project) {
+  validateSlug(project.slug);
+  validateUrl(project.github_url, 'GitHub URL');
+  validateUrl(project.live_url, 'Live URL');
+  validateImageUrl(project.image_url, 'Project image URL');
+
   const sanitized = {
     ...project,
     title: sanitizeString(project.title),
@@ -93,6 +104,11 @@ export async function createProject(project) {
 }
 
 export async function updateProject(id, project) {
+  if (project.slug !== undefined) validateSlug(project.slug);
+  if (project.github_url !== undefined) validateUrl(project.github_url, 'GitHub URL');
+  if (project.live_url !== undefined) validateUrl(project.live_url, 'Live URL');
+  if (project.image_url !== undefined) validateImageUrl(project.image_url, 'Project image URL');
+
   const sanitized = {
     ...project,
     title: sanitizeString(project.title),

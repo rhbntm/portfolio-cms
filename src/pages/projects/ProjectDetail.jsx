@@ -2,11 +2,13 @@ import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeSanitize from 'rehype-sanitize';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { useProject } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
+import { isValidUrl, isValidHttpsUrl } from '../../lib';
 import styles from './ProjectDetail.module.css';
 
 export default function ProjectDetail() {
@@ -27,7 +29,7 @@ export default function ProjectDetail() {
       <Link to="/projects" className={styles.back}>← Projects</Link>
 
       <div className={styles.hero}>
-        {project.image_url
+        {isValidHttpsUrl(project.image_url)
           ? (
             <>
               <img 
@@ -62,7 +64,7 @@ export default function ProjectDetail() {
             <p className={styles.category}>Project</p>
           )}
           <div className={styles.projectActions}>
-            {project.live_url && (
+            {isValidUrl(project.live_url) && (
               <a
                 href={project.live_url}
                 target="_blank"
@@ -72,7 +74,7 @@ export default function ProjectDetail() {
                 Live Demo ↗
               </a>
             )}
-            {project.github_url && (
+            {isValidUrl(project.github_url) && (
               <a
                 href={project.github_url}
                 target="_blank"
@@ -91,7 +93,7 @@ export default function ProjectDetail() {
         )}
         <h1 className={styles.title}>{project.title}</h1>
         <div className={styles.description}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{project.description}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{project.description}</ReactMarkdown>
         </div>
       </div>
     </div>

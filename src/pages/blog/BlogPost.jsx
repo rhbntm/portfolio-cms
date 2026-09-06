@@ -2,11 +2,13 @@ import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeSanitize from 'rehype-sanitize';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { usePost } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
+import { isValidHttpsUrl } from '../../lib';
 import styles from './BlogPost.module.css';
 
 export default function BlogPost() {
@@ -39,7 +41,7 @@ export default function BlogPost() {
           </div>
         )}
         {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
-        {post.cover_image && (
+        {isValidHttpsUrl(post.cover_image) && (
           <>
             <img 
               className={styles.coverImage} 
@@ -58,7 +60,7 @@ export default function BlogPost() {
           </>
         )}
         <div className={styles.content}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{post.content}</ReactMarkdown>
         </div>
       </article>
     </div>

@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { sanitizeString } from './validation';
+import { sanitizeString, validateSlug, validateImageUrl } from './validation';
 import { deleteImage } from './storage';
 import {
   fetchPostsFromGitHub,
@@ -79,6 +79,9 @@ export async function getPostById(id) {
 // ─── Writes (Supabase + fire-and-forget GitHub sync) ─────────────────────────
 
 export async function createPost(post) {
+  validateSlug(post.slug);
+  validateImageUrl(post.cover_image, 'Cover image URL');
+
   const sanitized = {
     ...post,
     title: sanitizeString(post.title),
@@ -102,6 +105,9 @@ export async function createPost(post) {
 }
 
 export async function updatePost(id, post) {
+  if (post.slug !== undefined) validateSlug(post.slug);
+  if (post.cover_image !== undefined) validateImageUrl(post.cover_image, 'Cover image URL');
+
   const sanitized = {
     ...post,
     title: sanitizeString(post.title),

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useProjects } from '../../hooks';
 import { Loading, ErrorMessage, Pagination } from '../../components';
+import { isValidHttpsUrl } from '../../lib';
 import styles from './Projects.module.css';
 
 export default function Projects() {
@@ -35,7 +36,7 @@ export default function Projects() {
             {projects.map(project => (
               <Link key={project.id} to={`/projects/${project.slug}`} className={styles.card}>
                 <div className={styles.cardImageWrap}>
-                  {project.image_url && (
+                  {isValidHttpsUrl(project.image_url) && (
                     <img className={styles.cardImage} src={project.image_url} alt={project.title} />
                   )}
                 </div>

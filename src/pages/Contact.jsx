@@ -44,6 +44,8 @@ export default function Contact() {
   const formRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
+  // Honeypot: bots fill hidden fields; real users never touch them
+  const [honeypot, setHoneypot] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,6 +55,9 @@ export default function Contact() {
       setStatus({ type: 'error', message: 'Email service is not configured. Please check your environment variables.' });
       return;
     }
+
+    // Honeypot check — bots fill hidden fields, real users don't
+    if (honeypot) return;
 
     // Rate limit check
     const submissionCount = getSubmissionCount();
@@ -141,6 +146,21 @@ export default function Contact() {
               Contact form is not configured. Please check environment variables.
             </p>
           )}
+
+          {/* Honeypot field — hidden from real users, filled by bots */}
+          <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+            <label htmlFor="website">Website</label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              value={honeypot}
+              onChange={e => setHoneypot(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="name">Full Name</label>
             <input

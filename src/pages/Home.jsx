@@ -71,7 +71,7 @@ export default function Home() {
             {projects[0] && (
               <div className={`${styles.projectCard} ${styles.projectCardLarge}`}>
                 <Link to={`/projects/${projects[0]?.slug}`} className={styles.projectImageWrapper}>
-                  {projects[0]?.image_url && <img className={styles.projectImage} src={projects[0].image_url} alt={projects[0].title} />}
+                  {isValidHttpsUrl(projects[0]?.image_url) && <img className={styles.projectImage} src={projects[0].image_url} alt={projects[0].title} />}
                   <div className={styles.projectOverlay} />
                 </Link>
                 <div className={styles.projectInfo}>
@@ -106,7 +106,7 @@ export default function Home() {
             {projects[1] && (
               <div className={`${styles.projectCard} ${styles.projectCardSmall}`}>
                 <Link to={`/projects/${projects[1]?.slug}`} className={styles.projectImageWrapper}>
-                  {projects[1]?.image_url && <img className={styles.projectImage} src={projects[1].image_url} alt={projects[1].title} />}
+                  {isValidHttpsUrl(projects[1]?.image_url) && <img className={styles.projectImage} src={projects[1].image_url} alt={projects[1].title} />}
                   <div className={styles.projectOverlay} />
                 </Link>
                 <div className={styles.projectInfo}>
@@ -141,7 +141,7 @@ export default function Home() {
             {projects[2] && (
               <div className={`${styles.projectCard} ${styles.projectCardFull}`}>
                 <Link to={`/projects/${projects[2]?.slug}`} className={styles.projectImageWrapper}>
-                  {projects[2]?.image_url && <img className={styles.projectImage} src={projects[2].image_url} alt={projects[2].title} />}
+                  {isValidHttpsUrl(projects[2]?.image_url) && <img className={styles.projectImage} src={projects[2].image_url} alt={projects[2].title} />}
                   <div className={styles.projectOverlay} />
                 </Link>
                 <div className={styles.projectInfo}>
