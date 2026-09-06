@@ -40,6 +40,11 @@ export default function Projects() {
                   )}
                 </div>
                 <div className={styles.cardBody}>
+                  {project.created_at && (
+                    <span className={styles.cardDate}>
+                      {new Date(project.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  )}
                   <h2 className={styles.cardTitle}>{project.title}</h2>
                   {project.tech_stack?.length > 0 && (
                     <div className={styles.cardTechStack}>

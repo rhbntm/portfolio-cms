@@ -1,7 +1,13 @@
 import { supabase } from './supabase';
 import { sanitizeString, sanitizeStringArray } from './validation';
 import { deleteImage } from './storage';
-import { fetchFromGitHub, syncProjectsToGitHub } from './github';
+import {
+  fetchProjectsFromGitHub,
+  fetchProjectFromGitHub,
+  syncProjectToGitHub,
+  deleteProjectFromGitHub,
+  syncProjectsToGitHub,
+} from './github';
 
 // ─── Reads (Supabase-first, GitHub fallback) ──────────────────────────────────
 
@@ -19,7 +25,7 @@ export async function getProjects({ page = 1, pageSize = 10 } = {}) {
   } catch (supabaseErr) {
     console.warn('[Fallback] Supabase unavailable for getProjects, trying GitHub:', supabaseErr.message);
     try {
-      const all = await fetchFromGitHub('data/projects.json');
+      const all = await fetchProjectsFromGitHub();
       const start = (page - 1) * pageSize;
       const paged = all.slice(start, start + pageSize);
       return { data: paged, count: all.length };
@@ -43,8 +49,8 @@ export async function getProjectBySlug(slug) {
   } catch (supabaseErr) {
     console.warn('[Fallback] Supabase unavailable for getProjectBySlug, trying GitHub:', supabaseErr.message);
     try {
-      const all = await fetchFromGitHub('data/projects.json');
-      return all.find(p => p.slug === slug) ?? null;
+      const project = await fetchProjectFromGitHub(slug);
+      return project;
     } catch (ghErr) {
       console.error('[Fallback] GitHub fallback also failed for getProjectBySlug:', ghErr.message);
       throw supabaseErr;
@@ -82,7 +88,7 @@ export async function createProject(project) {
     .single();
 
   if (error) throw error;
-  syncProjectsToGitHub(); // fire-and-forget
+  syncProjectToGitHub(data); // fire-and-forget
   return data;
 }
 
@@ -104,7 +110,7 @@ export async function updateProject(id, project) {
     .single();
 
   if (error) throw error;
-  syncProjectsToGitHub(); // fire-and-forget
+  syncProjectToGitHub(data); // fire-and-forget
   return data;
 }
 
@@ -119,7 +125,9 @@ export async function deleteProject(id) {
     .eq('id', id);
 
   if (error) throw error;
-  syncProjectsToGitHub(); // fire-and-forget
+  if (project?.slug) {
+    deleteProjectFromGitHub(project.slug); // fire-and-forget
+  }
 }
 
 export async function updateProjectsOrder(updates) {
@@ -138,3 +146,4 @@ export async function updateProjectsOrder(updates) {
   }
   syncProjectsToGitHub(); // fire-and-forget
 }
+

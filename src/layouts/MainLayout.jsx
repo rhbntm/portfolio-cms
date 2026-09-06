@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link, NavLink } from "react-router-dom";
+import { ScrollToTop } from "../components";
 import styles from './MainLayout.module.css';
 
 export default function MainLayout() {
@@ -7,6 +8,7 @@ export default function MainLayout() {
 
   return (
     <>
+      <ScrollToTop />
       <nav className={styles.nav}>
         <div className={styles.navInner}>
           <Link to="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>

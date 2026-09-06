@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Lightbox from "yet-another-react-lightbox";
@@ -13,6 +13,10 @@ export default function ProjectDetail() {
   const { slug } = useParams();
   const { data: project, loading, error } = useProject(slug);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [slug]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -80,6 +84,11 @@ export default function ProjectDetail() {
             )}
           </div>
         </div>
+        {project.created_at && (
+          <p className={styles.metaDate}>
+            {new Date(project.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </p>
+        )}
         <h1 className={styles.title}>{project.title}</h1>
         <div className={styles.description}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{project.description}</ReactMarkdown>

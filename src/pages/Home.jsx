@@ -76,6 +76,11 @@ export default function Home() {
                 </Link>
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
+                    {projects[0]?.created_at && (
+                      <span className={styles.projectDate}>
+                        {new Date(projects[0].created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      </span>
+                    )}
                     <h3 className={styles.projectTitle}>{projects[0]?.title}</h3>
                     {projects[0]?.tech_stack?.length > 0 ? (
                       <div className={styles.cardTechStack}>
@@ -106,6 +111,11 @@ export default function Home() {
                 </Link>
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
+                    {projects[1]?.created_at && (
+                      <span className={styles.projectDate}>
+                        {new Date(projects[1].created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      </span>
+                    )}
                     <h3 className={styles.projectTitle}>{projects[1]?.title}</h3>
                     {projects[1]?.tech_stack?.length > 0 ? (
                       <div className={styles.cardTechStack}>
@@ -136,6 +146,11 @@ export default function Home() {
                 </Link>
                 <div className={styles.projectInfo}>
                   <div className={styles.projectMeta}>
+                    {projects[2]?.created_at && (
+                      <span className={styles.projectDate}>
+                        {new Date(projects[2].created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      </span>
+                    )}
                     <h3 className={styles.projectTitle}>{projects[2]?.title}</h3>
                     {projects[2]?.tech_stack?.length > 0 ? (
                       <div className={styles.cardTechStack}>

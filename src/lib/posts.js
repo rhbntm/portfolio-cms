@@ -1,7 +1,13 @@
 import { supabase } from './supabase';
 import { sanitizeString } from './validation';
 import { deleteImage } from './storage';
-import { fetchFromGitHub, syncPostsToGitHub } from './github';
+import {
+  fetchPostsFromGitHub,
+  fetchPostFromGitHub,
+  syncPostToGitHub,
+  deletePostFromGitHub,
+  syncPostsToGitHub,
+} from './github';
 
 // ─── Reads (Supabase-first, GitHub fallback) ──────────────────────────────────
 
@@ -23,8 +29,8 @@ export async function getPosts({ includeDrafts = false, page = 1, pageSize = 10 
   } catch (supabaseErr) {
     console.warn('[Fallback] Supabase unavailable for getPosts, trying GitHub:', supabaseErr.message);
     try {
-      const all = await fetchFromGitHub('data/posts.json');
-      // GitHub snapshot only contains published posts; respect includeDrafts=false
+      const all = await fetchPostsFromGitHub();
+      // GitHub mirror only contains published posts; respect includeDrafts=false
       const filtered = includeDrafts ? all : all.filter(p => p.is_published);
       const start = (page - 1) * pageSize;
       const paged = filtered.slice(start, start + pageSize);
@@ -50,8 +56,8 @@ export async function getPostBySlug(slug) {
   } catch (supabaseErr) {
     console.warn('[Fallback] Supabase unavailable for getPostBySlug, trying GitHub:', supabaseErr.message);
     try {
-      const all = await fetchFromGitHub('data/posts.json');
-      return all.find(p => p.slug === slug && p.is_published) ?? null;
+      const post = await fetchPostFromGitHub(slug);
+      return post;
     } catch (ghErr) {
       console.error('[Fallback] GitHub fallback also failed for getPostBySlug:', ghErr.message);
       throw supabaseErr;
@@ -86,8 +92,13 @@ export async function createPost(post) {
     .select();
 
   if (error) throw error;
-  syncPostsToGitHub(); // fire-and-forget
-  return data?.[0] ?? null;
+  const created = data?.[0] ?? null;
+  if (created?.is_published) {
+    syncPostToGitHub(created); // fire-and-forget
+  } else {
+    syncPostsToGitHub();
+  }
+  return created;
 }
 
 export async function updatePost(id, post) {
@@ -105,8 +116,15 @@ export async function updatePost(id, post) {
     .select();
 
   if (error) throw error;
-  syncPostsToGitHub(); // fire-and-forget
-  return data?.[0] ?? null;
+  const updated = data?.[0] ?? null;
+  if (updated) {
+    if (updated.is_published) {
+      syncPostToGitHub(updated); // fire-and-forget
+    } else {
+      deletePostFromGitHub(updated.slug); // remove from GitHub if unpublished
+    }
+  }
+  return updated;
 }
 
 export async function deletePost(id) {
@@ -120,5 +138,8 @@ export async function deletePost(id) {
     .eq('id', id);
 
   if (error) throw error;
-  syncPostsToGitHub(); // fire-and-forget
+  if (post?.slug) {
+    deletePostFromGitHub(post.slug); // fire-and-forget
+  }
 }
+

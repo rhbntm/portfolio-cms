@@ -1,7 +1,8 @@
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useProjects } from '../../hooks';
 import { usePosts } from '../../hooks';
-import { isGitHubSyncConfigured } from '../../lib';
+import { isGitHubSyncConfigured, syncAllToGitHub, getGitHubDataUrl } from '../../lib';
 import styles from './AdminDashboard.module.css';
 
 export default function AdminDashboard() {
@@ -12,6 +13,24 @@ export default function AdminDashboard() {
   const postCount = posts?.length ?? null;
   const publishedCount = posts?.filter(p => p.is_published).length ?? null;
   const githubReady = isGitHubSyncConfigured();
+
+  const [syncState, setSyncState] = useState('idle'); // 'idle' | 'syncing' | 'done' | 'error'
+  const [syncResult, setSyncResult] = useState(null);
+
+  const handleSyncAll = useCallback(async () => {
+    setSyncState('syncing');
+    setSyncResult(null);
+    try {
+      const result = await syncAllToGitHub();
+      setSyncResult(result);
+      setSyncState('done');
+      setTimeout(() => setSyncState('idle'), 6000);
+    } catch (err) {
+      setSyncResult({ error: err.message });
+      setSyncState('error');
+      setTimeout(() => setSyncState('idle'), 8000);
+    }
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -26,15 +45,43 @@ export default function AdminDashboard() {
         {githubReady ? (
           <>
             <span className={styles.syncText}>GitHub sync active</span>
-            <span className={styles.syncHint}>— data is mirrored to the repo after every save</span>
+            <span className={styles.syncHint}>
+              — posts &amp; projects sync as individual <code>.md</code> files after every save.{' '}
+              <a
+                href={getGitHubDataUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.syncLink}
+              >
+                View data/ on GitHub ↗
+              </a>
+            </span>
+            <button
+              id="sync-all-btn"
+              className={styles.syncBtn}
+              onClick={handleSyncAll}
+              disabled={syncState === 'syncing'}
+              title="Re-sync everything from Supabase to GitHub"
+            >
+              {syncState === 'syncing' ? '⏳ syncing…' :
+               syncState === 'done' ? `✓ ${syncResult?.postsCount}p / ${syncResult?.projectsCount}pr synced` :
+               syncState === 'error' ? '✗ sync failed' :
+               '↑ Sync All'}
+            </button>
           </>
         ) : (
           <>
             <span className={styles.syncText}>GitHub sync not configured</span>
-            <span className={styles.syncHint}>— add <code>VITE_GITHUB_TOKEN</code> to your <code>.env</code> to enable fallback reads</span>
+            <span className={styles.syncHint}>
+              — add <code>VITE_GITHUB_TOKEN</code> to your <code>.env</code> to enable fallback reads and per-file Markdown sync
+            </span>
           </>
         )}
       </div>
+
+      {syncState === 'error' && syncResult?.error && (
+        <div className={styles.syncError}>{syncResult.error}</div>
+      )}
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>

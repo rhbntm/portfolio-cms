@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Lightbox from "yet-another-react-lightbox";
@@ -13,6 +13,10 @@ export default function BlogPost() {
   const { slug } = useParams();
   const { data: post, loading, error } = usePost(slug);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [slug]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;

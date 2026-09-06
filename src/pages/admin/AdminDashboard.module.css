@@ -10,7 +10,7 @@
 
 .syncBannerOk,
 .syncBannerWarn {
-  display: flex; align-items: center; gap: 0.5rem;
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
   margin-bottom: var(--space-xl);
   padding: 0.5rem 0.875rem;
   border-radius: var(--radius-sm);
@@ -30,6 +30,49 @@
 .syncText { color: #9ca3af; font-weight: 600; }
 .syncHint { color: #52555e; }
 .syncHint code { font-family: var(--font-mono); color: #6b7280; background: #1c1e22; padding: 0 4px; border-radius: 3px; }
+
+.syncLink {
+  color: var(--accent-text);
+  text-decoration: none;
+  margin-left: 0.25rem;
+}
+.syncLink:hover {
+  text-decoration: underline;
+}
+
+.syncBtn {
+  margin-left: auto;
+  background: rgba(33, 82, 36, 0.2);
+  border: 1px solid rgba(33, 82, 36, 0.4);
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+.syncBtn:hover:not(:disabled) {
+  background: rgba(33, 82, 36, 0.35);
+  border-color: var(--accent-text);
+}
+.syncBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.syncError {
+  margin-top: calc(-1 * var(--space-lg));
+  margin-bottom: var(--space-lg);
+  padding: 0.5rem 0.875rem;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: var(--radius-sm);
+  color: #f87171;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
 
 /* ─────────────────────────────────────────────────────── */
 
