@@ -1,0 +1,81 @@
+[
+  {
+    "id": 13,
+    "title": "Henkel Hackathon",
+    "slug": "henkel-hackathon",
+    "excerpt": "First Hackathon experience",
+    "content": "Out of the 100 applicants, I was part of the 30 that got selected.\n\nAnd so here is my first hackathon experience first held on September 1. It was very draining and fun.\n\n![favorite-moment](https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/posts/1788625487434-sofa.jpg)\n\n\n![locked-in](https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/posts/1788625174410-image.png)\n\nThis is my team Locked In working together on developing the solution. I don't know who came up with the team name due to my social anxious ahh but props to them. I was so happy with the team name lol. Lock in is my favorite phrase.\n\n![yey](https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/posts/1788626129184-f3ef8553-6c86-4d42-8392-29c301cac58f.jpg)\nAlthough, we didn't place anything on solving the actual business problem out of the 6 groups. We did get the first place on Loctite Team Bond Award\n![team-locked-in](https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/posts/1788626756200-locked-in.jpg)\n\nI also developed: [Loc it](https://ralph-brent-portfolio.vercel.app/projects/loc-it)\nas part of the bonus deliverables for the challenge\n\n\nIt was an honor to be part of Locked In and to be part of the first Hackathon organized by Henkel Makati.\n\n![everyone-photo](https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/posts/1788625260056-image.png)",
+    "cover_image": null,
+    "is_published": true,
+    "created_at": "2026-09-05T16:38:55.516291+00:00",
+    "tags": [
+      "Business",
+      "Life"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Building Business Skills",
+    "slug": "building-business-skills",
+    "excerpt": "I've spent the past few weeks focused on helping grow a small business. Along the way, I've improved my communication skills, gained new perspectives, and started thinking differently about the role software plays in solving real-world problems.",
+    "content": "I haven't been able to get intimate with programming or tech lately. I've been locked in on business stuff, so this is just a quick update and a short note on my tech-related plans.\n\nI've basically become a host in my friend's business on top of being the one editing and posting daily videos, which is why I haven't had much time—or even the mindset—to fully immerse myself in tech recently.\n\nThat said, I've learned a lot from helping grow the business. My communication skills have improved quite a bit, and I've discovered that I'm capable of pushing myself much harder than I previously thought. It's been a good reminder that growth often happens outside of your comfort zone.\n\nInterestingly, being involved in the day-to-day operations of a business has also given me a better appreciation for the problems software is meant to solve. Instead of only thinking about features and code, I've been exposed to challenges involving communication, workflows, inventory, marketing, and scaling. I think this perspective will help me build more practical software in the future.\n\nGoing forward, I'd like to set aside at least 30 minutes a day for tech-related learning. That could be watching YouTube videos, reading blog posts, exploring a random curiosity, or even discussing ideas with an LLM. More importantly, I want to immediately apply whatever I learn so the concepts stick and become part of my skill set.",
+    "cover_image": null,
+    "is_published": true,
+    "created_at": "2026-06-24T15:17:16.946834+00:00",
+    "tags": [
+      "Business"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Building More Than Software",
+    "slug": "building-more-than-software",
+    "excerpt": "Growth doesn't always come from writing code. Over the past few weeks, I've been focused on business operations, marketing, and improving my communication skills. This post is a reflection on what I've learned while stepping away from programming and into new challenges.",
+    "content": "I haven't been programming lately, I've been focused on growing my friend's business.\n\nMy next project might be building a payroll system as preparation for scaling my friend's business. It will greatly help the finance side of the business. But for now, I want to keep improving on the inventory system if I have time to do it.\n\nThere's so much to do. I mostly handle the content creation and that includes editing videos, advertisement posters, and other materials to improve the business branding and marketing. I've probably been working consistently for at least 12+ hours for the past week lmao.\n\nAlso, 2 days ago, I wanted to challenge myself so I decided to co-host with my friend during the live selling so that I can improve my communication. I'm generally a timid guy, so this really helps break that timidness. I like growing, and growing requires pain, so I just feel great overall as a result of that despite the uncomfortableness.\n\nThere's so much to write about, and most of these are unrelated to software/IT stuff but hey, this is my portfolio so I can do what I want lol.\n\nTo conclude, I feel great to the point where I feel like I'm in a manic state because I've also been sleep deprived but my energy is constantly on the higher end compared to prior to locking in on business, I would mostly feel drowsy and lethargic especially in the early morning to afternoons despite sleeping at least 8 hours.",
+    "cover_image": null,
+    "is_published": true,
+    "created_at": "2026-06-10T16:34:43.761433+00:00",
+    "tags": [
+      "Business",
+      "Personal",
+      "Reflection"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "J&R Inventory Management System: Lessons from a Real Business Project",
+    "slug": "j-r-inventory-management-system-lessons-from-a-real-business-project",
+    "excerpt": "Working on the J&R Inventory Management System for a growing Shopee live-selling business has allowed me to apply SDLC concepts to real business challenges. From analyzing workflows to designing operational improvements, I've gained valuable experience turning theoretical knowledge into practical solutions.",
+    "content": "For context, one of the projects that I've been working on: JR Inventory Management System is tied to this business that I'm helping https://linktr.ee/j.r.business.hq . The business is an online **LIVE** selling clothing shop based on Shopee which started operating around November 2026 so it's quite a new business <1 year old.\n\nSo now, I decided to increase my priority in helping my friend with his business because I'll be applying my skills as a software developer anyways, so I figured why not do it while actually solving real business problems. \n\nIn fact, I was able to apply the same principle used in software development like the SDLC that we've learned **conceptually** in School but not as much in **procedurally** applying in real life with real business problems.\n\nSo for instance, my friend and I had to plan how to better operationalize our day to day lives in a way that will allow us to efficiently handle tasks while getting the most out of it. Welcome to leverage I guess? Then logically, we have to gather the variables that we need to which we will base our design of our day to day life. We're currently in this phase so we haven't tested it yet. But doesn't that sound familiar? Yeah SLDC applied in efficiently operationalizing the business.\n\nAnyways there's a lot that I've procedurally(that is took actual action((instead of just thinking about concepts in my head)) learned today and I didn't even mention the technical ones like doing a grill-me session with my plan of adding a new feature in the J&R Inventory. \n\nLots of opportunities and inevitable challenges ahead as well, but we'll move forward regardless. Welcome to cringe",
+    "cover_image": null,
+    "is_published": true,
+    "created_at": "2026-06-05T16:08:54.899338+00:00",
+    "tags": []
+  },
+  {
+    "id": 9,
+    "title": "Why I added a blog/journal feature on this portfolio",
+    "slug": "why-i-added-a-blog-journal-feature-on-this-portfolio",
+    "excerpt": "2am me walking writing down my thoughts on google keep lol.",
+    "content": "So this is my blog post #2. And this is mostly going to be about my thoughts right now as of writing this blog or journal.\n\nThis blog is going to be about the reason why I added this feature in my portfolio in the first place. \n\nWe all know and can feel how important AI is becoming to our daily lives. And the way that we interact with AI is not through programming languages like Java or Python or whatever, it is through natural language like English or Filipino my native language, and etc.\n\nSo this is essentially why I added this blog post feature to my portfolio. It will function as a way for me to practice my written skills in natural language, specifically English. \n\nOne of my biggest problem personally is being clear and direct, I tend to go on unnecessary tangents when trying to communicate.\n\nThat's why. Why am I even adding more paragraphs lol, I could've finished it just fine on the 2nd last pararaph here.\n\nAnyways this is exactly the problem that I'm trying to regulate so my hope is that I become more concise and clear on my thoughts going forward that's it for now. I wanted to add the plans and ideas that I conceived while writing for adding new features to this blog but that's beyond the scope of this journal I think bye.",
+    "cover_image": null,
+    "is_published": true,
+    "created_at": "2026-06-02T18:09:52.207769+00:00",
+    "tags": [
+      "Personal"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Why I Chose Supabase",
+    "slug": "why-i-chose-supabase",
+    "excerpt": "My thoughts on using Supabase as a backend.",
+    "content": "Because it's what was recommended to me by ChatGPT🗿.",
+    "cover_image": "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/posts/1780407672346-zamn.png",
+    "is_published": true,
+    "created_at": "2026-04-23T10:43:33.064358+00:00",
+    "tags": [
+      "Life"
+    ]
+  }
+]
