@@ -13,6 +13,7 @@
     "@emailjs/browser": "^4.4.1",
     "@supabase/supabase-js": "^2.104.0",
     "browser-image-compression": "^2.0.2",
+    "posthog-js": "^1.433.5",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-markdown": "^10.1.0",

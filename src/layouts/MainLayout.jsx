@@ -1,10 +1,16 @@
-import { useState } from "react";
-import { Outlet, Link, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
 import { ScrollToTop } from "../components";
+import { trackPageView } from "../analytics";
 import styles from './MainLayout.module.css';
 
 export default function MainLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
 
   return (
     <>

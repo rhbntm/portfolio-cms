@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { sanitizeString } from '../lib/validation';
+import { trackContactSubmit } from '../analytics';
 import styles from './Contact.module.css';
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -98,6 +99,7 @@ export default function Contact() {
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY);
       incrementSubmissionCount();
+      trackContactSubmit();
       setStatus({ type: 'success', message: 'Message sent successfully. I’ll get back to you soon!' });
       formRef.current.reset();
     } catch (err) {

@@ -3,6 +3,7 @@ import { useProjects, usePosts } from '../hooks';
 import { Loading } from '../components/ui';
 import { isValidHttpsUrl, isValidUrl } from '../lib/validation';
 import heroImage from '../assets/hero.jpg';
+import { trackResumeDownload } from '../analytics';
 
 import styles from './Home.module.css';
 
@@ -29,7 +30,11 @@ export default function Home() {
           <div className={styles.heroActions}>
             <Link to="/projects" className={styles.heroCta}>View Projects</Link>
             <a href="https://github.com/rhbntm" target="_blank" rel="noopener noreferrer" className={styles.heroSecondaryCta}>GitHub</a>
-            <a href="/resume.pdf" className={styles.heroSecondaryCta}>Resume</a>
+            <a
+              href="/resume.pdf"
+              className={styles.heroSecondaryCta}
+              onClick={() => trackResumeDownload()}
+            >Resume</a>
           </div>
         </div>
         <div className={styles.heroImageContainer}>

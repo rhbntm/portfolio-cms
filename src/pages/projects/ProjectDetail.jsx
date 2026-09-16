@@ -7,6 +7,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { useProject } from '../../hooks';
+import { trackProjectView, trackProjectDemoClick, trackProjectGithubClick } from '../../analytics';
 import { Loading, ErrorMessage } from '../../components';
 import { isValidUrl, isValidHttpsUrl } from '../../lib';
 import styles from './ProjectDetail.module.css';
@@ -19,6 +20,11 @@ export default function ProjectDetail() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [slug]);
+
+  useEffect(() => {
+    if (!project) return;
+    trackProjectView({ slug: project.slug, title: project.title });
+  }, [project]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -70,6 +76,10 @@ export default function ProjectDetail() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.liveButton}
+                onClick={() => trackProjectDemoClick({
+                  slug: project.slug,
+                  title: project.title,
+                })}
               >
                 Live Demo ↗
               </a>
@@ -80,6 +90,10 @@ export default function ProjectDetail() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.githubLink}
+                onClick={() => trackProjectGithubClick({
+                  slug: project.slug,
+                  title: project.title,
+                })}
               >
                 GitHub →
               </a>
