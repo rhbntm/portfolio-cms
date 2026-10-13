@@ -4,6 +4,8 @@ title: "Why I added a blog/journal feature on this portfolio"
 slug: "why-i-added-a-blog-journal-feature-on-this-portfolio"
 excerpt: "2am me walking writing down my thoughts on google keep lol."
 cover_image: null
+tags:
+  - "Personal"
 is_published: true
 created_at: "2026-06-02T18:09:52.207769+00:00"
 updated_at: "2026-06-02T18:09:52.207769+00:00"

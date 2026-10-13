@@ -4,6 +4,10 @@ title: "Building More Than Software"
 slug: "building-more-than-software"
 excerpt: "Growth doesn't always come from writing code. Over the past few weeks, I've been focused on business operations, marketing, and improving my communication skills. This post is a reflection on what I've learned while stepping away from programming and into new challenges."
 cover_image: null
+tags:
+  - "Business"
+  - "Personal"
+  - "Reflection"
 is_published: true
 created_at: "2026-06-10T16:34:43.761433+00:00"
 updated_at: "2026-06-10T16:34:43.761433+00:00"

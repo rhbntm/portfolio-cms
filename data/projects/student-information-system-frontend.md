@@ -6,7 +6,7 @@ tech_stack:
   - "React 19 & Vite 7"
   - "Tailwind CSS"
   - "Axios"
-image_url: "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/projects/1780334668420-image.png"
+image_url: "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1780334668420-image.png"
 github_url: "https://github.com/rhbntm/sis-frontend"
 live_url: null
 sort_order: 2

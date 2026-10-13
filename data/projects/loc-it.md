@@ -4,7 +4,7 @@ title: "Loc-it"
 slug: "loc-it"
 tech_stack:
   - "React"
-image_url: "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/projects/1788624576410-Screenshot_2026-09-06_000912.png"
+image_url: "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1788624576410-Screenshot_2026-09-06_000912.png"
 github_url: "https://github.com/rhbntm/loc-it"
 live_url: "https://loc-it.vercel.app/"
 sort_order: 1

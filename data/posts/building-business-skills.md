@@ -4,6 +4,8 @@ title: "Building Business Skills"
 slug: "building-business-skills"
 excerpt: "I've spent the past few weeks focused on helping grow a small business. Along the way, I've improved my communication skills, gained new perspectives, and started thinking differently about the role software plays in solving real-world problems."
 cover_image: null
+tags:
+  - "Business"
 is_published: true
 created_at: "2026-06-24T15:17:16.946834+00:00"
 updated_at: "2026-06-24T15:17:16.946834+00:00"

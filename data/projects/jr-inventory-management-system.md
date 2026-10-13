@@ -9,7 +9,7 @@ tech_stack:
   - "Prisma"
   - "PostgreSQL"
   - "Next-Auth v4"
-image_url: "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/projects/1780483599821-Screenshot_2026-06-03_184323.png"
+image_url: "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1780483599821-Screenshot_2026-06-03_184323.png"
 github_url: "https://github.com/rhbntm/jr-inventory"
 live_url: null
 sort_order: 1

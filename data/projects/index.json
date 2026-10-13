@@ -10,7 +10,7 @@
     ],
     "github_url": "https://github.com/rhbntm/loc-it",
     "live_url": "https://loc-it.vercel.app/",
-    "image_url": "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/projects/1788624576410-Screenshot_2026-09-06_000912.png",
+    "image_url": "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1788624576410-Screenshot_2026-09-06_000912.png",
     "is_featured": false,
     "created_at": "2026-09-05T16:09:35.945567+00:00",
     "sort_order": 1
@@ -31,7 +31,7 @@
     ],
     "github_url": "https://github.com/rhbntm/jr-inventory",
     "live_url": null,
-    "image_url": "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/projects/1780483599821-Screenshot_2026-06-03_184323.png",
+    "image_url": "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1780483599821-Screenshot_2026-06-03_184323.png",
     "is_featured": true,
     "created_at": "2026-04-21T09:53:25.580509+00:00",
     "sort_order": 1
@@ -49,7 +49,7 @@
     ],
     "github_url": "https://github.com/rhbntm/sis-frontend",
     "live_url": null,
-    "image_url": "https://mftzjipgomcxhfpckbnj.supabase.co/storage/v1/object/public/images/projects/1780334668420-image.png",
+    "image_url": "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1780334668420-image.png",
     "is_featured": false,
     "created_at": "2026-04-23T10:41:13.090681+00:00",
     "sort_order": 2

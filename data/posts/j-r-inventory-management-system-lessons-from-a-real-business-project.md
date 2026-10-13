@@ -4,6 +4,7 @@ title: "J&R Inventory Management System: Lessons from a Real Business Project"
 slug: "j-r-inventory-management-system-lessons-from-a-real-business-project"
 excerpt: "Working on the J&R Inventory Management System for a growing Shopee live-selling business has allowed me to apply SDLC concepts to real business challenges. From analyzing workflows to designing operational improvements, I've gained valuable experience turning theoretical knowledge into practical solutions."
 cover_image: null
+tags:
 is_published: true
 created_at: "2026-06-05T16:08:54.899338+00:00"
 updated_at: "2026-06-05T16:08:54.899338+00:00"
