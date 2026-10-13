@@ -7,6 +7,7 @@ cover_image: null
 tags:
   - "Business"
   - "Life"
+  - "Tech"
 is_published: true
 created_at: "2026-09-05T16:38:55.516291+00:00"
 updated_at: "2026-09-05T16:38:55.516291+00:00"

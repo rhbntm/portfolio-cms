@@ -6,6 +6,7 @@ excerpt: "I've spent the past few weeks focused on helping grow a small business
 cover_image: null
 tags:
   - "Business"
+  - "Reflection"
 is_published: true
 created_at: "2026-06-24T15:17:16.946834+00:00"
 updated_at: "2026-06-24T15:17:16.946834+00:00"
