@@ -1,36 +1,12 @@
-import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { useProjects } from '../../hooks';
-import { usePosts } from '../../hooks';
-import { isGitHubSyncConfigured, syncAllToGitHub, getGitHubDataUrl } from '../../lib';
+import { useProjects, usePosts, useAdminPosts } from '../../hooks';
+import { getGitHubDataUrl, getGitHubSyncWorkflowUrl } from '../../lib/github';
 import styles from './AdminDashboard.module.css';
 
 export default function AdminDashboard() {
-  const { data: projects } = useProjects();
-  const { data: posts } = usePosts();
-
-  const projectCount = projects?.length ?? null;
-  const postCount = posts?.length ?? null;
-  const publishedCount = posts?.filter(p => p.is_published).length ?? null;
-  const githubReady = isGitHubSyncConfigured();
-
-  const [syncState, setSyncState] = useState('idle'); // 'idle' | 'syncing' | 'done' | 'error'
-  const [syncResult, setSyncResult] = useState(null);
-
-  const handleSyncAll = useCallback(async () => {
-    setSyncState('syncing');
-    setSyncResult(null);
-    try {
-      const result = await syncAllToGitHub();
-      setSyncResult(result);
-      setSyncState('done');
-      setTimeout(() => setSyncState('idle'), 6000);
-    } catch (err) {
-      setSyncResult({ error: err.message });
-      setSyncState('error');
-      setTimeout(() => setSyncState('idle'), 8000);
-    }
-  }, []);
+  const { count: projectCount, loading: projectsLoading } = useProjects(1, 1);
+  const { count: postCount, loading: postsLoading } = useAdminPosts(1, 1);
+  const { count: publishedCount, loading: publishedLoading } = usePosts(1, 1);
 
   return (
     <div className={styles.page}>
@@ -39,62 +15,44 @@ export default function AdminDashboard() {
         <p className={styles.subtitle}>portfolio-cms / admin</p>
       </div>
 
-      {/* GitHub sync status banner */}
-      <div className={githubReady ? styles.syncBannerOk : styles.syncBannerWarn}>
+      {/* GitHub backup banner */}
+      <div className={styles.syncBanner}>
         <span className={styles.syncDot} />
-        {githubReady ? (
-          <>
-            <span className={styles.syncText}>GitHub sync active</span>
-            <span className={styles.syncHint}>
-              — posts &amp; projects sync as individual <code>.md</code> files after every save.{' '}
-              <a
-                href={getGitHubDataUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.syncLink}
-              >
-                View data/ on GitHub ↗
-              </a>
-            </span>
-            <button
-              id="sync-all-btn"
-              className={styles.syncBtn}
-              onClick={handleSyncAll}
-              disabled={syncState === 'syncing'}
-              title="Re-sync everything from Supabase to GitHub"
-            >
-              {syncState === 'syncing' ? '⏳ syncing…' :
-               syncState === 'done' ? `✓ ${syncResult?.postsCount}p / ${syncResult?.projectsCount}pr synced` :
-               syncState === 'error' ? '✗ sync failed' :
-               '↑ Sync All'}
-            </button>
-          </>
-        ) : (
-          <>
-            <span className={styles.syncText}>GitHub sync not configured</span>
-            <span className={styles.syncHint}>
-              — add <code>VITE_GITHUB_TOKEN</code> to your <code>.env</code> to enable fallback reads and per-file Markdown sync
-            </span>
-          </>
-        )}
+        <span className={styles.syncText}>GitHub backup</span>
+        <span className={styles.syncHint}>
+          — published posts &amp; projects are mirrored to <code>data/</code> daily by a GitHub Action.{' '}
+          <a
+            href={getGitHubDataUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.syncLink}
+          >
+            View data/ on GitHub ↗
+          </a>
+        </span>
+        <a
+          href={getGitHubSyncWorkflowUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.syncBtn}
+          title="Open the sync workflow on GitHub and click “Run workflow”"
+        >
+          ↑ Sync now ↗
+        </a>
       </div>
-
-      {syncState === 'error' && syncResult?.error && (
-        <div className={styles.syncError}>{syncResult.error}</div>
-      )}
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
           <p className={styles.statLabel}>Projects</p>
-          <p className={styles.statValue}>{projectCount ?? '—'}</p>
+          <p className={styles.statValue}>{projectsLoading ? '—' : projectCount}</p>
         </div>
         <div className={styles.statCard}>
           <p className={styles.statLabel}>Posts</p>
-          <p className={styles.statValue}>{postCount ?? '—'}</p>
+          <p className={styles.statValue}>{postsLoading ? '—' : postCount}</p>
         </div>
         <div className={styles.statCard}>
           <p className={styles.statLabel}>Published</p>
-          <p className={styles.statValue}>{publishedCount ?? '—'}</p>
+          <p className={styles.statValue}>{publishedLoading ? '—' : publishedCount}</p>
         </div>
       </div>
 
@@ -121,4 +79,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-}
+}

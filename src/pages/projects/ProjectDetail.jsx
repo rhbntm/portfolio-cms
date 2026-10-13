@@ -9,7 +9,7 @@ import "yet-another-react-lightbox/styles.css";
 import { useProject } from '../../hooks';
 import { trackProjectView, trackProjectDemoClick, trackProjectGithubClick } from '../../analytics';
 import { Loading, ErrorMessage } from '../../components';
-import { isValidUrl, isValidHttpsUrl } from '../../lib';
+import { isValidUrl, isValidHttpsUrl } from '../../lib/validation';
 import styles from './ProjectDetail.module.css';
 
 export default function ProjectDetail() {

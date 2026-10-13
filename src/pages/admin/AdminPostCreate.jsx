@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { createPost, uploadImage, getPostBySlug } from "../../lib";
+import { createPost, uploadImage, isPostSlugTaken } from "../../lib";
 import styles from './AdminForm.module.css';
 
 const PRESET_TAGS = ['Business', 'Tech', 'Reflection', 'Personal', 'Design', 'Life'];
@@ -126,7 +126,7 @@ export default function AdminPostCreate() {
         let counter = 2;
         let collision = true;
         while (collision) {
-          const existing = await getPostBySlug(uniqueSlug);
+          const existing = await isPostSlugTaken(uniqueSlug);
           if (existing) { uniqueSlug = `${finalSlug}-${counter}`; counter++; }
           else { collision = false; }
         }

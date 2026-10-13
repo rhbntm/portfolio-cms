@@ -86,6 +86,19 @@ VITE_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
 VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
 ```
 
+> ⚠️ Every `VITE_*` variable is bundled into the public JavaScript. Never put a secret (e.g. a GitHub token or Supabase service-role key) in one.
+
+### GitHub data mirror (Supabase fallback)
+
+Published posts and projects are mirrored to `data/` as Markdown + `index.json`, and every Supabase Storage image they reference is copied to `data/images/` (mirrored content points at those copies). The site reads the mirror from GitHub when Supabase is unavailable; set `VITE_DATA_SOURCE=github` to skip Supabase entirely, e.g. after shutting it down. The mirror is written by the **Sync data mirror** GitHub Action (`.github/workflows/sync-data.yml`), which runs daily and on demand ("Run workflow" in the Actions tab, or the **Sync now** link on the admin dashboard).
+
+Add these **repository secrets** (Settings → Secrets and variables → Actions):
+
+- `SUPABASE_URL` — same value as `VITE_SUPABASE_URL`
+- `SUPABASE_ANON_KEY` — same value as `VITE_SUPABASE_ANON_KEY`
+
+The daily run also keeps a free-tier Supabase project from pausing due to inactivity. Data-only commits do not trigger a Vercel redeploy (see `ignoreCommand` in `vercel.json`).
+
 ### Getting Your Credentials
 
 **Supabase:**

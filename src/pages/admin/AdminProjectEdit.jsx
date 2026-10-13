@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getProjectById, updateProject, uploadImage, getProjectBySlug, deleteImage } from "../../lib";
+import { getProjectById, updateProject, uploadImage, isProjectSlugTaken, deleteImage } from "../../lib";
 import styles from './AdminForm.module.css';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -89,8 +89,8 @@ export default function AdminProjectEdit() {
         let counter = 2;
         let collision = true;
         while (collision) {
-          const existing = await getProjectBySlug(uniqueSlug);
-          if (existing && existing.id !== parseInt(id, 10)) {
+          const existing = await isProjectSlugTaken(uniqueSlug, id);
+          if (existing) {
             uniqueSlug = `${finalSlug}-${counter}`;
             counter++;
           } else {

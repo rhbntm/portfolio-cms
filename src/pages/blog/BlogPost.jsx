@@ -8,7 +8,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { usePost } from '../../hooks';
 import { Loading, ErrorMessage } from '../../components';
-import { isValidHttpsUrl } from '../../lib';
+import { isValidHttpsUrl } from '../../lib/validation';
 import styles from './BlogPost.module.css';
 
 export default function BlogPost() {

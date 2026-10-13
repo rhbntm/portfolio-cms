@@ -2,20 +2,63 @@ import { Link } from 'react-router-dom';
 import { useProjects, usePosts } from '../hooks';
 import { Loading } from '../components/ui';
 import { isValidHttpsUrl, isValidUrl } from '../lib/validation';
-import heroImage from '../assets/hero.jpg';
+import heroImage from '../assets/hero.webp';
 import { trackResumeDownload } from '../analytics';
 
 import styles from './Home.module.css';
 
+const TECHNOLOGIES = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs', 'Supabase', 'MySQL', 'PostgreSQL', 'Docker'];
+
+// Bento layout for the first three projects: [size class, fallback category label]
+const PROJECT_SLOTS = [
+  [styles.projectCardLarge, 'Full-stack Platform'],
+  [styles.projectCardSmall, 'Web Application'],
+  [styles.projectCardFull, 'System Implementation'],
+];
+
+function ProjectCard({ project, sizeClass, fallbackCategory }) {
+  return (
+    <div className={`${styles.projectCard} ${sizeClass}`}>
+      <Link to={`/projects/${project.slug}`} className={styles.projectImageWrapper}>
+        {isValidHttpsUrl(project.image_url) && (
+          <img className={styles.projectImage} src={project.image_url} alt={project.title} loading="lazy" />
+        )}
+        <div className={styles.projectOverlay} />
+      </Link>
+      <div className={styles.projectInfo}>
+        <div className={styles.projectMeta}>
+          {project.created_at && (
+            <span className={styles.projectDate}>
+              {new Date(project.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            </span>
+          )}
+          <h3 className={styles.projectTitle}>{project.title}</h3>
+          {project.tech_stack?.length > 0 ? (
+            <div className={styles.cardTechStack}>
+              {project.tech_stack.slice(0, 3).map(tech => (
+                <span key={tech} className={styles.techTag}>{tech}</span>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.projectCategory}>{fallbackCategory}</p>
+          )}
+        </div>
+        <div className={styles.projectActions}>
+          {isValidUrl(project.live_url) && (
+            <a href={project.live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
+          )}
+          {isValidHttpsUrl(project.github_url, ['github.com']) && (
+            <a href={project.github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
-  const { data: projects = [], loading: projectsLoading } = useProjects();
-  const { data: posts = [], loading: postsLoading } = usePosts();
-
-  if (projectsLoading || postsLoading) {
-    return <div className={styles.loadingState}><Loading /></div>;
-  }
-
-  const featuredPosts = posts.slice(0, 3);
+  const { data: projects, loading: projectsLoading } = useProjects(1, PROJECT_SLOTS.length);
+  const { data: posts, loading: postsLoading } = usePosts(1, 3);
 
   return (
     <>
@@ -38,7 +81,14 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.heroImageContainer}>
-          <img src={heroImage} alt="Hero" className={styles.heroImage} />
+          <img
+            src={heroImage}
+            alt="Portrait of Ralph Brent Marcelo"
+            className={styles.heroImage}
+            width={800}
+            height={1112}
+            fetchPriority="high"
+          />
         </div>
       </section>
       <div className={styles.divider}>
@@ -49,7 +99,7 @@ export default function Home() {
         <div className={styles.marqueeTrack}>
           {[...Array(2)].map((_, i) => (
             <div className={styles.marqueeGroup} key={i} aria-hidden={i > 0}>
-              {['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs', 'Supabase', 'MySQL', 'PostgreSQL', 'Docker'].map(tech => (
+              {TECHNOLOGIES.map(tech => (
                 <span className={styles.marqueeItem} key={`${tech}-${i}`}>
                   {tech}
                 </span>
@@ -69,115 +119,20 @@ export default function Home() {
           <Link to="/projects" className={styles.sectionLink}>All Projects →</Link>
         </div>
 
-        {!projects.length ? (
+        {projectsLoading ? (
+          <div className={styles.loadingState}><Loading /></div>
+        ) : !projects.length ? (
           <p className={styles.emptyState}>No projects to show yet.</p>
         ) : (
           <div className={styles.bentoGrid}>
-            {projects[0] && (
-              <div className={`${styles.projectCard} ${styles.projectCardLarge}`}>
-                <Link to={`/projects/${projects[0]?.slug}`} className={styles.projectImageWrapper}>
-                  {isValidHttpsUrl(projects[0]?.image_url) && <img className={styles.projectImage} src={projects[0].image_url} alt={projects[0].title} />}
-                  <div className={styles.projectOverlay} />
-                </Link>
-                <div className={styles.projectInfo}>
-                  <div className={styles.projectMeta}>
-                    {projects[0]?.created_at && (
-                      <span className={styles.projectDate}>
-                        {new Date(projects[0].created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                      </span>
-                    )}
-                    <h3 className={styles.projectTitle}>{projects[0]?.title}</h3>
-                    {projects[0]?.tech_stack?.length > 0 ? (
-                      <div className={styles.cardTechStack}>
-                        {projects[0].tech_stack.slice(0, 3).map(tech => (
-                          <span key={tech} className={styles.techTag}>{tech}</span>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className={styles.projectCategory}>Full-stack Platform</p>
-                    )}
-                  </div>
-                  <div className={styles.projectActions}>
-                    {isValidUrl(projects[0]?.live_url) && (
-                      <a href={projects[0].live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
-                    )}
-                    {isValidHttpsUrl(projects[0]?.github_url, ['github.com']) && (
-                      <a href={projects[0].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-            {projects[1] && (
-              <div className={`${styles.projectCard} ${styles.projectCardSmall}`}>
-                <Link to={`/projects/${projects[1]?.slug}`} className={styles.projectImageWrapper}>
-                  {isValidHttpsUrl(projects[1]?.image_url) && <img className={styles.projectImage} src={projects[1].image_url} alt={projects[1].title} />}
-                  <div className={styles.projectOverlay} />
-                </Link>
-                <div className={styles.projectInfo}>
-                  <div className={styles.projectMeta}>
-                    {projects[1]?.created_at && (
-                      <span className={styles.projectDate}>
-                        {new Date(projects[1].created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                      </span>
-                    )}
-                    <h3 className={styles.projectTitle}>{projects[1]?.title}</h3>
-                    {projects[1]?.tech_stack?.length > 0 ? (
-                      <div className={styles.cardTechStack}>
-                        {projects[1].tech_stack.slice(0, 3).map(tech => (
-                          <span key={tech} className={styles.techTag}>{tech}</span>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className={styles.projectCategory}>Web Application</p>
-                    )}
-                  </div>
-                  <div className={styles.projectActions}>
-                    {isValidUrl(projects[1]?.live_url) && (
-                      <a href={projects[1].live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
-                    )}
-                    {isValidHttpsUrl(projects[1]?.github_url, ['github.com']) && (
-                      <a href={projects[1].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-            {projects[2] && (
-              <div className={`${styles.projectCard} ${styles.projectCardFull}`}>
-                <Link to={`/projects/${projects[2]?.slug}`} className={styles.projectImageWrapper}>
-                  {isValidHttpsUrl(projects[2]?.image_url) && <img className={styles.projectImage} src={projects[2].image_url} alt={projects[2].title} />}
-                  <div className={styles.projectOverlay} />
-                </Link>
-                <div className={styles.projectInfo}>
-                  <div className={styles.projectMeta}>
-                    {projects[2]?.created_at && (
-                      <span className={styles.projectDate}>
-                        {new Date(projects[2].created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                      </span>
-                    )}
-                    <h3 className={styles.projectTitle}>{projects[2]?.title}</h3>
-                    {projects[2]?.tech_stack?.length > 0 ? (
-                      <div className={styles.cardTechStack}>
-                        {projects[2].tech_stack.slice(0, 3).map(tech => (
-                          <span key={tech} className={styles.techTag}>{tech}</span>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className={styles.projectCategory}>System Implementation</p>
-                    )}
-                  </div>
-                  <div className={styles.projectActions}>
-                    {isValidUrl(projects[2]?.live_url) && (
-                      <a href={projects[2].live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
-                    )}
-                    {isValidHttpsUrl(projects[2]?.github_url, ['github.com']) && (
-                      <a href={projects[2].github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+            {projects.slice(0, PROJECT_SLOTS.length).map((project, i) => (
+              <ProjectCard
+                key={project.id ?? project.slug}
+                project={project}
+                sizeClass={PROJECT_SLOTS[i][0]}
+                fallbackCategory={PROJECT_SLOTS[i][1]}
+              />
+            ))}
           </div>
         )}
       </section>
@@ -192,10 +147,12 @@ export default function Home() {
           <Link to="/blog" className={styles.sectionLink}>All Posts →</Link>
         </div>
         <div className={styles.journalList}>
-          {!featuredPosts.length ? (
+          {postsLoading ? (
+            <div className={styles.loadingState}><Loading /></div>
+          ) : !posts.length ? (
             <p className={styles.emptyState}>No posts published yet.</p>
           ) : (
-            featuredPosts.map(post => (
+            posts.slice(0, 3).map(post => (
               <Link key={post.id} to={`/blog/${post.slug}`} className={styles.journalItem}>
                 <span className={styles.journalDate}>
                   {new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}

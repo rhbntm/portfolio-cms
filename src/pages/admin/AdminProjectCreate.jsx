@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { createProject, uploadImage, getProjectBySlug } from "../../lib";
+import { createProject, uploadImage, isProjectSlugTaken } from "../../lib";
 import styles from './AdminForm.module.css';
 
 export default function AdminProjectCreate() {
@@ -54,7 +54,7 @@ export default function AdminProjectCreate() {
         let counter = 2;
         let collision = true;
         while (collision) {
-          const existing = await getProjectBySlug(uniqueSlug);
+          const existing = await isProjectSlugTaken(uniqueSlug);
           if (existing) {
             uniqueSlug = `${finalSlug}-${counter}`;
             counter++;

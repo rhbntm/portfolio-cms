@@ -1,0 +1,45 @@
+name: Sync data mirror
+
+# Mirrors published posts/projects from Supabase into data/ so the site can fall
+# back to GitHub when Supabase is paused. The daily run also keeps the Supabase
+# free tier from auto-pausing due to inactivity.
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # daily, 00:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Export Supabase content to data/
+        run: node scripts/sync-data.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Commit changes
+        run: |
+          if [ -z "$(git status --porcelain data)" ]; then
+            echo "data/ is up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git commit -m "chore(data): sync content [bot]"
+          git push

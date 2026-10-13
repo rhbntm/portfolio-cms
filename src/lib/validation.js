@@ -17,6 +17,14 @@ export function sanitizeString(str) {
   return str.trim().replace(/<[^>]*>/g, '');
 }
 
+/**
+ * Trims a Markdown body without stripping tags. Markdown fields are rendered
+ * through rehype-sanitize, so HTML-looking text (e.g. in code blocks) is safe to keep.
+ */
+export function trimString(str) {
+  return typeof str === 'string' ? str.trim() : str;
+}
+
 export function sanitizeStringArray(arr) {
   if (!Array.isArray(arr)) return arr;
   return arr.map(item => sanitizeString(item)).filter(Boolean);

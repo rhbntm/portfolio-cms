@@ -1,22 +1,19 @@
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
-import About from "../pages/About";
-import Projects from "../pages/projects/Projects";
-import ProjectDetail from "../pages/projects/ProjectDetail";
-import Blog from "../pages/blog/Blog";
-import BlogPost from "../pages/blog/BlogPost";
-import Contact from "../pages/Contact";
+import { Loading } from "../components";
+import { lazyPage } from "./lazy";
 
 export const publicRoutes = {
   path: "/",
   element: <MainLayout />,
+  hydrateFallbackElement: <Loading />,
   children: [
     { index: true, element: <Home /> },
-    { path: "about", element: <About /> },
-    { path: "projects", element: <Projects /> },
-    { path: "projects/:slug", element: <ProjectDetail /> },
-    { path: "blog", element: <Blog /> },
-    { path: "blog/:slug", element: <BlogPost /> },
-    { path: "contact", element: <Contact /> },
+    { path: "about", lazy: lazyPage(() => import("../pages/About")) },
+    { path: "projects", lazy: lazyPage(() => import("../pages/projects/Projects")) },
+    { path: "projects/:slug", lazy: lazyPage(() => import("../pages/projects/ProjectDetail")) },
+    { path: "blog", lazy: lazyPage(() => import("../pages/blog/Blog")) },
+    { path: "blog/:slug", lazy: lazyPage(() => import("../pages/blog/BlogPost")) },
+    { path: "contact", lazy: lazyPage(() => import("../pages/Contact")) },
   ],
 };

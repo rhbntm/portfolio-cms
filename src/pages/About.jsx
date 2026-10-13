@@ -1,12 +1,9 @@
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import styles from './About.module.css';
 
-const BIO = `
-I'm currently building projects to deepen my understanding of full-stack development. My focus is on creating structured, maintainable systems — from database design and APIs to clean frontend interfaces.
-
-Recently, I've been working on a portfolio CMS, an inventory management system, and exploring how SaaS platforms are designed. I'm also learning cloud concepts to better understand how real applications are deployed and scaled.
-`;
+const BIO = [
+  "I'm currently building projects to deepen my understanding of full-stack development. My focus is on creating structured, maintainable systems — from database design and APIs to clean frontend interfaces.",
+  "Recently, I've been working on a portfolio CMS, an inventory management system, and exploring how SaaS platforms are designed. I'm also learning cloud concepts to better understand how real applications are deployed and scaled.",
+];
 
 const EXPERIENCE = [
   {
@@ -37,7 +34,7 @@ export default function About() {
           <div className={styles.aboutMain}>
             <h2 className={styles.aboutLabel}>The Story</h2>
             <div className={styles.aboutText}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{BIO}</ReactMarkdown>
+              {BIO.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
             </div>
           </div>
         </div>
