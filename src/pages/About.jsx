@@ -25,7 +25,7 @@ export default function About() {
       <section className={styles.heroSection}>
         <div className={styles.sectionContainer}>
           <h1 className={styles.pageTitle}>About Me</h1>
-          <p className={styles.pageSubtitle}>3rd-year IT student. Full-stack developer.</p>
+          <p className={styles.pageSubtitle}>4th-year IT student. Full-stack developer.</p>
         </div>
       </section>
 

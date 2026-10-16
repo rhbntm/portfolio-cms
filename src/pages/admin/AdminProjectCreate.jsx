@@ -5,6 +5,8 @@ import remarkGfm from 'remark-gfm';
 import { createProject, uploadImage, isProjectSlugTaken } from "../../lib";
 import styles from './AdminForm.module.css';
 
+const SUMMARY_MAX = 160;
+
 export default function AdminProjectCreate() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -12,6 +14,7 @@ export default function AdminProjectCreate() {
   const [techStack, setTechStack] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [liveUrl, setLiveUrl] = useState('');
+  const [summary, setSummary] = useState('');
   const [description, setDescription] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -77,7 +80,7 @@ export default function AdminProjectCreate() {
         imageUrl = await uploadImage(imageFile, "projects");
       }
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await createProject({ title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, live_url: liveUrl, description, image_url: imageUrl });
+      await createProject({ title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, live_url: liveUrl, summary, description, image_url: imageUrl });
       navigate("/admin/projects");
     } catch (err) {
       setError(err.message);
@@ -123,6 +126,19 @@ export default function AdminProjectCreate() {
             <label className={styles.label}>GitHub URL</label>
             <input className={styles.input} type="url" value={githubUrl} onChange={e => setGithubUrl(e.target.value)} placeholder="https://github.com/..." />
           </div>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Summary</label>
+          <input
+            className={styles.input}
+            type="text"
+            value={summary}
+            onChange={e => setSummary(e.target.value)}
+            maxLength={SUMMARY_MAX}
+            placeholder="One line: what it is and who it's for"
+          />
+          <span className={styles.hint}>Shown on project cards · {summary.length}/{SUMMARY_MAX}</span>
         </div>
 
         <div className={styles.field}>

@@ -59,6 +59,12 @@ export default function ProjectDetail() {
       </div>
 
       <div className={styles.content}>
+        {project.created_at && (
+          <p className={styles.metaDate}>
+            {new Date(project.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </p>
+        )}
+        <h1 className={styles.title}>{project.title}</h1>
         <div className={styles.metaRow}>
           {project.tech_stack?.length > 0 ? (
             <div className={styles.cardTechStack}>
@@ -100,12 +106,6 @@ export default function ProjectDetail() {
             )}
           </div>
         </div>
-        {project.created_at && (
-          <p className={styles.metaDate}>
-            {new Date(project.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-          </p>
-        )}
-        <h1 className={styles.title}>{project.title}</h1>
         <div className={styles.description}>
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{project.description}</ReactMarkdown>
         </div>

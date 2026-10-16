@@ -71,9 +71,6 @@ export default function MainLayout() {
               Contact
             </NavLink>
           </div>
-          <div className={styles.navActions}>
-            <Link to="/login" className={styles.loginBtn}>Login</Link>
-          </div>
         </div>
       </nav>
 

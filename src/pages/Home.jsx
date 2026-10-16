@@ -33,6 +33,7 @@ function ProjectCard({ project, sizeClass, fallbackCategory }) {
             </span>
           )}
           <h3 className={styles.projectTitle}>{project.title}</h3>
+          {project.summary && <p className={styles.projectSummary}>{project.summary}</p>}
           {project.tech_stack?.length > 0 ? (
             <div className={styles.cardTechStack}>
               {project.tech_stack.slice(0, 3).map(tech => (
@@ -67,7 +68,7 @@ export default function Home() {
           <p className={styles.heroEyebrow}>Open for internships</p>
           <h1 className={styles.heroTitle}>I build full-stack web applications using React and PHP frameworks such as CodeIgniter and Laravel.</h1>
           <p className={styles.heroSub}>
-            3rd-year IT student focused on building functional websites and systems
+            4th-year IT student focused on building functional websites and systems
             from CMS website to inventory management tools.
           </p>
           <div className={styles.heroActions}>

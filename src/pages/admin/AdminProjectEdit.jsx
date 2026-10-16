@@ -8,6 +8,8 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
+const SUMMARY_MAX = 160;
+
 export default function AdminProjectEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ export default function AdminProjectEdit() {
   const [techStack, setTechStack] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [liveUrl, setLiveUrl] = useState('');
+  const [summary, setSummary] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -48,6 +51,7 @@ export default function AdminProjectEdit() {
           setTechStack(project.tech_stack?.join(' • ') || '');
           setGithubUrl(project.github_url || '');
           setLiveUrl(project.live_url || '');
+          setSummary(project.summary || '');
           setDescription(project.description || '');
           setImageUrl(project.image_url || '');
           setOriginalImageUrl(project.image_url || '');
@@ -113,7 +117,7 @@ export default function AdminProjectEdit() {
       }
       
       const techStackArray = techStack.split('•').map(s => s.trim()).filter(Boolean);
-      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, live_url: liveUrl, description, image_url: finalImageUrl || null });
+      await updateProject(id, { title, slug: finalSlug, tech_stack: techStackArray, github_url: githubUrl, live_url: liveUrl, summary, description, image_url: finalImageUrl || null });
       
       if (originalImageUrl && originalImageUrl !== finalImageUrl) {
         await deleteImage(originalImageUrl);
@@ -165,6 +169,19 @@ export default function AdminProjectEdit() {
             <label className={styles.label}>GitHub URL</label>
             <input className={styles.input} type="url" value={githubUrl} onChange={e => setGithubUrl(e.target.value)} placeholder="https://github.com/..." />
           </div>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Summary</label>
+          <input
+            className={styles.input}
+            type="text"
+            value={summary}
+            onChange={e => setSummary(e.target.value)}
+            maxLength={SUMMARY_MAX}
+            placeholder="One line: what it is and who it's for"
+          />
+          <span className={styles.hint}>Shown on project cards · {summary.length}/{SUMMARY_MAX}</span>
         </div>
 
         <div className={styles.field}>

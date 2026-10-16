@@ -117,6 +117,7 @@ export function projectToMarkdown(project) {
     id: project.id,
     title: project.title,
     slug: project.slug,
+    summary: project.summary || '',
     tech_stack: project.tech_stack || [],
     image_url: project.image_url || null,
     github_url: project.github_url || null,

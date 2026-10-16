@@ -30,7 +30,7 @@
 
 .metaRow {
   display: flex; align-items: center; justify-content: space-between;
-  gap: var(--space-md); margin-bottom: var(--space-md);
+  gap: var(--space-md); margin-bottom: var(--space-xl);
   flex-wrap: wrap;
 }
 
@@ -74,7 +74,7 @@
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700; letter-spacing: -0.025em;
-  color: var(--text-primary); margin-bottom: var(--space-lg); line-height: 1.1;
+  color: var(--text-primary); margin-bottom: var(--space-md); line-height: 1.1;
 }
 
 .description {

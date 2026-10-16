@@ -119,6 +119,14 @@
   line-height: 1.3;
 }
 
+.cardSummary {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
 .cardTechStack {
   display: flex;
   flex-wrap: wrap;
