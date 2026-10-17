@@ -2,6 +2,7 @@
 id: 2
 title: "Student Information System Frontend"
 slug: "student-information-system-frontend"
+summary: ""
 tech_stack:
   - "React 19 & Vite 7"
   - "Tailwind CSS"

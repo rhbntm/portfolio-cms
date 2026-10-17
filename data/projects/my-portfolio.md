@@ -2,6 +2,7 @@
 id: 3
 title: "My portfolio"
 slug: "my-portfolio"
+summary: ""
 tech_stack:
 image_url: null
 github_url: "https://github.com/rhbntm/portfolio-cms"

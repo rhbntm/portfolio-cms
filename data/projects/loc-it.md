@@ -2,6 +2,7 @@
 id: 6
 title: "Loc-it"
 slug: "loc-it"
+summary: ""
 tech_stack:
   - "React"
 image_url: "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1788624576410-Screenshot_2026-09-06_000912.png"
