@@ -8,7 +8,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { useProject } from '../../hooks';
 import { trackProjectView, trackProjectDemoClick, trackProjectGithubClick } from '../../analytics';
-import { Loading, ErrorMessage } from '../../components';
+import { Loading, ErrorMessage, NotFound } from '../../components';
 import { isValidUrl, isValidHttpsUrl } from '../../lib/validation';
 import styles from './ProjectDetail.module.css';
 
@@ -28,7 +28,15 @@ export default function ProjectDetail() {
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-  if (!project) return <p>Project not found</p>;
+  if (!project) {
+    return (
+      <NotFound
+        title="Project not found"
+        message="This project doesn't exist or may have moved."
+        links={[{ to: '/projects', label: 'All Projects' }]}
+      />
+    );
+  }
 
   return (
     <div className={styles.page}>

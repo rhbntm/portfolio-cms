@@ -1,9 +1,10 @@
-import { ProtectedRoute, Loading } from "../components";
+import { ProtectedRoute, Loading, RouteError } from "../components";
 import { lazyPage } from "./lazy";
 
 export const adminRoutes = {
   path: "/admin",
   element: <ProtectedRoute />,
+  errorElement: <RouteError />,
   hydrateFallbackElement: <Loading />,
   children: [{
     path: "/admin",

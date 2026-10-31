@@ -1,0 +1,30 @@
+.wrapper { max-width: 640px; margin: 0 auto; padding: var(--space-xxl) var(--space-lg); text-align: center; }
+
+.eyebrow {
+  font-family: var(--font-body); font-size: 0.6875rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent-text); margin-bottom: var(--space-md);
+}
+
+.title {
+  font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 700;
+  color: var(--text-primary); line-height: 1.1; margin-bottom: var(--space-md);
+}
+
+.text { font-size: 1rem; line-height: 1.6; color: var(--text-secondary); }
+
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-md); margin-top: var(--space-xl); }
+
+.action {
+  display: inline-flex; align-items: center;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--accent); color: var(--on-accent);
+  font-family: var(--font-body); font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid var(--accent); border-radius: var(--radius-sm);
+  transition: background var(--transition), border-color var(--transition);
+}
+.action:hover { background: var(--accent-bright); border-color: var(--accent-bright); }
+
+.actionSecondary { background: transparent; color: var(--text-primary); border-color: var(--border); }
+.actionSecondary:hover { background: transparent; border-color: var(--border-bright); }

@@ -7,7 +7,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { usePost } from '../../hooks';
-import { Loading, ErrorMessage } from '../../components';
+import { Loading, ErrorMessage, NotFound } from '../../components';
 import { isValidHttpsUrl } from '../../lib/validation';
 import styles from './BlogPost.module.css';
 
@@ -22,7 +22,15 @@ export default function BlogPost() {
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-  if (!post) return <p>Blog post not found</p>;
+  if (!post) {
+    return (
+      <NotFound
+        title="Post not found"
+        message="This post doesn't exist or is no longer published."
+        links={[{ to: '/blog', label: 'All Posts' }]}
+      />
+    );
+  }
 
   return (
     <div className={styles.page}>
