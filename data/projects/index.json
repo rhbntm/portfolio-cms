@@ -14,7 +14,7 @@
     "is_featured": false,
     "created_at": "2026-09-05T16:09:35.945567+00:00",
     "sort_order": 1,
-    "summary": null
+    "summary": "A LOCTITE product-finder prototype built as a bonus deliverable for the Henkel Philippines Hackathon 2026."
   },
   {
     "id": 1,
@@ -36,7 +36,7 @@
     "is_featured": true,
     "created_at": "2026-04-21T09:53:25.580509+00:00",
     "sort_order": 1,
-    "summary": "A stock and pricing system I built for my friend's ukay (secondhand clothing) live-selling business. The owner used it on his phone to count and price incoming"
+    "summary": "A stock and pricing system for a friend's ukay (secondhand clothing) live-selling business, used on a phone to count and price incoming stock"
   },
   {
     "id": 2,
@@ -55,21 +55,27 @@
     "is_featured": false,
     "created_at": "2026-04-23T10:41:13.090681+00:00",
     "sort_order": 2,
-    "summary": null
+    "summary": "A role-based student system with admin and faculty workflows, GPA analytics and billing, built on a CodeIgniter 4 REST API."
   },
   {
     "id": 3,
     "title": "My portfolio",
     "slug": "my-portfolio",
-    "description": "",
+    "description": "This site is my portfolio and the custom CMS behind it. I manage posts and projects from a protected admin panel instead of editing code.\n\n### Key Features\n\n* Markdown editor with live preview, drafts, and drag-and-drop image uploads with compression.\n* Supabase for the database, authentication, and image storage.\n* A daily GitHub Actions job that mirrors published content and images to the repository.\n* An automatic fallback to that mirror, so public pages stay readable if Supabase is unavailable.",
     "content": "A responsive task manager with drag-and-drop features, reminders, and real-time syncing across devices.",
-    "tech_stack": [],
+    "tech_stack": [
+      "React 19",
+      "Vite",
+      "Supabase",
+      "GitHub Actions",
+      "Vercel"
+    ],
     "github_url": "https://github.com/rhbntm/portfolio-cms",
-    "live_url": "https://taskmanagerapp.com",
-    "image_url": null,
+    "live_url": null,
+    "image_url": "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1793425490222-portfolio-cover.png",
     "is_featured": true,
     "created_at": "2026-04-23T10:41:13.090681+00:00",
     "sort_order": 3,
-    "summary": null
+    "summary": "My portfolio and its custom CMS: an admin panel for posts and projects, backed by Supabase with a daily GitHub mirror as a fallback."
   }
 ]

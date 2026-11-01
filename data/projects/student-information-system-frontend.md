@@ -2,7 +2,7 @@
 id: 2
 title: "Student Information System Frontend"
 slug: "student-information-system-frontend"
-summary: ""
+summary: "A role-based student system with admin and faculty workflows, GPA analytics and billing, built on a CodeIgniter 4 REST API."
 tech_stack:
   - "React 19 & Vite 7"
   - "Tailwind CSS"

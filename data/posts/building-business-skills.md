@@ -12,9 +12,10 @@ created_at: "2026-06-24T15:17:16.946834+00:00"
 updated_at: "2026-06-24T15:17:16.946834+00:00"
 ---
 
-I haven't been able to get intimate with programming or tech lately. I've been locked in on business stuff, so this is just a quick update and a short note on my tech-related plans.
+I haven't been able to do programming or tech lately. I've been locked in on business stuff, so this is just a quick update and a short note on my tech-related plans.
 
 I've basically become a host in my friend's business on top of being the one editing and posting daily videos, which is why I haven't had much time—or even the mindset—to fully immerse myself in tech recently.
+![image](https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/posts/1793427312065-image.png)
 
 That said, I've learned a lot from helping grow the business. My communication skills have improved quite a bit, and I've discovered that I'm capable of pushing myself much harder than I previously thought. It's been a good reminder that growth often happens outside of your comfort zone.
 

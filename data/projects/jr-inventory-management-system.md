@@ -2,7 +2,7 @@
 id: 1
 title: "JR Inventory Management System"
 slug: "jr-inventory-management-system"
-summary: "A stock and pricing system I built for my friend's ukay (secondhand clothing) live-selling business. The owner used it on his phone to count and price incoming"
+summary: "A stock and pricing system for a friend's ukay (secondhand clothing) live-selling business, used on a phone to count and price incoming stock"
 tech_stack:
   - "Next.js 16"
   - "React 19"

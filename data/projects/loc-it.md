@@ -2,7 +2,7 @@
 id: 6
 title: "Loc-it"
 slug: "loc-it"
-summary: ""
+summary: "A LOCTITE product-finder prototype built as a bonus deliverable for the Henkel Philippines Hackathon 2026."
 tech_stack:
   - "React"
 image_url: "https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/projects/1788624576410-Screenshot_2026-09-06_000912.png"

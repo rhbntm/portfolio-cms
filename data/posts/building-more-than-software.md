@@ -20,6 +20,8 @@ My next project might be building a payroll system as preparation for scaling my
 There's so much to do. I mostly handle the content creation and that includes editing videos, advertisement posters, and other materials to improve the business branding and marketing. I've probably been working consistently for at least 12+ hours for the past week lmao.
 
 Also, 2 days ago, I wanted to challenge myself so I decided to co-host with my friend during the live selling so that I can improve my communication. I'm generally a timid guy, so this really helps break that timidness. I like growing, and growing requires pain, so I just feel great overall as a result of that despite the uncomfortableness.
+![nak-tayo-ka-doon-picturan-kita](https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/posts/1793429208587-thisispain.png)
+Look at the joy in my soul yes. I'm growing woo.
 
 There's so much to write about, and most of these are unrelated to software/IT stuff but hey, this is my portfolio so I can do what I want lol.
 
