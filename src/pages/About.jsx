@@ -37,14 +37,17 @@ const EXPERIENCE = [
     role: 'Lead Developer, Capstone',
     org: 'Ruzzco Barbers',
     description: 'Leading a five-member team building an offline-first point-of-sale and a Random Forest customer-count forecast for a Caloocan barbershop.',
-    link: { href: '/projects', label: 'See the project' },
+    links: [{ href: '/projects', label: 'See the project' }],
   },
   {
     period: 'Dec 2025 – Present',
     role: 'Web Developer & E-commerce Operations Assistant',
     org: 'Live-selling clothing business',
     description: 'Built a custom inventory management system and support stock and order management during live sales.',
-    link: { href: 'https://shopee.ph/mr.silentwhite', label: 'Shop', external: true },
+    links: [
+      { href: 'https://shopee.ph/mr.silentwhite', label: 'Shopee shop', external: true },
+      { href: 'https://www.tiktok.com/@justinrosieclothingshop', label: 'TikTok shop', external: true },
+    ],
   },
   {
     period: '2022 – Jun 2027',
@@ -108,13 +111,17 @@ export default function About() {
                 <h3 className={styles.timelineRole}>{item.role}</h3>
                 <p className={styles.timelineOrg}>{item.org}</p>
                 <p className={styles.timelineDesc}>{item.description}</p>
-                {item.link && (item.link.external ? (
-                  <a href={item.link.href} target="_blank" rel="noopener noreferrer" className={styles.timelineLink}>
-                    {item.link.label} ↗
-                  </a>
-                ) : (
-                  <Link to={item.link.href} className={styles.timelineLink}>{item.link.label} →</Link>
-                ))}
+                {item.links?.length > 0 && (
+                  <div className={styles.timelineLinks}>
+                    {item.links.map(link => link.external ? (
+                      <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className={styles.timelineLink}>
+                        {link.label} ↗
+                      </a>
+                    ) : (
+                      <Link key={link.href} to={link.href} className={styles.timelineLink}>{link.label} →</Link>
+                    ))}
+                  </div>
+                )}
               </div>
             </li>
           ))}

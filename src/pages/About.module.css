@@ -226,9 +226,15 @@
   max-width: 64ch;
 }
 
+.timelineLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-lg);
+  margin-top: var(--space-sm);
+}
+
 .timelineLink {
   display: inline-block;
-  margin-top: var(--space-sm);
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--accent-text);
