@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import portraitImage from '../assets/portrait-desk.webp';
 import { trackResumeDownload } from '../analytics';
 import { AVAILABILITY, SKILL_GROUPS } from '../content/profile';
 import styles from './About.module.css';
@@ -77,7 +76,6 @@ export default function About() {
         </div>
 
         <aside className={styles.introAside}>
-          <img src={portraitImage} alt="Ralph working at his desk" className={styles.portrait} width={800} height={1112} />
           <dl className={styles.facts}>
             {FACTS.map(fact => (
               <div key={fact.label} className={styles.fact}>

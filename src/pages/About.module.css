@@ -91,19 +91,7 @@
 .secondaryBtn:hover { background: var(--surface-high); transform: translateY(-2px); }
 
 .introAside {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.portrait {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  height: auto;
-  object-fit: cover;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-bright);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  align-self: center;
 }
 
 .facts {
@@ -293,9 +281,6 @@
   .page { padding: var(--space-xl) var(--space-lg); gap: var(--space-xl); }
 
   .intro { grid-template-columns: 1fr; }
-  .introAside { flex-direction: row; align-items: flex-start; }
-  .portrait { width: 120px; flex-shrink: 0; }
-  .facts { flex: 1; min-width: 0; }
 
   .timelineItem { grid-template-columns: 1fr; gap: var(--space-xs); }
 }
@@ -306,8 +291,6 @@
 
 @media (max-width: 520px) {
   .page { padding: var(--space-lg) var(--space-md); }
-  .introAside { flex-direction: column; }
-  .portrait { display: none; }
   .skillsGrid { grid-template-columns: 1fr; }
   .actions > * { flex: 1 1 100%; justify-content: center; }
 }
