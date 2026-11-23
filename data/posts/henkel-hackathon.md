@@ -14,6 +14,7 @@ updated_at: "2026-09-05T16:38:55.516291+00:00"
 ---
 
 Out of the 100 applicants, I was part of the 30 that got selected.
+![certificate](https://raw.githubusercontent.com/rhbntm/portfolio-cms/main/data/images/posts/1795447186213-Ralph_Brent_Marcelo.jpg)
 
 And so here is my first hackathon experience first held on September 1. It was very draining and fun.
 
