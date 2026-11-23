@@ -154,6 +154,8 @@
   color: var(--text-secondary);
 }
 
+.principle a { margin-top: var(--space-sm); }
+
 /* ── Timeline ──────────────────────────────────────────── */
 .timeline {
   list-style: none;

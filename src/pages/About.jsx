@@ -30,6 +30,22 @@ const PRINCIPLES = [
   },
 ];
 
+const HOBBIES = [
+  {
+    title: 'Learning Japanese',
+    text: 'I started during the pandemic because of anime. Now I can follow slice-of-life shows without English subtitles, and I practice reading with light novels and visual novels. I review vocabulary daily and track it on Jiten.',
+    link: { href: 'https://jiten.moe/profile/rhbnt', label: 'My vocab heatmap' },
+  },
+  {
+    title: 'Training at home',
+    text: 'Kettlebell workouts, weighted bodyweight training and calisthenics.',
+  },
+  {
+    title: 'Reading',
+    text: 'Non-fiction on self-help, productivity and business, plus Japanese light novels for fiction.',
+  },
+];
+
 const EXPERIENCE = [
   {
     period: 'Sep 2026 – Present',
@@ -135,6 +151,23 @@ export default function About() {
               <ul className={styles.skillList}>
                 {group.items.map(item => <li key={item}>{item}</li>)}
               </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="hobbies-heading">
+        <h2 id="hobbies-heading" className={styles.sectionTitle}>Outside of code</h2>
+        <div className={styles.principles}>
+          {HOBBIES.map(h => (
+            <div key={h.title} className={styles.principle}>
+              <h3>{h.title}</h3>
+              <p>{h.text}</p>
+              {h.link && (
+                <a href={h.link.href} target="_blank" rel="noopener noreferrer" className={styles.timelineLink}>
+                  {h.link.label} ↗
+                </a>
+              )}
             </div>
           ))}
         </div>
