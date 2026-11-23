@@ -33,16 +33,18 @@ const PRINCIPLES = [
 const HOBBIES = [
   {
     title: 'Learning Japanese',
-    text: 'I started during the pandemic because of anime. Now I can follow slice-of-life shows without English subtitles, and I practice reading with light novels and visual novels. I review vocabulary daily and track it on Jiten.',
+    text: 'I started during the pandemic because of anime. I can follow simple shows without English subtitles, and I practice reading with visual novels. I try to review my vocabulary daily as part of my language learning hobby.',
     link: { href: 'https://jiten.moe/profile/rhbnt', label: 'My vocab heatmap' },
   },
   {
     title: 'Training at home',
-    text: 'Kettlebell workouts, weighted bodyweight training and calisthenics.',
+    text: 'I train for the health benefits, so I keep workouts short and efficient: kettlebells, weighted bodyweight training and calisthenics.',
+    link: { href: 'https://hevy.com/user/bertlog', label: 'My workout log' },
   },
   {
     title: 'Reading',
-    text: 'Non-fiction on self-help, productivity and business, plus Japanese light novels for fiction.',
+    text: 'Non-fiction (self-help, productivity, business) to learn from other people’s experience, and fiction as a pastime. While I read fiction as language practice and to keep my reading comprehension sharp.',
+    link: { href: 'https://www.goodreads.com/user/show/191531308-rhbnt', label: 'My Goodreads' },
   },
 ];
 
