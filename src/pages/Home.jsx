@@ -87,7 +87,7 @@ export default function Home() {
           <div className={styles.heroActions}>
             <Link to="/projects" className={styles.heroCta}>View projects</Link>
             <a
-              href="/resume.pdf"
+              href="/resume.pdf" download="Marcelo_Ralph_Brent_Resume.pdf"
               className={styles.heroSecondaryCta}
               onClick={() => trackResumeDownload()}
             >Download resume</a>
@@ -184,7 +184,7 @@ export default function Home() {
           </p>
           <div className={styles.ctaActions}>
             <Link to="/contact" className={styles.ctaButton}>Get in touch</Link>
-            <a href="/resume.pdf" className={styles.ctaSecondary} onClick={() => trackResumeDownload()}>Resume</a>
+            <a href="/resume.pdf" download="Marcelo_Ralph_Brent_Resume.pdf" className={styles.ctaSecondary} onClick={() => trackResumeDownload()}>Resume</a>
           </div>
         </div>
       </section>

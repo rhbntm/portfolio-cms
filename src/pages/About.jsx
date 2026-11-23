@@ -65,7 +65,7 @@ export default function About() {
             {BIO.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
           </div>
           <div className={styles.actions}>
-            <a href="/resume.pdf" className={styles.primaryBtn} onClick={() => trackResumeDownload()}>Download resume</a>
+            <a href="/resume.pdf" download="Marcelo_Ralph_Brent_Resume.pdf" className={styles.primaryBtn} onClick={() => trackResumeDownload()}>Download resume</a>
             <Link to="/contact" className={styles.secondaryBtn}>Get in touch</Link>
           </div>
         </div>
