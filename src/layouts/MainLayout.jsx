@@ -82,6 +82,8 @@ export default function MainLayout() {
         <div className={styles.footerInner}>
           <span className={styles.footerBrand}>© {new Date().getFullYear()} Ralph Brent Marcelo.</span>
           <div className={styles.footerLinks}>
+            <a href="mailto:ralphbrentm@gmail.com" className={styles.footerLink}>ralphbrentm@gmail.com</a>
+            <a href="/resume.pdf" download="Marcelo_Ralph_Brent_Resume.pdf" className={styles.footerLink}>Resume</a>
             <a href="https://github.com/rhbntm" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>GitHub</a>
             <a href="https://linkedin.com/in/rhbntm" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>LinkedIn</a>
           </div>

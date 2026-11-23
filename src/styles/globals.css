@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+/* Fonts are loaded from index.html (preconnect + <link>), not @import, so they don't block on this file. */
 
 :root {
   --bg:              #121414;
@@ -8,23 +8,29 @@
   --surface-high:    #282a2b;
   --surface-bright:  #37393a;
 
-  --text-primary:    #e2e2e2;
+  --text-primary:    #e8eaea;
   --text-secondary:  #b9cacb;
   --text-muted:      #849495;
 
-  --border:          #3b494b;
-  --border-bright:   #546a6b;
+  --border:          #2c3536;
+  --border-bright:   #46595a;
 
+  /* Deep green for large surfaces (CTA band), bright green for interactive elements */
   --accent:          #215224;
-  --accent-bright:   #3d9945;
-  --accent-hover:    #1a4020;
-  --accent-glow:     rgba(33, 82, 36, 0.18);
+  --accent-bright:   #4cb455;
+  --accent-bright-hover: #5cc765;
+  --accent-hover:    #1a4020; /* admin buttons: darker hover on the deep green */
+  --accent-glow:     rgba(76, 180, 85, 0.22);
+  --accent-soft:     rgba(76, 180, 85, 0.10);
+  --accent-line:     rgba(76, 180, 85, 0.24);
   --accent-text:     #8fd195;
   --on-accent:       #e8f5e9;
+  --on-accent-bright:#07140a;
 
   --font-display:    'Noto Serif', Georgia, serif;
   --font-body:       'Manrope', system-ui, sans-serif;
-  --font-admin:      'IBM Plex Sans', system-ui, sans-serif;
+  /* IBM Plex Sans is no longer downloaded; the admin falls back to the body font */
+  --font-admin:      'IBM Plex Sans', var(--font-body);
   --font-mono:       'IBM Plex Mono', 'Courier New', monospace;
 
   --space-xs:   4px;
@@ -34,9 +40,12 @@
   --space-xl:   48px;
   --space-xxl:  80px;
 
-  --radius-sm:  2px;
-  --radius-md:  4px;
-  --radius-lg:  8px;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 12px 32px rgba(0, 0, 0, 0.28);
 
   --transition:      220ms ease;
   --transition-slow: 600ms ease;
@@ -64,3 +73,20 @@ img { display: block; max-width: 100%; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 input, textarea, select { font-family: inherit; }
 ::selection { background: var(--accent); color: var(--on-accent); }
+
+/* Visible keyboard focus everywhere (mouse clicks don't trigger it) */
+:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Respect the OS "reduce motion" setting site-wide */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

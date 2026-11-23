@@ -10,6 +10,7 @@ import { useProject } from '../../hooks';
 import { trackProjectView, trackProjectDemoClick, trackProjectGithubClick } from '../../analytics';
 import { Loading, ErrorMessage, NotFound } from '../../components';
 import { isValidUrl, isValidHttpsUrl } from '../../lib/validation';
+import { techList } from '../../lib/format';
 import styles from './ProjectDetail.module.css';
 
 export default function ProjectDetail() {
@@ -74,12 +75,12 @@ export default function ProjectDetail() {
         )}
         <h1 className={styles.title}>{project.title}</h1>
         <div className={styles.metaRow}>
-          {project.tech_stack?.length > 0 ? (
-            <div className={styles.cardTechStack}>
-              {project.tech_stack.map(tech => (
-                <span key={tech} className={styles.techTag}>{tech}</span>
+          {techList(project.tech_stack).length > 0 ? (
+            <ul className={styles.cardTechStack} aria-label="Tech stack">
+              {techList(project.tech_stack).map(tech => (
+                <li key={tech} className={styles.techTag}>{tech}</li>
               ))}
-            </div>
+            </ul>
           ) : (
             <p className={styles.category}>Project</p>
           )}
@@ -95,7 +96,7 @@ export default function ProjectDetail() {
                   title: project.title,
                 })}
               >
-                Live Demo ↗
+                Live demo ↗
               </a>
             )}
             {isValidUrl(project.github_url) && (
@@ -109,7 +110,7 @@ export default function ProjectDetail() {
                   title: project.title,
                 })}
               >
-                GitHub →
+                View code ↗
               </a>
             )}
           </div>
