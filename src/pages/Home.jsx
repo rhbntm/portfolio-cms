@@ -4,10 +4,10 @@ import { Loading } from '../components/ui';
 import { isValidHttpsUrl, isValidUrl } from '../lib/validation';
 import heroImage from '../assets/hero.webp';
 import { trackResumeDownload } from '../analytics';
+import { AVAILABILITY, SKILL_GROUPS } from '../content/profile';
+import { techList } from '../lib/format';
 
 import styles from './Home.module.css';
-
-const TECHNOLOGIES = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs', 'Supabase', 'MySQL', 'PostgreSQL', 'Docker'];
 
 // Bento layout for the first three projects: [size class, fallback category label]
 const PROJECT_SLOTS = [
@@ -17,43 +17,53 @@ const PROJECT_SLOTS = [
 ];
 
 function ProjectCard({ project, sizeClass, fallbackCategory }) {
+  const tech = techList(project.tech_stack);
+  const href = `/projects/${project.slug}`;
+
   return (
-    <div className={`${styles.projectCard} ${sizeClass}`}>
-      <Link to={`/projects/${project.slug}`} className={styles.projectImageWrapper}>
+    <article className={`${styles.projectCard} ${sizeClass}`}>
+      <div className={styles.projectImageWrapper}>
         {isValidHttpsUrl(project.image_url) && (
-          <img className={styles.projectImage} src={project.image_url} alt={project.title} loading="lazy" />
+          <img className={styles.projectImage} src={project.image_url} alt="" loading="lazy" />
         )}
-        <div className={styles.projectOverlay} />
-      </Link>
+      </div>
       <div className={styles.projectInfo}>
-        <div className={styles.projectMeta}>
-          {project.created_at && (
-            <span className={styles.projectDate}>
-              {new Date(project.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-            </span>
-          )}
-          <h3 className={styles.projectTitle}>{project.title}</h3>
-          {project.summary && <p className={styles.projectSummary}>{project.summary}</p>}
-          {project.tech_stack?.length > 0 ? (
-            <div className={styles.cardTechStack}>
-              {project.tech_stack.slice(0, 3).map(tech => (
-                <span key={tech} className={styles.techTag}>{tech}</span>
+        {project.created_at && (
+          <span className={styles.projectDate}>
+            {new Date(project.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+          </span>
+        )}
+        <h3 className={styles.projectTitle}>
+          {/* Stretched link: its ::after covers the whole card, so the card is one click target */}
+          <Link to={href} className={styles.projectLink}>{project.title}</Link>
+        </h3>
+        {project.summary && <p className={styles.projectSummary}>{project.summary}</p>}
+        <div className={styles.projectFooter}>
+          {tech.length > 0 ? (
+            <ul className={styles.cardTechStack} aria-label="Tech stack">
+              {tech.slice(0, 4).map(item => (
+                <li key={item} className={styles.techTag}>{item}</li>
               ))}
-            </div>
+              {tech.length > 4 && <li className={styles.techMore}>+{tech.length - 4}</li>}
+            </ul>
           ) : (
             <p className={styles.projectCategory}>{fallbackCategory}</p>
           )}
-        </div>
-        <div className={styles.projectActions}>
-          {isValidUrl(project.live_url) && (
-            <a href={project.live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>Live ↗</a>
-          )}
-          {isValidHttpsUrl(project.github_url, ['github.com']) && (
-            <a href={project.github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>GitHub ↗</a>
-          )}
+          <div className={styles.projectActions}>
+            {isValidUrl(project.live_url) && (
+              <a href={project.live_url} target="_blank" rel="noopener noreferrer" className={styles.projectLive}>
+                Live demo ↗
+              </a>
+            )}
+            {isValidHttpsUrl(project.github_url, ['github.com']) && (
+              <a href={project.github_url} target="_blank" rel="noopener noreferrer" className={styles.projectGithub}>
+                Code ↗
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -65,20 +75,25 @@ export default function Home() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <p className={styles.heroEyebrow}>Open for internships</p>
-          <h1 className={styles.heroTitle}>I build full-stack web applications using React and PHP frameworks such as CodeIgniter and Laravel.</h1>
+          <p className={styles.heroEyebrow}>{AVAILABILITY}</p>
+          <h1 className={styles.heroTitle}>
+            Hi, I’m Ralph. I build web apps that small businesses actually use.
+          </h1>
           <p className={styles.heroSub}>
-            4th-year IT student focused on building functional websites and systems
-            from CMS website to inventory management tools.
+            4th-year IT student and full-stack developer (React, Next.js, Laravel). I led a
+            five-person team on an offline-first point-of-sale with sales forecasting, and
+            built a phone-first inventory system for a live-selling shop.
           </p>
           <div className={styles.heroActions}>
-            <Link to="/projects" className={styles.heroCta}>View Projects</Link>
-            <a href="https://github.com/rhbntm" target="_blank" rel="noopener noreferrer" className={styles.heroSecondaryCta}>GitHub</a>
+            <Link to="/projects" className={styles.heroCta}>View projects</Link>
             <a
               href="/resume.pdf"
               className={styles.heroSecondaryCta}
               onClick={() => trackResumeDownload()}
-            >Resume</a>
+            >Download resume</a>
+            <a href="https://github.com/rhbntm" target="_blank" rel="noopener noreferrer" className={styles.heroTextLink}>
+              GitHub ↗
+            </a>
           </div>
         </div>
         <div className={styles.heroImageContainer}>
@@ -87,37 +102,33 @@ export default function Home() {
             alt="Portrait of Ralph Brent Marcelo"
             className={styles.heroImage}
             width={800}
-            height={1112}
+            height={1000}
             fetchPriority="high"
           />
         </div>
       </section>
-      <div className={styles.divider}>
-        <div className={styles.dividerInner}>Technologies</div>
-      </div>
 
-      <div className={styles.marqueeWrapper}>
-        <div className={styles.marqueeTrack}>
-          {[...Array(2)].map((_, i) => (
-            <div className={styles.marqueeGroup} key={i} aria-hidden={i > 0}>
-              {TECHNOLOGIES.map(tech => (
-                <span className={styles.marqueeItem} key={`${tech}-${i}`}>
-                  {tech}
-                </span>
-              ))}
+      <section className={styles.section} aria-labelledby="skills-heading">
+        <div className={styles.sectionHeader}>
+          <h2 id="skills-heading" className={styles.sectionTitle}>What I work with</h2>
+          <Link to="/about" className={styles.sectionLink}>More about me →</Link>
+        </div>
+        <div className={styles.skillsGrid}>
+          {SKILL_GROUPS.map(group => (
+            <div key={group.label} className={styles.skillGroup}>
+              <h3 className={styles.skillLabel}>{group.label}</h3>
+              <ul className={styles.skillList}>
+                {group.items.map(item => <li key={item} className={styles.skillItem}>{item}</li>)}
+              </ul>
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div className={styles.divider}>
-        <div className={styles.dividerInner}>Curated Projects</div>
-      </div>
-
-      <section className={styles.section}>
+      <section className={styles.section} aria-labelledby="projects-heading">
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Projects</h2>
-          <Link to="/projects" className={styles.sectionLink}>All Projects →</Link>
+          <h2 id="projects-heading" className={styles.sectionTitle}>Selected projects</h2>
+          <Link to="/projects" className={styles.sectionLink}>All projects →</Link>
         </div>
 
         {projectsLoading ? (
@@ -138,14 +149,10 @@ export default function Home() {
         )}
       </section>
 
-      <div className={styles.divider}>
-        <div className={styles.dividerInner}>Blog & Thoughts</div>
-      </div>
-
-      <section className={styles.section}>
+      <section className={styles.section} aria-labelledby="posts-heading">
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Latest Posts</h2>
-          <Link to="/blog" className={styles.sectionLink}>All Posts →</Link>
+          <h2 id="posts-heading" className={styles.sectionTitle}>Latest writing</h2>
+          <Link to="/blog" className={styles.sectionLink}>All posts →</Link>
         </div>
         <div className={styles.journalList}>
           {postsLoading ? (
@@ -162,6 +169,7 @@ export default function Home() {
                   <h3 className={styles.journalTitle}>{post.title}</h3>
                   <p className={styles.journalExcerpt}>{post.excerpt}</p>
                 </div>
+                <span className={styles.journalArrow} aria-hidden="true">→</span>
               </Link>
             ))
           )}
@@ -171,8 +179,13 @@ export default function Home() {
       <section className={styles.ctaSection}>
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>Let’s work together</h2>
-          <p className={styles.ctaText}>I’m currently looking for internships and freelance opportunities.</p>
-          <Link to="/contact" className={styles.ctaButton}>Get in Touch</Link>
+          <p className={styles.ctaText}>
+            I’m looking for a software development internship starting December 2026, and I’m open to freelance work.
+          </p>
+          <div className={styles.ctaActions}>
+            <Link to="/contact" className={styles.ctaButton}>Get in touch</Link>
+            <a href="/resume.pdf" className={styles.ctaSecondary} onClick={() => trackResumeDownload()}>Resume</a>
+          </div>
         </div>
       </section>
     </>

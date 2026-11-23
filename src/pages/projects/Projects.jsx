@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useProjects } from '../../hooks';
 import { Loading, ErrorMessage, Pagination } from '../../components';
 import { isValidHttpsUrl } from '../../lib/validation';
+import { techList } from '../../lib/format';
 import styles from './Projects.module.css';
 
 export default function Projects() {
@@ -14,13 +15,10 @@ export default function Projects() {
       <div className={styles.header}>
         <h1 className={styles.title}>Projects</h1>
         <p className={styles.description}>
-          <a
-            href="https://github.com/rhbntm"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.githubLink}
-          >
-            My GitHub
+          Systems I’ve built for real users, each with a write-up of the problem, the decisions, and what I’d change.
+          More experiments are on{' '}
+          <a href="https://github.com/rhbntm" target="_blank" rel="noopener noreferrer" className={styles.githubLink}>
+            GitHub ↗
           </a>
         </p>
       </div>
@@ -48,9 +46,9 @@ export default function Projects() {
                   )}
                   <h2 className={styles.cardTitle}>{project.title}</h2>
                   {project.summary && <p className={styles.cardSummary}>{project.summary}</p>}
-                  {project.tech_stack?.length > 0 && (
+                  {techList(project.tech_stack).length > 0 && (
                     <div className={styles.cardTechStack}>
-                      {project.tech_stack.map(tech => (
+                      {techList(project.tech_stack).map(tech => (
                         <span key={tech} className={styles.techTag}>{tech}</span>
                       ))}
                     </div>

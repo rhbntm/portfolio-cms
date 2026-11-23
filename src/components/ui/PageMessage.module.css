@@ -18,13 +18,12 @@
 .action {
   display: inline-flex; align-items: center;
   padding: var(--space-md) var(--space-xl);
-  background: var(--accent); color: var(--on-accent);
-  font-family: var(--font-body); font-size: 0.75rem; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  border: 1px solid var(--accent); border-radius: var(--radius-sm);
+  background: var(--accent-bright); color: var(--on-accent-bright);
+  font-family: var(--font-body); font-size: 0.9375rem; font-weight: 700;
+  border: 1px solid var(--accent-bright); border-radius: var(--radius-sm);
   transition: background var(--transition), border-color var(--transition);
 }
-.action:hover { background: var(--accent-bright); border-color: var(--accent-bright); }
+.action:hover { background: var(--accent-bright-hover); border-color: var(--accent-bright-hover); }
 
 .actionSecondary { background: transparent; color: var(--text-primary); border-color: var(--border); }
 .actionSecondary:hover { background: transparent; border-color: var(--border-bright); }

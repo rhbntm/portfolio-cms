@@ -1,96 +1,134 @@
+import { Link } from 'react-router-dom';
+import portraitImage from '../assets/portrait-desk.webp';
+import { trackResumeDownload } from '../analytics';
+import { AVAILABILITY, SKILL_GROUPS } from '../content/profile';
 import styles from './About.module.css';
 
 const BIO = [
-  "I'm currently building projects to deepen my understanding of full-stack development. My focus is on creating structured, maintainable systems — from database design and APIs to clean frontend interfaces.",
-  "Recently, I've been working on a portfolio CMS, an inventory management system, and exploring how SaaS platforms are designed. I'm also learning cloud concepts to better understand how real applications are deployed and scaled.",
+  "I'm a 4th-year IT student who builds web apps for small businesses. I like the whole stack — database design, APIs, and the screens people actually tap on — but what I care about most is whether the thing gets used.",
+  "I built and deployed an inventory system for a live-selling clothing business, and I'm lead developer of a five-member capstone team building an offline-first point-of-sale with a machine-learning customer-count forecast for Ruzzco Barbers.",
+];
+
+const FACTS = [
+  { label: 'Based in', value: 'Manila, Philippines' },
+  { label: 'Studying', value: 'BS Information Technology, graduating June 2027' },
+  { label: 'Looking for', value: 'Software development internship (500-hour OJT) from December 2026' },
+];
+
+// Lessons taken from real projects — see the JR Inventory case study.
+const PRINCIPLES = [
+  {
+    title: 'Build for the real user',
+    text: 'My first inventory system went unused because it ran on a slow laptop. Rebuilding it phone-first, on the device the owner already used, is what got it adopted.',
+  },
+  {
+    title: 'Measure before rewriting',
+    text: "I once rewrote a Laravel app because pages felt slow; the cause was my own dev setup. Now I profile first and change the stack last.",
+  },
+  {
+    title: 'Ship, then iterate',
+    text: 'The first version of the inventory system was in daily use three days into a one-week build. Real feedback beats a longer plan.',
+  },
 ];
 
 const EXPERIENCE = [
   {
-    period: 'December 2025 – Present',
-    role: 'Web Developer & E-commerce Operations Assistant',
-    description: 'Developed a custom inventory management system and supports stock and order management during live sales operations.',
-    link: 'https://shopee.ph/mr.silentwhite',
+    period: 'Sep 2026 – Present',
+    role: 'Lead Developer, Capstone',
+    org: 'Ruzzco Barbers',
+    description: 'Leading a five-member team building an offline-first point-of-sale and a Random Forest customer-count forecast for a Caloocan barbershop.',
+    link: { href: '/projects', label: 'See the project' },
   },
   {
-    period: '2022 – Present',
-    role: 'BS Information Technology (Student)',
-    description: 'Expected Graduation: June, 2027',
+    period: 'Dec 2025 – Present',
+    role: 'Web Developer & E-commerce Operations Assistant',
+    org: 'Live-selling clothing business',
+    description: 'Built a custom inventory management system and support stock and order management during live sales.',
+    link: { href: 'https://shopee.ph/mr.silentwhite', label: 'Shop', external: true },
+  },
+  {
+    period: '2022 – Jun 2027',
+    role: 'BS Information Technology',
+    org: 'Student',
+    description: 'Expected graduation: June 2027.',
   },
 ];
 
 export default function About() {
   return (
     <div className={styles.page}>
-      <section className={styles.heroSection}>
-        <div className={styles.sectionContainer}>
-          <h1 className={styles.pageTitle}>About Me</h1>
-          <p className={styles.pageSubtitle}>4th-year IT student. Full-stack developer.</p>
+      <section className={styles.intro}>
+        <div className={styles.introText}>
+          <p className={styles.eyebrow}>{AVAILABILITY}</p>
+          <h1 className={styles.pageTitle}>About me</h1>
+          <div className={styles.bio}>
+            {BIO.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+          </div>
+          <div className={styles.actions}>
+            <a href="/resume.pdf" className={styles.primaryBtn} onClick={() => trackResumeDownload()}>Download resume</a>
+            <Link to="/contact" className={styles.secondaryBtn}>Get in touch</Link>
+          </div>
         </div>
+
+        <aside className={styles.introAside}>
+          <img src={portraitImage} alt="Ralph working at his desk" className={styles.portrait} width={800} height={1112} />
+          <dl className={styles.facts}>
+            {FACTS.map(fact => (
+              <div key={fact.label} className={styles.fact}>
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
       </section>
 
-      <section className={styles.aboutSection}>
-        <div className={styles.sectionContainer}>
-          <div className={styles.aboutMain}>
-            <h2 className={styles.aboutLabel}>The Story</h2>
-            <div className={styles.aboutText}>
-              {BIO.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+      <section className={styles.section} aria-labelledby="principles-heading">
+        <h2 id="principles-heading" className={styles.sectionTitle}>How I work</h2>
+        <div className={styles.principles}>
+          {PRINCIPLES.map(p => (
+            <div key={p.title} className={styles.principle}>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      <section className={styles.techSection}>
-        <div className={styles.sectionContainer}>
-          <div className={styles.techMain}>
-            <h2 className={styles.techLabel}>Technologies</h2>
-            <div className={styles.techGrid}>
-              <div className={styles.techCategory}>
-                <span>Frontend</span>
-                <div className={styles.cardTechStack}>
-                  {['React', 'Next.js', 'TypeScript', 'Tailwind CSS'].map(tech => (
-                    <span key={tech} className={styles.techTag}>{tech}</span>
-                  ))}
-                </div>
+      <section className={styles.section} aria-labelledby="experience-heading">
+        <h2 id="experience-heading" className={styles.sectionTitle}>Experience &amp; education</h2>
+        <ol className={styles.timeline}>
+          {EXPERIENCE.map(item => (
+            <li key={item.role} className={styles.timelineItem}>
+              <span className={styles.timelinePeriod}>{item.period}</span>
+              <div>
+                <h3 className={styles.timelineRole}>{item.role}</h3>
+                <p className={styles.timelineOrg}>{item.org}</p>
+                <p className={styles.timelineDesc}>{item.description}</p>
+                {item.link && (item.link.external ? (
+                  <a href={item.link.href} target="_blank" rel="noopener noreferrer" className={styles.timelineLink}>
+                    {item.link.label} ↗
+                  </a>
+                ) : (
+                  <Link to={item.link.href} className={styles.timelineLink}>{item.link.label} →</Link>
+                ))}
               </div>
-              <div className={styles.techCategory}>
-                <span>Backend</span>
-                <div className={styles.cardTechStack}>
-                  {['Laravel', 'PHP', 'Node.js', 'Express', 'REST APIs'].map(tech => (
-                    <span key={tech} className={styles.techTag}>{tech}</span>
-                  ))}
-                </div>
-              </div>
-              <div className={styles.techCategory}>
-                <span>Database &amp; Cloud</span>
-                <div className={styles.cardTechStack}>
-                  {['Supabase', 'MySQL', 'PostgreSQL', 'Docker'].map(tech => (
-                    <span key={tech} className={styles.techTag}>{tech}</span>
-                  ))}
-                </div>
-              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className={styles.section} aria-labelledby="skills-heading">
+        <h2 id="skills-heading" className={styles.sectionTitle}>Skills</h2>
+        <div className={styles.skillsGrid}>
+          {SKILL_GROUPS.map(group => (
+            <div key={group.label} className={styles.skillGroup}>
+              <h3 className={styles.skillLabel}>{group.label}</h3>
+              <ul className={styles.skillList}>
+                {group.items.map(item => <li key={item}>{item}</li>)}
+              </ul>
             </div>
-
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.experienceSection}>
-        <div className={styles.sectionContainer}>
-          <div className={styles.experienceMain}>
-            <h2 className={styles.experienceLabel}>Experience</h2>
-            <ul className={styles.timeline}>
-              {EXPERIENCE.map((item) => (
-                <li key={item.role} className={styles.timelineItem}>
-                  <span className={styles.timelinePeriod}>{item.period}</span>
-                  <div>
-                    <h3 className={styles.timelineRole}>{item.role}</h3>
-                    <p className={styles.timelineDesc}>{item.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          ))}
         </div>
       </section>
     </div>
