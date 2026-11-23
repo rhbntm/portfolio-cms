@@ -59,7 +59,10 @@ export default function About() {
     <div className={styles.page}>
       <section className={styles.intro}>
         <div className={styles.introText}>
-          <p className={styles.eyebrow}>{AVAILABILITY}</p>
+          <p className={styles.eyebrow}>
+            {AVAILABILITY.short}
+            <span className={styles.eyebrowDetail}> · {AVAILABILITY.detail}</span>
+          </p>
           <h1 className={styles.pageTitle}>About me</h1>
           <div className={styles.bio}>
             {BIO.map(paragraph => <p key={paragraph}>{paragraph}</p>)}

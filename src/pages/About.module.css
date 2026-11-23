@@ -294,6 +294,10 @@
   .timelineItem { grid-template-columns: 1fr; gap: var(--space-xs); }
 }
 
+@media (max-width: 640px) {
+  .eyebrowDetail { display: none; }
+}
+
 @media (max-width: 520px) {
   .page { padding: var(--space-lg) var(--space-md); }
   .introAside { flex-direction: column; }

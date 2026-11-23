@@ -75,7 +75,10 @@ export default function Home() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <p className={styles.heroEyebrow}>{AVAILABILITY}</p>
+          <p className={styles.heroEyebrow}>
+            {AVAILABILITY.short}
+            <span className={styles.eyebrowDetail}> · {AVAILABILITY.detail}</span>
+          </p>
           <h1 className={styles.heroTitle}>
             Hi, I’m Ralph. I build web apps that small businesses actually use.
           </h1>

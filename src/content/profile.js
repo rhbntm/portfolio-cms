@@ -1,6 +1,10 @@
 // Single source for profile content shared by Home and About.
 
-export const AVAILABILITY = 'Open to internships · 500-hour OJT from Dec 2026';
+// `detail` is hidden on small screens so the pill stays on one line.
+export const AVAILABILITY = {
+  short: 'Open to internships',
+  detail: '500-hour OJT from Dec 2026',
+};
 
 export const SKILL_GROUPS = [
   { label: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS'] },

@@ -548,18 +548,46 @@ body {
 }
 
 @media (max-width: 900px) {
+  /* Small screens: portrait becomes a round avatar sharing the first row with the availability pill.
+     display: contents lets the hero text's children sit directly in the hero grid. */
   .hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-md);
+    row-gap: 0;
+    align-items: center;
     padding-top: var(--space-xl);
   }
 
-  /* Headline first on small screens; portrait becomes a small avatar above it */
+  .heroContent { display: contents; }
+
   .heroImageContainer {
-    order: -1;
-    width: 120px;
-    border-radius: var(--radius-md);
+    grid-row: 1;
+    grid-column: 1;
+    width: 64px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: var(--accent-line);
+    box-shadow: none;
     transform: none;
   }
+
+  .heroImageContainer:hover { transform: none; }
+
+  .heroImage { object-position: center 30%; }
+
+  .heroEyebrow {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: start;
+    margin-bottom: 0;
+  }
+
+  .heroTitle,
+  .heroSub,
+  .heroActions { grid-column: 1 / -1; }
+
+  .heroTitle { margin-top: var(--space-lg); }
 
   .section { padding: var(--space-xl) var(--space-lg) 0; }
 
@@ -592,7 +620,16 @@ body {
 @media (max-width: 640px) {
   .hero { padding: var(--space-lg) var(--space-md) var(--space-md); }
 
-  .heroImageContainer { width: 96px; }
+  .heroImageContainer { width: 52px; }
+
+  .eyebrowDetail { display: none; }
+
+  .heroTitle {
+    font-size: clamp(1.875rem, 8.5vw, 2.25rem);
+    line-height: 1.12;
+  }
+
+  .heroSub { font-size: 1rem; }
 
   .heroActions { width: 100%; }
 
